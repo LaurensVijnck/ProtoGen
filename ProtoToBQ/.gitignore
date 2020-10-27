@@ -7,3 +7,4 @@ kuick.egg-info
 *.csv
 venv
 config
+output

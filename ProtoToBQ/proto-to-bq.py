@@ -3,6 +3,7 @@ from enum import Enum
 import itertools
 import json
 import sys
+import logging
 
 from output.python.protos import bigquery_options_pb2
 from google.protobuf.compiler import plugin_pb2 as plugin
@@ -111,6 +112,11 @@ def _traverse(proto_file):
 
 
 def _generate_repository(request):
+    """
+    Collects all known message and enum types.
+    :param request:
+    :return: the root elements and a repository with all known message and enum types
+    """
 
     repository = {}
     root_el = []
@@ -132,20 +138,31 @@ def _generate_repository(request):
                     if item.options.HasExtension(bigquery_options_pb2.table_root):
                         root_el.append(f".{proto_file.package}.{item.name}")
 
+                    # https://googleapis.dev/python/protobuf/latest/google/protobuf/descriptor.html
+                    # logging.warning(item.DESCRIPTOR.fields_by_name.keys())
+                    # logging.warning(item.DESCRIPTOR.extensions_by_name.keys())
+                    # logging.warning(item.DESCRIPTOR.options)
+                    for f in item.field:
+                        # https://googleapis.dev/python/protobuf/latest/google/protobuf/descriptor_pb2.html#module-google.protobuf.descriptor_pb2
+                        has_option_specified = f.options.HasExtension(bigquery_options_pb2.required)
+                        is_required = f.options.Extensions[bigquery_options_pb2.required] # Defaults to False
+                        logging.warning("Field: %s option present: %s required: %s", f.name, has_option_specified, is_required)
 
                     data.update({
                         # https://stackoverflow.com/questions/32836315/python-protocol-buffer-field-options/32867712#32867712
                         "root": item.options.HasExtension(bigquery_options_pb2.table_root),
                         'type': 'Message',
                         'fields': [
-                            {'fieldName': f.name,
-                             'fieldDescription': f.options.Extensions[bigquery_options_pb2.description],
-                             'fieldType': ProtoTypeEnum(f.type).name,
-                             'fieldTypeValue': f.type_name,
-                             'fieldRequired': f.options.HasExtension(bigquery_options_pb2.required),
-                             'fieldIndex': f.number,
-                             'isBatchField': item.options.Extensions[bigquery_options_pb2.batch_field] == f.name
-                             } for f in item.field]
+                            {
+                                'fieldName': f.name,
+                                'fieldDescription': f.options.Extensions[bigquery_options_pb2.description],
+                                'fieldType': ProtoTypeEnum(f.type).name,
+                                'fieldTypeValue': f.type_name,
+                                'fieldRequired': f.options.Extensions[bigquery_options_pb2.required],
+                                'fieldIndex': f.number,
+                                'isBatchField': item.options.Extensions[bigquery_options_pb2.batch_field] == f.name
+                             } for f in item.field
+                        ]
                     })
 
                 elif isinstance(item, EnumDescriptorProto):
@@ -161,6 +178,14 @@ def _generate_repository(request):
 
 
 def _contruct_schema_rec(repository, field, schema_arr):
+    """
+    Constructs a schema for a specific message, given a repository of message types and enums.
+
+    :param repository: the repository of message types and enums
+    :param field: the message type for which to create a schema
+    :param schema_arr:
+    :return: the resulting BQ schema for the message type
+    """
 
     for f in field["fields"]:
 
@@ -171,6 +196,7 @@ def _contruct_schema_rec(repository, field, schema_arr):
             schema_arr.extend(_contruct_schema_rec(repository, repository.get(f["fieldTypeValue"]), []))
         else:
             protoType = ProtoTypeEnum._member_map_[f["fieldType"]]
+            logging.warning("test: %s %s", f["fieldName"], f['fieldRequired'])
 
             tableField = {
                 "description": f["fieldDescription"],
@@ -191,15 +217,20 @@ def _contruct_schema_rec(repository, field, schema_arr):
 
 
 def generate_code(request, response):
+    """
+    :param request: the plugin's input source
+    :param response: the plugin's output sink
+    :return: None
+    """
 
     # Construct repository
     table_root_el, repository = _generate_repository(request)
 
-    # Generate schema for root els
+    # Generate schema for every root el
     for table_root in table_root_el:
         schema = []
         root = repository[table_root]
-        _contruct_schema_rec(repository, root, schema)
+        _contruct_schema_rec(repository, root, schema)  # TODO why pass in schema?
 
         # Fill response
         f = response.file.add()

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="f34fd941-b282-49ad-bf7f-5e987bd849d0" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/lvi/Event.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/operations/EventProtoToJSONParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/lvi/ActorOuterClass.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/lvi/ActorOuterClass.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/lvi/BigqueryOptions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/lvi/BigqueryOptions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/lvi/ClientOuterClass.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/lvi/ClientOuterClass.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/lvi/EventOuterClass.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/operations/ProtoToJson.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/operations/ProtoToJson.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pipelines/DynamicETL.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pipelines/DynamicETL.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/lvi/ActorOuterClass.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/lvi/ActorOuterClass.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/lvi/BigqueryOptions.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/lvi/BigqueryOptions.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/lvi/ClientOuterClass.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/lvi/ClientOuterClass.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/lvi/EventOuterClass$Event$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/lvi/EventOuterClass$Event$Builder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/lvi/EventOuterClass$Event.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/lvi/EventOuterClass$EventOrBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/lvi/EventOuterClass.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/operations/ProtoToJson$MapPubSubMessageToProto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/operations/ProtoToJson$MapPubSubMessageToProto.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/operations/ProtoToJson.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/operations/ProtoToJson.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pipelines/DynamicETL$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pipelines/DynamicETL$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pipelines/DynamicETL$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pipelines/DynamicETL$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pipelines/DynamicETL$PubSubBytesConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pipelines/DynamicETL$PubSubBytesConverter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pipelines/DynamicETL.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pipelines/DynamicETL.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IgnoredFileRootStore">
+    <option name="generatedRoots">
+      <set>
+        <option value="$PROJECT_DIR$/.idea" />
+      </set>
+    </option>
+  </component>
+  <component name="ProjectId" id="1jKLpBhNCk2RMZ6q28buJ2TL3ob" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/lvi" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="operations" />
+      <recent name="models.coders" />
+      <recent name="models" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/java/lvi" />
+      <recent name="$PROJECT_DIR$/src/main/java" />
+      <recent name="$PROJECT_DIR$/src/main/java/protos" />
+      <recent name="$PROJECT_DIR$/src/main/java/proto" />
+    </key>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f34fd941-b282-49ad-bf7f-5e987bd849d0" name="Default Changelist" comment="" />
+      <created>1603548017498</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1603548017498</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="440" y="192" key="#Project_Structure" timestamp="1603555070564">
+      <screen x="0" y="0" width="1680" height="1050" />
+    </state>
+    <state x="440" y="192" key="#Project_Structure/0.0.1680.1050@0.0.1680.1050" timestamp="1603555070564" />
+    <state x="2426" y="244" key="#com.intellij.ide.util.MemberChooser" timestamp="1603804988967">
+      <screen x="1680" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2426" y="244" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1050/1680.0.1920.1080@1680.0.1920.1080" timestamp="1603804988967" />
+    <state x="653" y="237" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1050@0.0.1680.1050" timestamp="1603551463893" />
+    <state x="463" y="456" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog" timestamp="1603549882415">
+      <screen x="0" y="0" width="1680" height="1050" />
+    </state>
+    <state x="463" y="456" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog/0.0.1680.1050@0.0.1680.1050" timestamp="1603549882415" />
+    <state x="612" y="415" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.packages" timestamp="1603549883822">
+      <screen x="0" y="0" width="1680" height="1050" />
+    </state>
+    <state x="612" y="415" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.packages/0.0.1680.1050@0.0.1680.1050" timestamp="1603549883822" />
+    <state x="2149" y="179" key="SettingsEditor" timestamp="1603804860935">
+      <screen x="1680" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2149" y="179" key="SettingsEditor/0.0.1680.1050/1680.0.1920.1080@1680.0.1920.1080" timestamp="1603804860935" />
+  </component>
+</project>

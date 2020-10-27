@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package lvi;
+
+import "google/protobuf/descriptor.proto";
+
+// TODO: Jonny create 'nested' BQTableOptions message options and use in compiler plugin
+extend google.protobuf.MessageOptions {
+  bool table_root = 51234; // Which number to pick anyway?
+  string batch_field = 51235;
+}
+
+extend google.protobuf.FieldOptions {
+  bool required = 1010; // Which number to pick anyway?
+  string description = 1012;
+}

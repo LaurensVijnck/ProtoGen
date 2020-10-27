@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package lvi;
+
+import "protos/bigquery_options.proto";
+
+message Client {
+    int64 tenantId = 1 [(required) = true, (description) = "Identifier in the client catalog"];
+    string name = 2;
+}

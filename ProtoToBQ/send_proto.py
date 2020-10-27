@@ -43,6 +43,7 @@ for i in range(6):
     address = actor_pb2.Address()
     address.street = "Maastrichterpoort"
     address.number = "2"
+    address.country = "Belgium"
     actor.address.MergeFrom(address)
     batch_event.actor.MergeFrom(actor)
     start = start + 1

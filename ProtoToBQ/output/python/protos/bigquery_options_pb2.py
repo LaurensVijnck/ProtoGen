@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='lvi',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=b'\n\x1dprotos/bigquery_options.proto\x12\x03lvi\x1a google/protobuf/descriptor.proto:5\n\ntable_root\x12\x1f.google.protobuf.MessageOptions\x18\xa2\x90\x03 \x01(\x08:6\n\x0b\x62\x61tch_field\x12\x1f.google.protobuf.MessageOptions\x18\xa3\x90\x03 \x01(\t:0\n\x08required\x12\x1d.google.protobuf.FieldOptions\x18\xf2\x07 \x01(\x08:7\n\x0f\x62\x61tch_attribute\x12\x1d.google.protobuf.FieldOptions\x18\xf3\x07 \x01(\x08:3\n\x0b\x64\x65scription\x12\x1d.google.protobuf.FieldOptions\x18\xf4\x07 \x01(\tb\x06proto3'
+  serialized_pb=b'\n\x1dprotos/bigquery_options.proto\x12\x03lvi\x1a google/protobuf/descriptor.proto:5\n\ntable_root\x12\x1f.google.protobuf.MessageOptions\x18\xa2\x90\x03 \x01(\x08:6\n\x0b\x62\x61tch_field\x12\x1f.google.protobuf.MessageOptions\x18\xa3\x90\x03 \x01(\t:0\n\x08required\x12\x1d.google.protobuf.FieldOptions\x18\xf2\x07 \x01(\x08:3\n\x0b\x64\x65scription\x12\x1d.google.protobuf.FieldOptions\x18\xf4\x07 \x01(\tb\x06proto3'
   ,
   dependencies=[google_dot_protobuf_dot_descriptor__pb2.DESCRIPTOR,])
 
@@ -48,17 +48,9 @@ required = _descriptor.FieldDescriptor(
   message_type=None, enum_type=None, containing_type=None,
   is_extension=True, extension_scope=None,
   serialized_options=None, file=DESCRIPTOR)
-BATCH_ATTRIBUTE_FIELD_NUMBER = 1011
-batch_attribute = _descriptor.FieldDescriptor(
-  name='batch_attribute', full_name='lvi.batch_attribute', index=3,
-  number=1011, type=8, cpp_type=7, label=1,
-  has_default_value=False, default_value=False,
-  message_type=None, enum_type=None, containing_type=None,
-  is_extension=True, extension_scope=None,
-  serialized_options=None, file=DESCRIPTOR)
 DESCRIPTION_FIELD_NUMBER = 1012
 description = _descriptor.FieldDescriptor(
-  name='description', full_name='lvi.description', index=4,
+  name='description', full_name='lvi.description', index=3,
   number=1012, type=9, cpp_type=9, label=1,
   has_default_value=False, default_value=b"".decode('utf-8'),
   message_type=None, enum_type=None, containing_type=None,
@@ -68,14 +60,12 @@ description = _descriptor.FieldDescriptor(
 DESCRIPTOR.extensions_by_name['table_root'] = table_root
 DESCRIPTOR.extensions_by_name['batch_field'] = batch_field
 DESCRIPTOR.extensions_by_name['required'] = required
-DESCRIPTOR.extensions_by_name['batch_attribute'] = batch_attribute
 DESCRIPTOR.extensions_by_name['description'] = description
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 google_dot_protobuf_dot_descriptor__pb2.MessageOptions.RegisterExtension(table_root)
 google_dot_protobuf_dot_descriptor__pb2.MessageOptions.RegisterExtension(batch_field)
 google_dot_protobuf_dot_descriptor__pb2.FieldOptions.RegisterExtension(required)
-google_dot_protobuf_dot_descriptor__pb2.FieldOptions.RegisterExtension(batch_attribute)
 google_dot_protobuf_dot_descriptor__pb2.FieldOptions.RegisterExtension(description)
 
 # @@protoc_insertion_point(module_scope)

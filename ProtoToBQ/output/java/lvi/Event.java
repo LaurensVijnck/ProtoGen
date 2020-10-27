@@ -652,25 +652,25 @@ public final class Event {
     lvi.ClientOuterClass.ClientOrBuilder getClientOrBuilder();
 
     /**
-     * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+     * <code>repeated .lvi.BatchEvent events = 2;</code>
      */
     java.util.List<lvi.Event.BatchEvent> 
         getEventsList();
     /**
-     * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+     * <code>repeated .lvi.BatchEvent events = 2;</code>
      */
     lvi.Event.BatchEvent getEvents(int index);
     /**
-     * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+     * <code>repeated .lvi.BatchEvent events = 2;</code>
      */
     int getEventsCount();
     /**
-     * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+     * <code>repeated .lvi.BatchEvent events = 2;</code>
      */
     java.util.List<? extends lvi.Event.BatchEventOrBuilder> 
         getEventsOrBuilderList();
     /**
-     * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+     * <code>repeated .lvi.BatchEvent events = 2;</code>
      */
     lvi.Event.BatchEventOrBuilder getEventsOrBuilder(
         int index);
@@ -805,32 +805,32 @@ public final class Event {
     public static final int EVENTS_FIELD_NUMBER = 2;
     private java.util.List<lvi.Event.BatchEvent> events_;
     /**
-     * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+     * <code>repeated .lvi.BatchEvent events = 2;</code>
      */
     public java.util.List<lvi.Event.BatchEvent> getEventsList() {
       return events_;
     }
     /**
-     * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+     * <code>repeated .lvi.BatchEvent events = 2;</code>
      */
     public java.util.List<? extends lvi.Event.BatchEventOrBuilder> 
         getEventsOrBuilderList() {
       return events_;
     }
     /**
-     * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+     * <code>repeated .lvi.BatchEvent events = 2;</code>
      */
     public int getEventsCount() {
       return events_.size();
     }
     /**
-     * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+     * <code>repeated .lvi.BatchEvent events = 2;</code>
      */
     public lvi.Event.BatchEvent getEvents(int index) {
       return events_.get(index);
     }
     /**
-     * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+     * <code>repeated .lvi.BatchEvent events = 2;</code>
      */
     public lvi.Event.BatchEventOrBuilder getEventsOrBuilder(
         int index) {
@@ -1341,7 +1341,7 @@ public final class Event {
           lvi.Event.BatchEvent, lvi.Event.BatchEvent.Builder, lvi.Event.BatchEventOrBuilder> eventsBuilder_;
 
       /**
-       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+       * <code>repeated .lvi.BatchEvent events = 2;</code>
        */
       public java.util.List<lvi.Event.BatchEvent> getEventsList() {
         if (eventsBuilder_ == null) {
@@ -1351,7 +1351,7 @@ public final class Event {
         }
       }
       /**
-       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+       * <code>repeated .lvi.BatchEvent events = 2;</code>
        */
       public int getEventsCount() {
         if (eventsBuilder_ == null) {
@@ -1361,7 +1361,7 @@ public final class Event {
         }
       }
       /**
-       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+       * <code>repeated .lvi.BatchEvent events = 2;</code>
        */
       public lvi.Event.BatchEvent getEvents(int index) {
         if (eventsBuilder_ == null) {
@@ -1371,7 +1371,7 @@ public final class Event {
         }
       }
       /**
-       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+       * <code>repeated .lvi.BatchEvent events = 2;</code>
        */
       public Builder setEvents(
           int index, lvi.Event.BatchEvent value) {
@@ -1388,7 +1388,7 @@ public final class Event {
         return this;
       }
       /**
-       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+       * <code>repeated .lvi.BatchEvent events = 2;</code>
        */
       public Builder setEvents(
           int index, lvi.Event.BatchEvent.Builder builderForValue) {
@@ -1402,7 +1402,7 @@ public final class Event {
         return this;
       }
       /**
-       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+       * <code>repeated .lvi.BatchEvent events = 2;</code>
        */
       public Builder addEvents(lvi.Event.BatchEvent value) {
         if (eventsBuilder_ == null) {
@@ -1418,7 +1418,7 @@ public final class Event {
         return this;
       }
       /**
-       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+       * <code>repeated .lvi.BatchEvent events = 2;</code>
        */
       public Builder addEvents(
           int index, lvi.Event.BatchEvent value) {
@@ -1435,7 +1435,7 @@ public final class Event {
         return this;
       }
       /**
-       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+       * <code>repeated .lvi.BatchEvent events = 2;</code>
        */
       public Builder addEvents(
           lvi.Event.BatchEvent.Builder builderForValue) {
@@ -1449,7 +1449,7 @@ public final class Event {
         return this;
       }
       /**
-       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+       * <code>repeated .lvi.BatchEvent events = 2;</code>
        */
       public Builder addEvents(
           int index, lvi.Event.BatchEvent.Builder builderForValue) {
@@ -1463,7 +1463,7 @@ public final class Event {
         return this;
       }
       /**
-       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+       * <code>repeated .lvi.BatchEvent events = 2;</code>
        */
       public Builder addAllEvents(
           java.lang.Iterable<? extends lvi.Event.BatchEvent> values) {
@@ -1478,7 +1478,7 @@ public final class Event {
         return this;
       }
       /**
-       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+       * <code>repeated .lvi.BatchEvent events = 2;</code>
        */
       public Builder clearEvents() {
         if (eventsBuilder_ == null) {
@@ -1491,7 +1491,7 @@ public final class Event {
         return this;
       }
       /**
-       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+       * <code>repeated .lvi.BatchEvent events = 2;</code>
        */
       public Builder removeEvents(int index) {
         if (eventsBuilder_ == null) {
@@ -1504,14 +1504,14 @@ public final class Event {
         return this;
       }
       /**
-       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+       * <code>repeated .lvi.BatchEvent events = 2;</code>
        */
       public lvi.Event.BatchEvent.Builder getEventsBuilder(
           int index) {
         return getEventsFieldBuilder().getBuilder(index);
       }
       /**
-       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+       * <code>repeated .lvi.BatchEvent events = 2;</code>
        */
       public lvi.Event.BatchEventOrBuilder getEventsOrBuilder(
           int index) {
@@ -1521,7 +1521,7 @@ public final class Event {
         }
       }
       /**
-       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+       * <code>repeated .lvi.BatchEvent events = 2;</code>
        */
       public java.util.List<? extends lvi.Event.BatchEventOrBuilder> 
            getEventsOrBuilderList() {
@@ -1532,14 +1532,14 @@ public final class Event {
         }
       }
       /**
-       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+       * <code>repeated .lvi.BatchEvent events = 2;</code>
        */
       public lvi.Event.BatchEvent.Builder addEventsBuilder() {
         return getEventsFieldBuilder().addBuilder(
             lvi.Event.BatchEvent.getDefaultInstance());
       }
       /**
-       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+       * <code>repeated .lvi.BatchEvent events = 2;</code>
        */
       public lvi.Event.BatchEvent.Builder addEventsBuilder(
           int index) {
@@ -1547,7 +1547,7 @@ public final class Event {
             index, lvi.Event.BatchEvent.getDefaultInstance());
       }
       /**
-       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+       * <code>repeated .lvi.BatchEvent events = 2;</code>
        */
       public java.util.List<lvi.Event.BatchEvent.Builder> 
            getEventsBuilderList() {
@@ -1643,10 +1643,10 @@ public final class Event {
       "ry_options.proto\032\023protos/client.proto\032\022p" +
       "rotos/actor.proto\"M\n\nBatchEvent\022?\n\005actor" +
       "\030\002 \001(\0132\n.lvi.ActorB$\220?\001\242?\036Actor concerne" +
-      "d with the event\"y\n\nEventBatch\0225\n\006client" +
+      "d with the event\"t\n\nEventBatch\0225\n\006client" +
       "\030\001 \001(\0132\013.lvi.ClientB\030\220?\001\242?\022Owner of the " +
-      "event\022$\n\006events\030\002 \003(\0132\017.lvi.BatchEventB\003" +
-      "\230?\001:\016\220\202\031\001\232\202\031\006eventsb\006proto3"
+      "event\022\037\n\006events\030\002 \003(\0132\017.lvi.BatchEvent:\016" +
+      "\220\202\031\001\232\202\031\006eventsb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -1669,7 +1669,6 @@ public final class Event {
         new java.lang.String[] { "Client", "Events", });
     com.google.protobuf.ExtensionRegistry registry =
         com.google.protobuf.ExtensionRegistry.newInstance();
-    registry.add(lvi.BigqueryOptions.batchAttribute);
     registry.add(lvi.BigqueryOptions.batchField);
     registry.add(lvi.BigqueryOptions.description);
     registry.add(lvi.BigqueryOptions.required);

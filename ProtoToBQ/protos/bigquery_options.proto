@@ -11,6 +11,5 @@ extend google.protobuf.MessageOptions {
 
 extend google.protobuf.FieldOptions {
   bool required = 1010; // Which number to pick anyway?
-  bool batch_attribute = 1011;
   string description = 1012;
 }

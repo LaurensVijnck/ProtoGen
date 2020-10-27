@@ -132,6 +132,7 @@ def _generate_repository(request):
                     if item.options.HasExtension(bigquery_options_pb2.table_root):
                         root_el.append(f".{proto_file.package}.{item.name}")
 
+
                     data.update({
                         # https://stackoverflow.com/questions/32836315/python-protocol-buffer-field-options/32867712#32867712
                         "root": item.options.HasExtension(bigquery_options_pb2.table_root),
@@ -143,7 +144,7 @@ def _generate_repository(request):
                              'fieldTypeValue': f.type_name,
                              'fieldRequired': f.options.HasExtension(bigquery_options_pb2.required),
                              'fieldIndex': f.number,
-                             'isBatchField': f.options.HasExtension(bigquery_options_pb2.batch_attribute)
+                             'isBatchField': item.options.Extensions[bigquery_options_pb2.batch_field] == f.name
                              } for f in item.field]
                     })
 

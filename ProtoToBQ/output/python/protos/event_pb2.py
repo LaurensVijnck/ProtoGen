@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='lvi',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=b'\n\x12protos/event.proto\x12\x03lvi\x1a\x1dprotos/bigquery_options.proto\x1a\x13protos/client.proto\x1a\x12protos/actor.proto\"M\n\nBatchEvent\x12?\n\x05\x61\x63tor\x18\x02 \x01(\x0b\x32\n.lvi.ActorB$\x90?\x01\xa2?\x1e\x41\x63tor concerned with the event\"y\n\nEventBatch\x12\x35\n\x06\x63lient\x18\x01 \x01(\x0b\x32\x0b.lvi.ClientB\x18\x90?\x01\xa2?\x12Owner of the event\x12$\n\x06\x65vents\x18\x02 \x03(\x0b\x32\x0f.lvi.BatchEventB\x03\x98?\x01:\x0e\x90\x82\x19\x01\x9a\x82\x19\x06\x65ventsb\x06proto3'
+  serialized_pb=b'\n\x12protos/event.proto\x12\x03lvi\x1a\x1dprotos/bigquery_options.proto\x1a\x13protos/client.proto\x1a\x12protos/actor.proto\"M\n\nBatchEvent\x12?\n\x05\x61\x63tor\x18\x02 \x01(\x0b\x32\n.lvi.ActorB$\x90?\x01\xa2?\x1e\x41\x63tor concerned with the event\"t\n\nEventBatch\x12\x35\n\x06\x63lient\x18\x01 \x01(\x0b\x32\x0b.lvi.ClientB\x18\x90?\x01\xa2?\x12Owner of the event\x12\x1f\n\x06\x65vents\x18\x02 \x03(\x0b\x32\x0f.lvi.BatchEvent:\x0e\x90\x82\x19\x01\x9a\x82\x19\x06\x65ventsb\x06proto3'
   ,
   dependencies=[protos_dot_bigquery__options__pb2.DESCRIPTOR,protos_dot_client__pb2.DESCRIPTOR,protos_dot_actor__pb2.DESCRIPTOR,])
 
@@ -79,7 +79,7 @@ _EVENTBATCH = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=b'\230?\001', file=DESCRIPTOR),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -93,7 +93,7 @@ _EVENTBATCH = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=178,
-  serialized_end=299,
+  serialized_end=294,
 )
 
 _BATCHEVENT.fields_by_name['actor'].message_type = protos_dot_actor__pb2._ACTOR
@@ -120,6 +120,5 @@ _sym_db.RegisterMessage(EventBatch)
 
 _BATCHEVENT.fields_by_name['actor']._options = None
 _EVENTBATCH.fields_by_name['client']._options = None
-_EVENTBATCH.fields_by_name['events']._options = None
 _EVENTBATCH._options = None
 # @@protoc_insertion_point(module_scope)

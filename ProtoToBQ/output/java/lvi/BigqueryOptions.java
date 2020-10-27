@@ -10,7 +10,6 @@ public final class BigqueryOptions {
     registry.add(lvi.BigqueryOptions.tableRoot);
     registry.add(lvi.BigqueryOptions.batchField);
     registry.add(lvi.BigqueryOptions.required);
-    registry.add(lvi.BigqueryOptions.batchAttribute);
     registry.add(lvi.BigqueryOptions.description);
   }
 
@@ -60,17 +59,6 @@ public final class BigqueryOptions {
           .newFileScopedGeneratedExtension(
         java.lang.Boolean.class,
         null);
-  public static final int BATCH_ATTRIBUTE_FIELD_NUMBER = 1011;
-  /**
-   * <code>extend .google.protobuf.FieldOptions { ... }</code>
-   */
-  public static final
-    com.google.protobuf.GeneratedMessage.GeneratedExtension<
-      com.google.protobuf.DescriptorProtos.FieldOptions,
-      java.lang.Boolean> batchAttribute = com.google.protobuf.GeneratedMessage
-          .newFileScopedGeneratedExtension(
-        java.lang.Boolean.class,
-        null);
   public static final int DESCRIPTION_FIELD_NUMBER = 1012;
   /**
    * <code>extend .google.protobuf.FieldOptions { ... }</code>
@@ -96,10 +84,9 @@ public final class BigqueryOptions {
       "root\022\037.google.protobuf.MessageOptions\030\242\220" +
       "\003 \001(\010:6\n\013batch_field\022\037.google.protobuf.M" +
       "essageOptions\030\243\220\003 \001(\t:0\n\010required\022\035.goog" +
-      "le.protobuf.FieldOptions\030\362\007 \001(\010:7\n\017batch" +
-      "_attribute\022\035.google.protobuf.FieldOption" +
-      "s\030\363\007 \001(\010:3\n\013description\022\035.google.protobu" +
-      "f.FieldOptions\030\364\007 \001(\tb\006proto3"
+      "le.protobuf.FieldOptions\030\362\007 \001(\010:3\n\013descr" +
+      "iption\022\035.google.protobuf.FieldOptions\030\364\007" +
+      " \001(\tb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -109,8 +96,7 @@ public final class BigqueryOptions {
     tableRoot.internalInit(descriptor.getExtensions().get(0));
     batchField.internalInit(descriptor.getExtensions().get(1));
     required.internalInit(descriptor.getExtensions().get(2));
-    batchAttribute.internalInit(descriptor.getExtensions().get(3));
-    description.internalInit(descriptor.getExtensions().get(4));
+    description.internalInit(descriptor.getExtensions().get(3));
     com.google.protobuf.DescriptorProtos.getDescriptor();
   }
 

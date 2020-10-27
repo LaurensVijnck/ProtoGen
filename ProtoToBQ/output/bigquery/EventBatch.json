@@ -1,0 +1,62 @@
+[
+  {
+    "description": "Owner of the event",
+    "mode": "REQUIRED",
+    "name": "client",
+    "type": "RECORD",
+    "fields": [
+      {
+        "description": "Identifier in the client catalog",
+        "mode": "REQUIRED",
+        "name": "tenantId",
+        "type": "INTEGER"
+      },
+      {
+        "description": "",
+        "mode": "NULLABLE",
+        "name": "name",
+        "type": "STRING"
+      }
+    ]
+  },
+  {
+    "description": "Actor concerned with the event",
+    "mode": "REQUIRED",
+    "name": "actor",
+    "type": "RECORD",
+    "fields": [
+      {
+        "description": "Identifier in the master table",
+        "mode": "REQUIRED",
+        "name": "userId",
+        "type": "INTEGER"
+      },
+      {
+        "description": "",
+        "mode": "NULLABLE",
+        "name": "email",
+        "type": "STRING"
+      },
+      {
+        "description": "",
+        "mode": "NULLABLE",
+        "name": "address",
+        "type": "RECORD",
+        "fields": [
+          {
+            "description": "",
+            "mode": "NULLABLE",
+            "name": "street",
+            "type": "STRING"
+          },
+          {
+            "description": "",
+            "mode": "NULLABLE",
+            "name": "number",
+            "type": "STRING"
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,9 @@
+**/.DS_Store
+**/.idea
+**/__pycache__
+build/
+dist/
+kuick.egg-info
+*.csv
+venv
+config

@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package lvi;
+
+import "protos/bigquery_options.proto";
+import "protos/client.proto";
+import "protos/actor.proto";
+
+message BatchEvent {
+    Actor actor = 2  [(required) = true, (description) = "Actor concerned with the event"];
+}
+
+message EventBatch {
+    option (table_root) = true;
+    Client client = 1  [(required) = true, (description) = "Owner of the event"];
+    repeated BatchEvent events = 2 [(batch_attribute) = true];
+}

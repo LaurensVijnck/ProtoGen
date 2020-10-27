@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.protobuf.util.JsonFormat;
+import lvi.BigqueryOptions;
 import lvi.Event;
 import models.FailSafeElement;
 import org.apache.beam.sdk.transforms.DoFn;
@@ -63,7 +64,7 @@ public class EventProtoToJSONParser<OriginalT> extends PTransform<PCollection<Fa
         private List<String> unBatchElements(String jsonString) throws JsonProcessingException {
             ObjectMapper jacksonObjMapper = new ObjectMapper();
             ObjectNode node = (ObjectNode)jacksonObjMapper.readTree(jsonString);
-            ArrayNode batch = (ArrayNode)(node).remove("events");
+            ArrayNode batch = (ArrayNode)(node).remove(Event.EventBatch.getDescriptor().getOptions().getExtension(BigqueryOptions.batchField));
             List<String> elements = new LinkedList<>();
 
             for (Iterator<JsonNode> it = batch.elements(); it.hasNext(); ) {

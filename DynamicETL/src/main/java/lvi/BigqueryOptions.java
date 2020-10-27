@@ -8,6 +8,7 @@ public final class BigqueryOptions {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistryLite registry) {
     registry.add(BigqueryOptions.tableRoot);
+    registry.add(BigqueryOptions.batchField);
     registry.add(BigqueryOptions.required);
     registry.add(BigqueryOptions.batchAttribute);
     registry.add(BigqueryOptions.description);
@@ -32,6 +33,17 @@ public final class BigqueryOptions {
       Boolean> tableRoot = com.google.protobuf.GeneratedMessage
           .newFileScopedGeneratedExtension(
         Boolean.class,
+        null);
+  public static final int BATCH_FIELD_FIELD_NUMBER = 51235;
+  /**
+   * <code>extend .google.protobuf.MessageOptions { ... }</code>
+   */
+  public static final
+    com.google.protobuf.GeneratedMessage.GeneratedExtension<
+      com.google.protobuf.DescriptorProtos.MessageOptions,
+      String> batchField = com.google.protobuf.GeneratedMessage
+          .newFileScopedGeneratedExtension(
+        String.class,
         null);
   public static final int REQUIRED_FIELD_NUMBER = 1010;
   /**
@@ -82,11 +94,12 @@ public final class BigqueryOptions {
       "\n\035protos/bigquery_options.proto\022\003lvi\032 go" +
       "ogle/protobuf/descriptor.proto:5\n\ntable_" +
       "root\022\037.google.protobuf.MessageOptions\030\242\220" +
-      "\003 \001(\010:0\n\010required\022\035.google.protobuf.Fiel" +
-      "dOptions\030\362\007 \001(\010:7\n\017batch_attribute\022\035.goo" +
-      "gle.protobuf.FieldOptions\030\363\007 \001(\010:3\n\013desc" +
-      "ription\022\035.google.protobuf.FieldOptions\030\364" +
-      "\007 \001(\tb\006proto3"
+      "\003 \001(\010:6\n\013batch_field\022\037.google.protobuf.M" +
+      "essageOptions\030\243\220\003 \001(\t:0\n\010required\022\035.goog" +
+      "le.protobuf.FieldOptions\030\362\007 \001(\010:7\n\017batch" +
+      "_attribute\022\035.google.protobuf.FieldOption" +
+      "s\030\363\007 \001(\010:3\n\013description\022\035.google.protobu" +
+      "f.FieldOptions\030\364\007 \001(\tb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -94,9 +107,10 @@ public final class BigqueryOptions {
           com.google.protobuf.DescriptorProtos.getDescriptor(),
         });
     tableRoot.internalInit(descriptor.getExtensions().get(0));
-    required.internalInit(descriptor.getExtensions().get(1));
-    batchAttribute.internalInit(descriptor.getExtensions().get(2));
-    description.internalInit(descriptor.getExtensions().get(3));
+    batchField.internalInit(descriptor.getExtensions().get(1));
+    required.internalInit(descriptor.getExtensions().get(2));
+    batchAttribute.internalInit(descriptor.getExtensions().get(3));
+    description.internalInit(descriptor.getExtensions().get(4));
     com.google.protobuf.DescriptorProtos.getDescriptor();
   }
 

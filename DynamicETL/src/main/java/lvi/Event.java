@@ -1643,10 +1643,10 @@ public final class Event {
       "ry_options.proto\032\023protos/client.proto\032\022p" +
       "rotos/actor.proto\"M\n\nBatchEvent\022?\n\005actor" +
       "\030\002 \001(\0132\n.lvi.ActorB$\220?\001\242?\036Actor concerne" +
-      "d with the event\"o\n\nEventBatch\0225\n\006client" +
+      "d with the event\"y\n\nEventBatch\0225\n\006client" +
       "\030\001 \001(\0132\013.lvi.ClientB\030\220?\001\242?\022Owner of the " +
       "event\022$\n\006events\030\002 \003(\0132\017.lvi.BatchEventB\003" +
-      "\230?\001:\004\220\202\031\001b\006proto3"
+      "\230?\001:\016\220\202\031\001\232\202\031\006eventsb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -1670,6 +1670,7 @@ public final class Event {
     com.google.protobuf.ExtensionRegistry registry =
         com.google.protobuf.ExtensionRegistry.newInstance();
     registry.add(BigqueryOptions.batchAttribute);
+    registry.add(BigqueryOptions.batchField);
     registry.add(BigqueryOptions.description);
     registry.add(BigqueryOptions.required);
     registry.add(BigqueryOptions.tableRoot);

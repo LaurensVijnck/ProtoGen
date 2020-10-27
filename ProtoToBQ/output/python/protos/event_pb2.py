@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='lvi',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=b'\n\x12protos/event.proto\x12\x03lvi\x1a\x1dprotos/bigquery_options.proto\x1a\x13protos/client.proto\x1a\x12protos/actor.proto\"M\n\nBatchEvent\x12?\n\x05\x61\x63tor\x18\x02 \x01(\x0b\x32\n.lvi.ActorB$\x90?\x01\xa2?\x1e\x41\x63tor concerned with the event\"o\n\nEventBatch\x12\x35\n\x06\x63lient\x18\x01 \x01(\x0b\x32\x0b.lvi.ClientB\x18\x90?\x01\xa2?\x12Owner of the event\x12$\n\x06\x65vents\x18\x02 \x03(\x0b\x32\x0f.lvi.BatchEventB\x03\x98?\x01:\x04\x90\x82\x19\x01\x62\x06proto3'
+  serialized_pb=b'\n\x12protos/event.proto\x12\x03lvi\x1a\x1dprotos/bigquery_options.proto\x1a\x13protos/client.proto\x1a\x12protos/actor.proto\"M\n\nBatchEvent\x12?\n\x05\x61\x63tor\x18\x02 \x01(\x0b\x32\n.lvi.ActorB$\x90?\x01\xa2?\x1e\x41\x63tor concerned with the event\"y\n\nEventBatch\x12\x35\n\x06\x63lient\x18\x01 \x01(\x0b\x32\x0b.lvi.ClientB\x18\x90?\x01\xa2?\x12Owner of the event\x12$\n\x06\x65vents\x18\x02 \x03(\x0b\x32\x0f.lvi.BatchEventB\x03\x98?\x01:\x0e\x90\x82\x19\x01\x9a\x82\x19\x06\x65ventsb\x06proto3'
   ,
   dependencies=[protos_dot_bigquery__options__pb2.DESCRIPTOR,protos_dot_client__pb2.DESCRIPTOR,protos_dot_actor__pb2.DESCRIPTOR,])
 
@@ -86,14 +86,14 @@ _EVENTBATCH = _descriptor.Descriptor(
   nested_types=[],
   enum_types=[
   ],
-  serialized_options=b'\220\202\031\001',
+  serialized_options=b'\220\202\031\001\232\202\031\006events',
   is_extendable=False,
   syntax='proto3',
   extension_ranges=[],
   oneofs=[
   ],
   serialized_start=178,
-  serialized_end=289,
+  serialized_end=299,
 )
 
 _BATCHEVENT.fields_by_name['actor'].message_type = protos_dot_actor__pb2._ACTOR

@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 GCP_PROJECT=geometric-ocean-284614
 GCP_LOCATION=EU
 

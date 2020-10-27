@@ -87,7 +87,7 @@ _BQ_TO_TYPE_VALUE = {
     BigQueryTypeEnum.TYPE_GEOGRAPHY: "GEOGRAPHY"
 }
 
-
+# https://expobrain.net/2015/09/13/create-a-plugin-for-google-protocol-buffer/
 def _traverse(proto_file):
 
     def _traverse(package, items):

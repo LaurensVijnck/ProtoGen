@@ -41,6 +41,18 @@ public final class ActorOuterClass {
      */
     com.google.protobuf.ByteString
         getNumberBytes();
+
+    /**
+     * <code>string country = 3;</code>
+     * @return The country.
+     */
+    java.lang.String getCountry();
+    /**
+     * <code>string country = 3;</code>
+     * @return The bytes for country.
+     */
+    com.google.protobuf.ByteString
+        getCountryBytes();
   }
   /**
    * Protobuf type {@code lvi.Address}
@@ -57,6 +69,7 @@ public final class ActorOuterClass {
     private Address() {
       street_ = "";
       number_ = "";
+      country_ = "";
     }
 
     @java.lang.Override
@@ -99,6 +112,12 @@ public final class ActorOuterClass {
               java.lang.String s = input.readStringRequireUtf8();
 
               number_ = s;
+              break;
+            }
+            case 26: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              country_ = s;
               break;
             }
             default: {
@@ -205,6 +224,42 @@ public final class ActorOuterClass {
       }
     }
 
+    public static final int COUNTRY_FIELD_NUMBER = 3;
+    private volatile java.lang.Object country_;
+    /**
+     * <code>string country = 3;</code>
+     * @return The country.
+     */
+    public java.lang.String getCountry() {
+      java.lang.Object ref = country_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        country_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string country = 3;</code>
+     * @return The bytes for country.
+     */
+    public com.google.protobuf.ByteString
+        getCountryBytes() {
+      java.lang.Object ref = country_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        country_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -225,6 +280,9 @@ public final class ActorOuterClass {
       if (!getNumberBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 2, number_);
       }
+      if (!getCountryBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, country_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -239,6 +297,9 @@ public final class ActorOuterClass {
       }
       if (!getNumberBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, number_);
+      }
+      if (!getCountryBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, country_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -259,6 +320,8 @@ public final class ActorOuterClass {
           .equals(other.getStreet())) return false;
       if (!getNumber()
           .equals(other.getNumber())) return false;
+      if (!getCountry()
+          .equals(other.getCountry())) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -274,6 +337,8 @@ public final class ActorOuterClass {
       hash = (53 * hash) + getStreet().hashCode();
       hash = (37 * hash) + NUMBER_FIELD_NUMBER;
       hash = (53 * hash) + getNumber().hashCode();
+      hash = (37 * hash) + COUNTRY_FIELD_NUMBER;
+      hash = (53 * hash) + getCountry().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -411,6 +476,8 @@ public final class ActorOuterClass {
 
         number_ = "";
 
+        country_ = "";
+
         return this;
       }
 
@@ -439,6 +506,7 @@ public final class ActorOuterClass {
         lvi.ActorOuterClass.Address result = new lvi.ActorOuterClass.Address(this);
         result.street_ = street_;
         result.number_ = number_;
+        result.country_ = country_;
         onBuilt();
         return result;
       }
@@ -493,6 +561,10 @@ public final class ActorOuterClass {
         }
         if (!other.getNumber().isEmpty()) {
           number_ = other.number_;
+          onChanged();
+        }
+        if (!other.getCountry().isEmpty()) {
+          country_ = other.country_;
           onChanged();
         }
         this.mergeUnknownFields(other.unknownFields);
@@ -672,6 +744,82 @@ public final class ActorOuterClass {
   checkByteStringIsUtf8(value);
         
         number_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object country_ = "";
+      /**
+       * <code>string country = 3;</code>
+       * @return The country.
+       */
+      public java.lang.String getCountry() {
+        java.lang.Object ref = country_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          country_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string country = 3;</code>
+       * @return The bytes for country.
+       */
+      public com.google.protobuf.ByteString
+          getCountryBytes() {
+        java.lang.Object ref = country_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          country_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string country = 3;</code>
+       * @param value The country to set.
+       * @return This builder for chaining.
+       */
+      public Builder setCountry(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        country_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string country = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearCountry() {
+        
+        country_ = getDefaultInstance().getCountry();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string country = 3;</code>
+       * @param value The bytes for country to set.
+       * @return This builder for chaining.
+       */
+      public Builder setCountryBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        country_ = value;
         onChanged();
         return this;
       }
@@ -1583,11 +1731,11 @@ public final class ActorOuterClass {
   static {
     java.lang.String[] descriptorData = {
       "\n\022protos/actor.proto\022\003lvi\032\035protos/bigque" +
-      "ry_options.proto\")\n\007Address\022\016\n\006street\030\001 " +
-      "\001(\t\022\016\n\006number\030\002 \001(\t\"k\n\005Actor\0224\n\006userId\030\001" +
-      " \001(\003B$\220?\001\242?\036Identifier in the master tab" +
-      "le\022\r\n\005email\030\002 \001(\t\022\035\n\007address\030\003 \001(\0132\014.lvi" +
-      ".Addressb\006proto3"
+      "ry_options.proto\":\n\007Address\022\016\n\006street\030\001 " +
+      "\001(\t\022\016\n\006number\030\002 \001(\t\022\017\n\007country\030\003 \001(\t\"k\n\005" +
+      "Actor\0224\n\006userId\030\001 \001(\003B$\220?\001\242?\036Identifier " +
+      "in the master table\022\r\n\005email\030\002 \001(\t\022\035\n\007ad" +
+      "dress\030\003 \001(\0132\014.lvi.Addressb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -1599,7 +1747,7 @@ public final class ActorOuterClass {
     internal_static_lvi_Address_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_lvi_Address_descriptor,
-        new java.lang.String[] { "Street", "Number", });
+        new java.lang.String[] { "Street", "Number", "Country", });
     internal_static_lvi_Actor_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_lvi_Actor_fieldAccessorTable = new

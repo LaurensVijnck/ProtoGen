@@ -12,10 +12,10 @@ mkdir -p $DST_DIR/python
 mkdir -p $DST_DIR/bigquery
 
 # Compile protos
-protoc -I=/Users/lvijnck/Desktop/ProtoToBQ \
+protoc -I=/Users/lvijnck/Desktop/ProtoBQGeneration/ProtoToBQ \
     --java_out=$DST_DIR/java \
     --python_out=$DST_DIR/python \
    protos/*
 
 # Invoke Custom BigQuery plugin
-protoc -I=/Users/lvijnck/Desktop/ProtoToBQ --plugin=protoc-gen-bq=proto-to-bq.py --bq_out=$DST_DIR/bigquery protos/*
+protoc -I=/Users/lvijnck/Desktop/ProtoBQGeneration/ProtoToBQ --plugin=protoc-gen-bq=proto-to-bq.py --bq_out=$DST_DIR/bigquery protos/*

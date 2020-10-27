@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='lvi',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=b'\n\x12protos/actor.proto\x12\x03lvi\x1a\x1dprotos/bigquery_options.proto\")\n\x07\x41\x64\x64ress\x12\x0e\n\x06street\x18\x01 \x01(\t\x12\x0e\n\x06number\x18\x02 \x01(\t\"k\n\x05\x41\x63tor\x12\x34\n\x06userId\x18\x01 \x01(\x03\x42$\x90?\x01\xa2?\x1eIdentifier in the master table\x12\r\n\x05\x65mail\x18\x02 \x01(\t\x12\x1d\n\x07\x61\x64\x64ress\x18\x03 \x01(\x0b\x32\x0c.lvi.Addressb\x06proto3'
+  serialized_pb=b'\n\x12protos/actor.proto\x12\x03lvi\x1a\x1dprotos/bigquery_options.proto\":\n\x07\x41\x64\x64ress\x12\x0e\n\x06street\x18\x01 \x01(\t\x12\x0e\n\x06number\x18\x02 \x01(\t\x12\x0f\n\x07\x63ountry\x18\x03 \x01(\t\"k\n\x05\x41\x63tor\x12\x34\n\x06userId\x18\x01 \x01(\x03\x42$\x90?\x01\xa2?\x1eIdentifier in the master table\x12\r\n\x05\x65mail\x18\x02 \x01(\t\x12\x1d\n\x07\x61\x64\x64ress\x18\x03 \x01(\x0b\x32\x0c.lvi.Addressb\x06proto3'
   ,
   dependencies=[protos_dot_bigquery__options__pb2.DESCRIPTOR,])
 
@@ -47,6 +47,13 @@ _ADDRESS = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='country', full_name='lvi.Address.country', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -60,7 +67,7 @@ _ADDRESS = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=58,
-  serialized_end=99,
+  serialized_end=116,
 )
 
 
@@ -104,8 +111,8 @@ _ACTOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=101,
-  serialized_end=208,
+  serialized_start=118,
+  serialized_end=225,
 )
 
 _ACTOR.fields_by_name['address'].message_type = _ADDRESS

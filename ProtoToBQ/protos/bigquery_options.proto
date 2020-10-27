@@ -6,6 +6,7 @@ import "google/protobuf/descriptor.proto";
 
 extend google.protobuf.MessageOptions {
   bool table_root = 51234; // Which number to pick anyway?
+  string batch_field = 51235;
 }
 
 extend google.protobuf.FieldOptions {

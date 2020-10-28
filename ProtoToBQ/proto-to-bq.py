@@ -254,7 +254,7 @@ if __name__ == '__main__':
 
     # Create response
     response = plugin.CodeGeneratorResponse()
-    response.supported_features= response.FEATURE_PROTO3_OPTIONAL
+    response.supported_features = response.FEATURE_PROTO3_OPTIONAL
 
     # Generate code
     generate_code(request, response)

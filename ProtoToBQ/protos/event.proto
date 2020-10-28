@@ -10,7 +10,7 @@ message BatchEvent {
     Actor actor = 2  [(required) = true, (description) = "Actor concerned with the event"];
 }
 
-message EventBatch {
+message Event {
     option (table_root) = true;
     // option (batch_field) = "events";
     Client client = 1  [(required) = true, (description) = "Owner of the event"];

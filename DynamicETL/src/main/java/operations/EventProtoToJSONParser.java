@@ -9,7 +9,7 @@ import com.google.api.services.bigquery.model.TableCell;
 import com.google.api.services.bigquery.model.TableRow;
 import com.google.protobuf.util.JsonFormat;
 import lvi.BigqueryOptions;
-import lvi.Event;
+import lvi.EventOuterClass;
 import models.FailSafeElement;
 import org.apache.beam.sdk.transforms.DoFn;
 import org.apache.beam.sdk.transforms.PTransform;
@@ -50,7 +50,7 @@ public class EventProtoToJSONParser<OriginalT> extends PTransform<PCollection<Fa
         public void processElement(@Element FailSafeElement<OriginalT, byte[]> input, ProcessContext c) {
 
             try {
-                String JsonString = JsonFormat.printer().print(Event.EventBatch.parseFrom(input.getPayload()));
+                // String JsonString = JsonFormat.printer().print(Event.EventBatch.parseFrom(input.getPayload()));
 
                 /*for (String el : unBatchElements(JsonString)) {
                     LOG.info(el);
@@ -65,9 +65,9 @@ public class EventProtoToJSONParser<OriginalT> extends PTransform<PCollection<Fa
     }
 
     private static List<String> unBatchElements(String jsonString, ArrayNode schema) throws Exception {
-        ObjectMapper jacksonObjMapper = new ObjectMapper();
+        /*ObjectMapper jacksonObjMapper = new ObjectMapper();
         ObjectNode node = (ObjectNode) jacksonObjMapper.readTree(jsonString);
-        ArrayNode batch = (ArrayNode) (node).remove(Event.EventBatch.getDescriptor().getOptions().getExtension(BigqueryOptions.batchField));
+        /// ArrayNode batch = (ArrayNode) (node).remove(EventOuterClass.Event.getDescriptor().getOptions().getExtension(BigqueryOptions.batchField));
         List<String> elements = new LinkedList<>();
 
         for (Iterator<JsonNode> it = batch.elements(); it.hasNext(); ) {
@@ -79,7 +79,7 @@ public class EventProtoToJSONParser<OriginalT> extends PTransform<PCollection<Fa
             }
         }
 
-        return elements;
+        return elements;*/
     }
 
     private static boolean validateElement(ObjectNode node, ArrayNode schema, String path) throws Exception {
@@ -117,7 +117,7 @@ public class EventProtoToJSONParser<OriginalT> extends PTransform<PCollection<Fa
 
 
 
-    public List<TableRow> convertTableRow(Event.EventBatch eventBatch) {
+    /*public List<TableRow> convertTableRow(Event.EventBatch eventBatch) {
         List<TableRow> rows = new LinkedList<>();
 
         // Client
@@ -158,7 +158,7 @@ public class EventProtoToJSONParser<OriginalT> extends PTransform<PCollection<Fa
         }
 
         return rows;
-    }
+    }*/
 
     public static void main(String[] args) throws Exception {
         String jsonString = "{\n" +

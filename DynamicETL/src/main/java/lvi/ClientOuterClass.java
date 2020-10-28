@@ -33,7 +33,7 @@ public final class ClientOuterClass {
      * <code>string name = 2;</code>
      * @return The name.
      */
-    String getName();
+    java.lang.String getName();
     /**
      * <code>string name = 2;</code>
      * @return The bytes for name.
@@ -57,14 +57,14 @@ public final class ClientOuterClass {
       name_ = "";
     }
 
-    @Override
+    @java.lang.Override
     @SuppressWarnings({"unused"})
-    protected Object newInstance(
+    protected java.lang.Object newInstance(
         UnusedPrivateParameter unused) {
       return new Client();
     }
 
-    @Override
+    @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
@@ -75,7 +75,7 @@ public final class ClientOuterClass {
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       if (extensionRegistry == null) {
-        throw new NullPointerException();
+        throw new java.lang.NullPointerException();
       }
       int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
@@ -94,7 +94,7 @@ public final class ClientOuterClass {
               break;
             }
             case 18: {
-              String s = input.readStringRequireUtf8();
+              java.lang.String s = input.readStringRequireUtf8();
 
               name_ = s;
               break;
@@ -120,15 +120,15 @@ public final class ClientOuterClass {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return ClientOuterClass.internal_static_lvi_Client_descriptor;
+      return lvi.ClientOuterClass.internal_static_lvi_Client_descriptor;
     }
 
-    @Override
-    protected FieldAccessorTable
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return ClientOuterClass.internal_static_lvi_Client_fieldAccessorTable
+      return lvi.ClientOuterClass.internal_static_lvi_Client_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              Client.class, Builder.class);
+              lvi.ClientOuterClass.Client.class, lvi.ClientOuterClass.Client.Builder.class);
     }
 
     private int bitField0_;
@@ -138,7 +138,7 @@ public final class ClientOuterClass {
      * <code>int64 tenantId = 1 [(.lvi.required) = true, (.lvi.description) = "Identifier in the client catalog"];</code>
      * @return Whether the tenantId field is set.
      */
-    @Override
+    @java.lang.Override
     public boolean hasTenantId() {
       return ((bitField0_ & 0x00000001) != 0);
     }
@@ -146,26 +146,26 @@ public final class ClientOuterClass {
      * <code>int64 tenantId = 1 [(.lvi.required) = true, (.lvi.description) = "Identifier in the client catalog"];</code>
      * @return The tenantId.
      */
-    @Override
+    @java.lang.Override
     public long getTenantId() {
       return tenantId_;
     }
 
     public static final int NAME_FIELD_NUMBER = 2;
-    private volatile Object name_;
+    private volatile java.lang.Object name_;
     /**
      * <code>string name = 2;</code>
      * @return The name.
      */
-    @Override
-    public String getName() {
-      Object ref = name_;
-      if (ref instanceof String) {
-        return (String) ref;
+    @java.lang.Override
+    public java.lang.String getName() {
+      java.lang.Object ref = name_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
+        java.lang.String s = bs.toStringUtf8();
         name_ = s;
         return s;
       }
@@ -174,14 +174,14 @@ public final class ClientOuterClass {
      * <code>string name = 2;</code>
      * @return The bytes for name.
      */
-    @Override
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getNameBytes() {
-      Object ref = name_;
-      if (ref instanceof String) {
+      java.lang.Object ref = name_;
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
+                (java.lang.String) ref);
         name_ = b;
         return b;
       } else {
@@ -190,7 +190,7 @@ public final class ClientOuterClass {
     }
 
     private byte memoizedIsInitialized = -1;
-    @Override
+    @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -200,7 +200,7 @@ public final class ClientOuterClass {
       return true;
     }
 
-    @Override
+    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (((bitField0_ & 0x00000001) != 0)) {
@@ -212,7 +212,7 @@ public final class ClientOuterClass {
       unknownFields.writeTo(output);
     }
 
-    @Override
+    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
@@ -230,15 +230,15 @@ public final class ClientOuterClass {
       return size;
     }
 
-    @Override
-    public boolean equals(final Object obj) {
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof Client)) {
+      if (!(obj instanceof lvi.ClientOuterClass.Client)) {
         return super.equals(obj);
       }
-      Client other = (Client) obj;
+      lvi.ClientOuterClass.Client other = (lvi.ClientOuterClass.Client) obj;
 
       if (hasTenantId() != other.hasTenantId()) return false;
       if (hasTenantId()) {
@@ -251,7 +251,7 @@ public final class ClientOuterClass {
       return true;
     }
 
-    @Override
+    @java.lang.Override
     public int hashCode() {
       if (memoizedHashCode != 0) {
         return memoizedHashCode;
@@ -270,69 +270,69 @@ public final class ClientOuterClass {
       return hash;
     }
 
-    public static Client parseFrom(
+    public static lvi.ClientOuterClass.Client parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static Client parseFrom(
+    public static lvi.ClientOuterClass.Client parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static Client parseFrom(
+    public static lvi.ClientOuterClass.Client parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static Client parseFrom(
+    public static lvi.ClientOuterClass.Client parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static Client parseFrom(byte[] data)
+    public static lvi.ClientOuterClass.Client parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static Client parseFrom(
+    public static lvi.ClientOuterClass.Client parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static Client parseFrom(java.io.InputStream input)
+    public static lvi.ClientOuterClass.Client parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static Client parseFrom(
+    public static lvi.ClientOuterClass.Client parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static Client parseDelimitedFrom(java.io.InputStream input)
+    public static lvi.ClientOuterClass.Client parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static Client parseDelimitedFrom(
+    public static lvi.ClientOuterClass.Client parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static Client parseFrom(
+    public static lvi.ClientOuterClass.Client parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static Client parseFrom(
+    public static lvi.ClientOuterClass.Client parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -340,23 +340,23 @@ public final class ClientOuterClass {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    @Override
+    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(Client prototype) {
+    public static Builder newBuilder(lvi.ClientOuterClass.Client prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-    @Override
+    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
     }
 
-    @Override
+    @java.lang.Override
     protected Builder newBuilderForType(
-        BuilderParent parent) {
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -366,18 +366,18 @@ public final class ClientOuterClass {
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:lvi.Client)
-        ClientOrBuilder {
+        lvi.ClientOuterClass.ClientOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return ClientOuterClass.internal_static_lvi_Client_descriptor;
+        return lvi.ClientOuterClass.internal_static_lvi_Client_descriptor;
       }
 
-      @Override
-      protected FieldAccessorTable
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return ClientOuterClass.internal_static_lvi_Client_fieldAccessorTable
+        return lvi.ClientOuterClass.internal_static_lvi_Client_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                Client.class, Builder.class);
+                lvi.ClientOuterClass.Client.class, lvi.ClientOuterClass.Client.Builder.class);
       }
 
       // Construct using lvi.ClientOuterClass.Client.newBuilder()
@@ -386,7 +386,7 @@ public final class ClientOuterClass {
       }
 
       private Builder(
-          BuilderParent parent) {
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -395,7 +395,7 @@ public final class ClientOuterClass {
                 .alwaysUseFieldBuilders) {
         }
       }
-      @Override
+      @java.lang.Override
       public Builder clear() {
         super.clear();
         tenantId_ = 0L;
@@ -405,29 +405,29 @@ public final class ClientOuterClass {
         return this;
       }
 
-      @Override
+      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return ClientOuterClass.internal_static_lvi_Client_descriptor;
+        return lvi.ClientOuterClass.internal_static_lvi_Client_descriptor;
       }
 
-      @Override
-      public Client getDefaultInstanceForType() {
-        return Client.getDefaultInstance();
+      @java.lang.Override
+      public lvi.ClientOuterClass.Client getDefaultInstanceForType() {
+        return lvi.ClientOuterClass.Client.getDefaultInstance();
       }
 
-      @Override
-      public Client build() {
-        Client result = buildPartial();
+      @java.lang.Override
+      public lvi.ClientOuterClass.Client build() {
+        lvi.ClientOuterClass.Client result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      @Override
-      public Client buildPartial() {
-        Client result = new Client(this);
+      @java.lang.Override
+      public lvi.ClientOuterClass.Client buildPartial() {
+        lvi.ClientOuterClass.Client result = new lvi.ClientOuterClass.Client(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) != 0)) {
@@ -440,50 +440,50 @@ public final class ClientOuterClass {
         return result;
       }
 
-      @Override
+      @java.lang.Override
       public Builder clone() {
         return super.clone();
       }
-      @Override
+      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return super.setField(field, value);
       }
-      @Override
+      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
-      @Override
+      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
-      @Override
+      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
+          int index, java.lang.Object value) {
         return super.setRepeatedField(field, index, value);
       }
-      @Override
+      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return super.addRepeatedField(field, value);
       }
-      @Override
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof Client) {
-          return mergeFrom((Client)other);
+        if (other instanceof lvi.ClientOuterClass.Client) {
+          return mergeFrom((lvi.ClientOuterClass.Client)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(Client other) {
-        if (other == Client.getDefaultInstance()) return this;
+      public Builder mergeFrom(lvi.ClientOuterClass.Client other) {
+        if (other == lvi.ClientOuterClass.Client.getDefaultInstance()) return this;
         if (other.hasTenantId()) {
           setTenantId(other.getTenantId());
         }
@@ -496,21 +496,21 @@ public final class ClientOuterClass {
         return this;
       }
 
-      @Override
+      @java.lang.Override
       public final boolean isInitialized() {
         return true;
       }
 
-      @Override
+      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        Client parsedMessage = null;
+        lvi.ClientOuterClass.Client parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (Client) e.getUnfinishedMessage();
+          parsedMessage = (lvi.ClientOuterClass.Client) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -526,7 +526,7 @@ public final class ClientOuterClass {
        * <code>int64 tenantId = 1 [(.lvi.required) = true, (.lvi.description) = "Identifier in the client catalog"];</code>
        * @return Whether the tenantId field is set.
        */
-      @Override
+      @java.lang.Override
       public boolean hasTenantId() {
         return ((bitField0_ & 0x00000001) != 0);
       }
@@ -534,7 +534,7 @@ public final class ClientOuterClass {
        * <code>int64 tenantId = 1 [(.lvi.required) = true, (.lvi.description) = "Identifier in the client catalog"];</code>
        * @return The tenantId.
        */
-      @Override
+      @java.lang.Override
       public long getTenantId() {
         return tenantId_;
       }
@@ -560,21 +560,21 @@ public final class ClientOuterClass {
         return this;
       }
 
-      private Object name_ = "";
+      private java.lang.Object name_ = "";
       /**
        * <code>string name = 2;</code>
        * @return The name.
        */
-      public String getName() {
-        Object ref = name_;
-        if (!(ref instanceof String)) {
+      public java.lang.String getName() {
+        java.lang.Object ref = name_;
+        if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
+          java.lang.String s = bs.toStringUtf8();
           name_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
       /**
@@ -583,11 +583,11 @@ public final class ClientOuterClass {
        */
       public com.google.protobuf.ByteString
           getNameBytes() {
-        Object ref = name_;
+        java.lang.Object ref = name_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
+                  (java.lang.String) ref);
           name_ = b;
           return b;
         } else {
@@ -600,7 +600,7 @@ public final class ClientOuterClass {
        * @return This builder for chaining.
        */
       public Builder setName(
-          String value) {
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -635,13 +635,13 @@ public final class ClientOuterClass {
         onChanged();
         return this;
       }
-      @Override
+      @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFields(unknownFields);
       }
 
-      @Override
+      @java.lang.Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
@@ -652,18 +652,18 @@ public final class ClientOuterClass {
     }
 
     // @@protoc_insertion_point(class_scope:lvi.Client)
-    private static final Client DEFAULT_INSTANCE;
+    private static final lvi.ClientOuterClass.Client DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new Client();
+      DEFAULT_INSTANCE = new lvi.ClientOuterClass.Client();
     }
 
-    public static Client getDefaultInstance() {
+    public static lvi.ClientOuterClass.Client getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
     private static final com.google.protobuf.Parser<Client>
         PARSER = new com.google.protobuf.AbstractParser<Client>() {
-      @Override
+      @java.lang.Override
       public Client parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -676,13 +676,13 @@ public final class ClientOuterClass {
       return PARSER;
     }
 
-    @Override
+    @java.lang.Override
     public com.google.protobuf.Parser<Client> getParserForType() {
       return PARSER;
     }
 
-    @Override
-    public Client getDefaultInstanceForType() {
+    @java.lang.Override
+    public lvi.ClientOuterClass.Client getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -701,7 +701,7 @@ public final class ClientOuterClass {
   private static  com.google.protobuf.Descriptors.FileDescriptor
       descriptor;
   static {
-    String[] descriptorData = {
+    java.lang.String[] descriptorData = {
       "\n\023protos/client.proto\022\003lvi\032\035protos/bigqu" +
       "ery_options.proto\"b\n\006Client\022=\n\010tenantId\030" +
       "\001 \001(\003B&\220?\001\242? Identifier in the client ca" +
@@ -711,21 +711,21 @@ public final class ClientOuterClass {
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
-          BigqueryOptions.getDescriptor(),
+          lvi.BigqueryOptions.getDescriptor(),
         });
     internal_static_lvi_Client_descriptor =
       getDescriptor().getMessageTypes().get(0);
     internal_static_lvi_Client_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_lvi_Client_descriptor,
-        new String[] { "TenantId", "Name", "TenantId", });
+        new java.lang.String[] { "TenantId", "Name", "TenantId", });
     com.google.protobuf.ExtensionRegistry registry =
         com.google.protobuf.ExtensionRegistry.newInstance();
-    registry.add(BigqueryOptions.description);
-    registry.add(BigqueryOptions.required);
+    registry.add(lvi.BigqueryOptions.description);
+    registry.add(lvi.BigqueryOptions.required);
     com.google.protobuf.Descriptors.FileDescriptor
         .internalUpdateFileDescriptor(descriptor, registry);
-    BigqueryOptions.getDescriptor();
+    lvi.BigqueryOptions.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

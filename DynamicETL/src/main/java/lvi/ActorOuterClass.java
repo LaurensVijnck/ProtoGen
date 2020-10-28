@@ -22,7 +22,7 @@ public final class ActorOuterClass {
      * <code>string street = 1;</code>
      * @return The street.
      */
-    String getStreet();
+    java.lang.String getStreet();
     /**
      * <code>string street = 1;</code>
      * @return The bytes for street.
@@ -34,7 +34,7 @@ public final class ActorOuterClass {
      * <code>string number = 2;</code>
      * @return The number.
      */
-    String getNumber();
+    java.lang.String getNumber();
     /**
      * <code>string number = 2;</code>
      * @return The bytes for number.
@@ -46,7 +46,7 @@ public final class ActorOuterClass {
      * <code>string country = 3;</code>
      * @return The country.
      */
-    String getCountry();
+    java.lang.String getCountry();
     /**
      * <code>string country = 3;</code>
      * @return The bytes for country.
@@ -72,14 +72,14 @@ public final class ActorOuterClass {
       country_ = "";
     }
 
-    @Override
+    @java.lang.Override
     @SuppressWarnings({"unused"})
-    protected Object newInstance(
+    protected java.lang.Object newInstance(
         UnusedPrivateParameter unused) {
       return new Address();
     }
 
-    @Override
+    @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
@@ -90,7 +90,7 @@ public final class ActorOuterClass {
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       if (extensionRegistry == null) {
-        throw new NullPointerException();
+        throw new java.lang.NullPointerException();
       }
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
@@ -103,19 +103,19 @@ public final class ActorOuterClass {
               done = true;
               break;
             case 10: {
-              String s = input.readStringRequireUtf8();
+              java.lang.String s = input.readStringRequireUtf8();
 
               street_ = s;
               break;
             }
             case 18: {
-              String s = input.readStringRequireUtf8();
+              java.lang.String s = input.readStringRequireUtf8();
 
               number_ = s;
               break;
             }
             case 26: {
-              String s = input.readStringRequireUtf8();
+              java.lang.String s = input.readStringRequireUtf8();
 
               country_ = s;
               break;
@@ -141,32 +141,32 @@ public final class ActorOuterClass {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return ActorOuterClass.internal_static_lvi_Address_descriptor;
+      return lvi.ActorOuterClass.internal_static_lvi_Address_descriptor;
     }
 
-    @Override
-    protected FieldAccessorTable
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return ActorOuterClass.internal_static_lvi_Address_fieldAccessorTable
+      return lvi.ActorOuterClass.internal_static_lvi_Address_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              Address.class, Builder.class);
+              lvi.ActorOuterClass.Address.class, lvi.ActorOuterClass.Address.Builder.class);
     }
 
     public static final int STREET_FIELD_NUMBER = 1;
-    private volatile Object street_;
+    private volatile java.lang.Object street_;
     /**
      * <code>string street = 1;</code>
      * @return The street.
      */
-    @Override
-    public String getStreet() {
-      Object ref = street_;
-      if (ref instanceof String) {
-        return (String) ref;
+    @java.lang.Override
+    public java.lang.String getStreet() {
+      java.lang.Object ref = street_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
+        java.lang.String s = bs.toStringUtf8();
         street_ = s;
         return s;
       }
@@ -175,14 +175,14 @@ public final class ActorOuterClass {
      * <code>string street = 1;</code>
      * @return The bytes for street.
      */
-    @Override
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getStreetBytes() {
-      Object ref = street_;
-      if (ref instanceof String) {
+      java.lang.Object ref = street_;
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
+                (java.lang.String) ref);
         street_ = b;
         return b;
       } else {
@@ -191,20 +191,20 @@ public final class ActorOuterClass {
     }
 
     public static final int NUMBER_FIELD_NUMBER = 2;
-    private volatile Object number_;
+    private volatile java.lang.Object number_;
     /**
      * <code>string number = 2;</code>
      * @return The number.
      */
-    @Override
-    public String getNumber() {
-      Object ref = number_;
-      if (ref instanceof String) {
-        return (String) ref;
+    @java.lang.Override
+    public java.lang.String getNumber() {
+      java.lang.Object ref = number_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
+        java.lang.String s = bs.toStringUtf8();
         number_ = s;
         return s;
       }
@@ -213,14 +213,14 @@ public final class ActorOuterClass {
      * <code>string number = 2;</code>
      * @return The bytes for number.
      */
-    @Override
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getNumberBytes() {
-      Object ref = number_;
-      if (ref instanceof String) {
+      java.lang.Object ref = number_;
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
+                (java.lang.String) ref);
         number_ = b;
         return b;
       } else {
@@ -229,20 +229,20 @@ public final class ActorOuterClass {
     }
 
     public static final int COUNTRY_FIELD_NUMBER = 3;
-    private volatile Object country_;
+    private volatile java.lang.Object country_;
     /**
      * <code>string country = 3;</code>
      * @return The country.
      */
-    @Override
-    public String getCountry() {
-      Object ref = country_;
-      if (ref instanceof String) {
-        return (String) ref;
+    @java.lang.Override
+    public java.lang.String getCountry() {
+      java.lang.Object ref = country_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
+        java.lang.String s = bs.toStringUtf8();
         country_ = s;
         return s;
       }
@@ -251,14 +251,14 @@ public final class ActorOuterClass {
      * <code>string country = 3;</code>
      * @return The bytes for country.
      */
-    @Override
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getCountryBytes() {
-      Object ref = country_;
-      if (ref instanceof String) {
+      java.lang.Object ref = country_;
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
+                (java.lang.String) ref);
         country_ = b;
         return b;
       } else {
@@ -267,7 +267,7 @@ public final class ActorOuterClass {
     }
 
     private byte memoizedIsInitialized = -1;
-    @Override
+    @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -277,7 +277,7 @@ public final class ActorOuterClass {
       return true;
     }
 
-    @Override
+    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (!getStreetBytes().isEmpty()) {
@@ -292,7 +292,7 @@ public final class ActorOuterClass {
       unknownFields.writeTo(output);
     }
 
-    @Override
+    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
@@ -312,15 +312,15 @@ public final class ActorOuterClass {
       return size;
     }
 
-    @Override
-    public boolean equals(final Object obj) {
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof Address)) {
+      if (!(obj instanceof lvi.ActorOuterClass.Address)) {
         return super.equals(obj);
       }
-      Address other = (Address) obj;
+      lvi.ActorOuterClass.Address other = (lvi.ActorOuterClass.Address) obj;
 
       if (!getStreet()
           .equals(other.getStreet())) return false;
@@ -332,7 +332,7 @@ public final class ActorOuterClass {
       return true;
     }
 
-    @Override
+    @java.lang.Override
     public int hashCode() {
       if (memoizedHashCode != 0) {
         return memoizedHashCode;
@@ -350,69 +350,69 @@ public final class ActorOuterClass {
       return hash;
     }
 
-    public static Address parseFrom(
+    public static lvi.ActorOuterClass.Address parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static Address parseFrom(
+    public static lvi.ActorOuterClass.Address parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static Address parseFrom(
+    public static lvi.ActorOuterClass.Address parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static Address parseFrom(
+    public static lvi.ActorOuterClass.Address parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static Address parseFrom(byte[] data)
+    public static lvi.ActorOuterClass.Address parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static Address parseFrom(
+    public static lvi.ActorOuterClass.Address parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static Address parseFrom(java.io.InputStream input)
+    public static lvi.ActorOuterClass.Address parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static Address parseFrom(
+    public static lvi.ActorOuterClass.Address parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static Address parseDelimitedFrom(java.io.InputStream input)
+    public static lvi.ActorOuterClass.Address parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static Address parseDelimitedFrom(
+    public static lvi.ActorOuterClass.Address parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static Address parseFrom(
+    public static lvi.ActorOuterClass.Address parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static Address parseFrom(
+    public static lvi.ActorOuterClass.Address parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -420,23 +420,23 @@ public final class ActorOuterClass {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    @Override
+    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(Address prototype) {
+    public static Builder newBuilder(lvi.ActorOuterClass.Address prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-    @Override
+    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
     }
 
-    @Override
+    @java.lang.Override
     protected Builder newBuilderForType(
-        BuilderParent parent) {
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -446,18 +446,18 @@ public final class ActorOuterClass {
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:lvi.Address)
-        AddressOrBuilder {
+        lvi.ActorOuterClass.AddressOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return ActorOuterClass.internal_static_lvi_Address_descriptor;
+        return lvi.ActorOuterClass.internal_static_lvi_Address_descriptor;
       }
 
-      @Override
-      protected FieldAccessorTable
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return ActorOuterClass.internal_static_lvi_Address_fieldAccessorTable
+        return lvi.ActorOuterClass.internal_static_lvi_Address_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                Address.class, Builder.class);
+                lvi.ActorOuterClass.Address.class, lvi.ActorOuterClass.Address.Builder.class);
       }
 
       // Construct using lvi.ActorOuterClass.Address.newBuilder()
@@ -466,7 +466,7 @@ public final class ActorOuterClass {
       }
 
       private Builder(
-          BuilderParent parent) {
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -475,7 +475,7 @@ public final class ActorOuterClass {
                 .alwaysUseFieldBuilders) {
         }
       }
-      @Override
+      @java.lang.Override
       public Builder clear() {
         super.clear();
         street_ = "";
@@ -487,29 +487,29 @@ public final class ActorOuterClass {
         return this;
       }
 
-      @Override
+      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return ActorOuterClass.internal_static_lvi_Address_descriptor;
+        return lvi.ActorOuterClass.internal_static_lvi_Address_descriptor;
       }
 
-      @Override
-      public Address getDefaultInstanceForType() {
-        return Address.getDefaultInstance();
+      @java.lang.Override
+      public lvi.ActorOuterClass.Address getDefaultInstanceForType() {
+        return lvi.ActorOuterClass.Address.getDefaultInstance();
       }
 
-      @Override
-      public Address build() {
-        Address result = buildPartial();
+      @java.lang.Override
+      public lvi.ActorOuterClass.Address build() {
+        lvi.ActorOuterClass.Address result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      @Override
-      public Address buildPartial() {
-        Address result = new Address(this);
+      @java.lang.Override
+      public lvi.ActorOuterClass.Address buildPartial() {
+        lvi.ActorOuterClass.Address result = new lvi.ActorOuterClass.Address(this);
         result.street_ = street_;
         result.number_ = number_;
         result.country_ = country_;
@@ -517,50 +517,50 @@ public final class ActorOuterClass {
         return result;
       }
 
-      @Override
+      @java.lang.Override
       public Builder clone() {
         return super.clone();
       }
-      @Override
+      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return super.setField(field, value);
       }
-      @Override
+      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
-      @Override
+      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
-      @Override
+      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
+          int index, java.lang.Object value) {
         return super.setRepeatedField(field, index, value);
       }
-      @Override
+      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return super.addRepeatedField(field, value);
       }
-      @Override
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof Address) {
-          return mergeFrom((Address)other);
+        if (other instanceof lvi.ActorOuterClass.Address) {
+          return mergeFrom((lvi.ActorOuterClass.Address)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(Address other) {
-        if (other == Address.getDefaultInstance()) return this;
+      public Builder mergeFrom(lvi.ActorOuterClass.Address other) {
+        if (other == lvi.ActorOuterClass.Address.getDefaultInstance()) return this;
         if (!other.getStreet().isEmpty()) {
           street_ = other.street_;
           onChanged();
@@ -578,21 +578,21 @@ public final class ActorOuterClass {
         return this;
       }
 
-      @Override
+      @java.lang.Override
       public final boolean isInitialized() {
         return true;
       }
 
-      @Override
+      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        Address parsedMessage = null;
+        lvi.ActorOuterClass.Address parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (Address) e.getUnfinishedMessage();
+          parsedMessage = (lvi.ActorOuterClass.Address) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -602,21 +602,21 @@ public final class ActorOuterClass {
         return this;
       }
 
-      private Object street_ = "";
+      private java.lang.Object street_ = "";
       /**
        * <code>string street = 1;</code>
        * @return The street.
        */
-      public String getStreet() {
-        Object ref = street_;
-        if (!(ref instanceof String)) {
+      public java.lang.String getStreet() {
+        java.lang.Object ref = street_;
+        if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
+          java.lang.String s = bs.toStringUtf8();
           street_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
       /**
@@ -625,11 +625,11 @@ public final class ActorOuterClass {
        */
       public com.google.protobuf.ByteString
           getStreetBytes() {
-        Object ref = street_;
+        java.lang.Object ref = street_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
+                  (java.lang.String) ref);
           street_ = b;
           return b;
         } else {
@@ -642,7 +642,7 @@ public final class ActorOuterClass {
        * @return This builder for chaining.
        */
       public Builder setStreet(
-          String value) {
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -678,21 +678,21 @@ public final class ActorOuterClass {
         return this;
       }
 
-      private Object number_ = "";
+      private java.lang.Object number_ = "";
       /**
        * <code>string number = 2;</code>
        * @return The number.
        */
-      public String getNumber() {
-        Object ref = number_;
-        if (!(ref instanceof String)) {
+      public java.lang.String getNumber() {
+        java.lang.Object ref = number_;
+        if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
+          java.lang.String s = bs.toStringUtf8();
           number_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
       /**
@@ -701,11 +701,11 @@ public final class ActorOuterClass {
        */
       public com.google.protobuf.ByteString
           getNumberBytes() {
-        Object ref = number_;
+        java.lang.Object ref = number_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
+                  (java.lang.String) ref);
           number_ = b;
           return b;
         } else {
@@ -718,7 +718,7 @@ public final class ActorOuterClass {
        * @return This builder for chaining.
        */
       public Builder setNumber(
-          String value) {
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -754,21 +754,21 @@ public final class ActorOuterClass {
         return this;
       }
 
-      private Object country_ = "";
+      private java.lang.Object country_ = "";
       /**
        * <code>string country = 3;</code>
        * @return The country.
        */
-      public String getCountry() {
-        Object ref = country_;
-        if (!(ref instanceof String)) {
+      public java.lang.String getCountry() {
+        java.lang.Object ref = country_;
+        if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
+          java.lang.String s = bs.toStringUtf8();
           country_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
       /**
@@ -777,11 +777,11 @@ public final class ActorOuterClass {
        */
       public com.google.protobuf.ByteString
           getCountryBytes() {
-        Object ref = country_;
+        java.lang.Object ref = country_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
+                  (java.lang.String) ref);
           country_ = b;
           return b;
         } else {
@@ -794,7 +794,7 @@ public final class ActorOuterClass {
        * @return This builder for chaining.
        */
       public Builder setCountry(
-          String value) {
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -829,13 +829,13 @@ public final class ActorOuterClass {
         onChanged();
         return this;
       }
-      @Override
+      @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFields(unknownFields);
       }
 
-      @Override
+      @java.lang.Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
@@ -846,18 +846,18 @@ public final class ActorOuterClass {
     }
 
     // @@protoc_insertion_point(class_scope:lvi.Address)
-    private static final Address DEFAULT_INSTANCE;
+    private static final lvi.ActorOuterClass.Address DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new Address();
+      DEFAULT_INSTANCE = new lvi.ActorOuterClass.Address();
     }
 
-    public static Address getDefaultInstance() {
+    public static lvi.ActorOuterClass.Address getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
     private static final com.google.protobuf.Parser<Address>
         PARSER = new com.google.protobuf.AbstractParser<Address>() {
-      @Override
+      @java.lang.Override
       public Address parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -870,13 +870,13 @@ public final class ActorOuterClass {
       return PARSER;
     }
 
-    @Override
+    @java.lang.Override
     public com.google.protobuf.Parser<Address> getParserForType() {
       return PARSER;
     }
 
-    @Override
-    public Address getDefaultInstanceForType() {
+    @java.lang.Override
+    public lvi.ActorOuterClass.Address getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -901,7 +901,7 @@ public final class ActorOuterClass {
      * <code>string email = 2 [(.lvi.required) = false, (.lvi.description) = "Email address of the actor"];</code>
      * @return The email.
      */
-    String getEmail();
+    java.lang.String getEmail();
     /**
      * <code>string email = 2 [(.lvi.required) = false, (.lvi.description) = "Email address of the actor"];</code>
      * @return The bytes for email.
@@ -918,11 +918,11 @@ public final class ActorOuterClass {
      * <code>.lvi.Address address = 3;</code>
      * @return The address.
      */
-    Address getAddress();
+    lvi.ActorOuterClass.Address getAddress();
     /**
      * <code>.lvi.Address address = 3;</code>
      */
-    AddressOrBuilder getAddressOrBuilder();
+    lvi.ActorOuterClass.AddressOrBuilder getAddressOrBuilder();
   }
   /**
    * Protobuf type {@code lvi.Actor}
@@ -940,14 +940,14 @@ public final class ActorOuterClass {
       email_ = "";
     }
 
-    @Override
+    @java.lang.Override
     @SuppressWarnings({"unused"})
-    protected Object newInstance(
+    protected java.lang.Object newInstance(
         UnusedPrivateParameter unused) {
       return new Actor();
     }
 
-    @Override
+    @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
@@ -958,7 +958,7 @@ public final class ActorOuterClass {
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       if (extensionRegistry == null) {
-        throw new NullPointerException();
+        throw new java.lang.NullPointerException();
       }
       int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
@@ -977,17 +977,17 @@ public final class ActorOuterClass {
               break;
             }
             case 18: {
-              String s = input.readStringRequireUtf8();
+              java.lang.String s = input.readStringRequireUtf8();
 
               email_ = s;
               break;
             }
             case 26: {
-              Address.Builder subBuilder = null;
+              lvi.ActorOuterClass.Address.Builder subBuilder = null;
               if (address_ != null) {
                 subBuilder = address_.toBuilder();
               }
-              address_ = input.readMessage(Address.parser(), extensionRegistry);
+              address_ = input.readMessage(lvi.ActorOuterClass.Address.parser(), extensionRegistry);
               if (subBuilder != null) {
                 subBuilder.mergeFrom(address_);
                 address_ = subBuilder.buildPartial();
@@ -1016,15 +1016,15 @@ public final class ActorOuterClass {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return ActorOuterClass.internal_static_lvi_Actor_descriptor;
+      return lvi.ActorOuterClass.internal_static_lvi_Actor_descriptor;
     }
 
-    @Override
-    protected FieldAccessorTable
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return ActorOuterClass.internal_static_lvi_Actor_fieldAccessorTable
+      return lvi.ActorOuterClass.internal_static_lvi_Actor_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              Actor.class, Builder.class);
+              lvi.ActorOuterClass.Actor.class, lvi.ActorOuterClass.Actor.Builder.class);
     }
 
     private int bitField0_;
@@ -1034,7 +1034,7 @@ public final class ActorOuterClass {
      * <code>int64 userId = 1 [(.lvi.required) = true, (.lvi.description) = "Identifier in the master table"];</code>
      * @return Whether the userId field is set.
      */
-    @Override
+    @java.lang.Override
     public boolean hasUserId() {
       return ((bitField0_ & 0x00000001) != 0);
     }
@@ -1042,26 +1042,26 @@ public final class ActorOuterClass {
      * <code>int64 userId = 1 [(.lvi.required) = true, (.lvi.description) = "Identifier in the master table"];</code>
      * @return The userId.
      */
-    @Override
+    @java.lang.Override
     public long getUserId() {
       return userId_;
     }
 
     public static final int EMAIL_FIELD_NUMBER = 2;
-    private volatile Object email_;
+    private volatile java.lang.Object email_;
     /**
      * <code>string email = 2 [(.lvi.required) = false, (.lvi.description) = "Email address of the actor"];</code>
      * @return The email.
      */
-    @Override
-    public String getEmail() {
-      Object ref = email_;
-      if (ref instanceof String) {
-        return (String) ref;
+    @java.lang.Override
+    public java.lang.String getEmail() {
+      java.lang.Object ref = email_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
+        java.lang.String s = bs.toStringUtf8();
         email_ = s;
         return s;
       }
@@ -1070,14 +1070,14 @@ public final class ActorOuterClass {
      * <code>string email = 2 [(.lvi.required) = false, (.lvi.description) = "Email address of the actor"];</code>
      * @return The bytes for email.
      */
-    @Override
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getEmailBytes() {
-      Object ref = email_;
-      if (ref instanceof String) {
+      java.lang.Object ref = email_;
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
+                (java.lang.String) ref);
         email_ = b;
         return b;
       } else {
@@ -1086,12 +1086,12 @@ public final class ActorOuterClass {
     }
 
     public static final int ADDRESS_FIELD_NUMBER = 3;
-    private Address address_;
+    private lvi.ActorOuterClass.Address address_;
     /**
      * <code>.lvi.Address address = 3;</code>
      * @return Whether the address field is set.
      */
-    @Override
+    @java.lang.Override
     public boolean hasAddress() {
       return address_ != null;
     }
@@ -1099,20 +1099,20 @@ public final class ActorOuterClass {
      * <code>.lvi.Address address = 3;</code>
      * @return The address.
      */
-    @Override
-    public Address getAddress() {
-      return address_ == null ? Address.getDefaultInstance() : address_;
+    @java.lang.Override
+    public lvi.ActorOuterClass.Address getAddress() {
+      return address_ == null ? lvi.ActorOuterClass.Address.getDefaultInstance() : address_;
     }
     /**
      * <code>.lvi.Address address = 3;</code>
      */
-    @Override
-    public AddressOrBuilder getAddressOrBuilder() {
+    @java.lang.Override
+    public lvi.ActorOuterClass.AddressOrBuilder getAddressOrBuilder() {
       return getAddress();
     }
 
     private byte memoizedIsInitialized = -1;
-    @Override
+    @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -1122,7 +1122,7 @@ public final class ActorOuterClass {
       return true;
     }
 
-    @Override
+    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (((bitField0_ & 0x00000001) != 0)) {
@@ -1137,7 +1137,7 @@ public final class ActorOuterClass {
       unknownFields.writeTo(output);
     }
 
-    @Override
+    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
@@ -1159,15 +1159,15 @@ public final class ActorOuterClass {
       return size;
     }
 
-    @Override
-    public boolean equals(final Object obj) {
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof Actor)) {
+      if (!(obj instanceof lvi.ActorOuterClass.Actor)) {
         return super.equals(obj);
       }
-      Actor other = (Actor) obj;
+      lvi.ActorOuterClass.Actor other = (lvi.ActorOuterClass.Actor) obj;
 
       if (hasUserId() != other.hasUserId()) return false;
       if (hasUserId()) {
@@ -1185,7 +1185,7 @@ public final class ActorOuterClass {
       return true;
     }
 
-    @Override
+    @java.lang.Override
     public int hashCode() {
       if (memoizedHashCode != 0) {
         return memoizedHashCode;
@@ -1208,69 +1208,69 @@ public final class ActorOuterClass {
       return hash;
     }
 
-    public static Actor parseFrom(
+    public static lvi.ActorOuterClass.Actor parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static Actor parseFrom(
+    public static lvi.ActorOuterClass.Actor parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static Actor parseFrom(
+    public static lvi.ActorOuterClass.Actor parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static Actor parseFrom(
+    public static lvi.ActorOuterClass.Actor parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static Actor parseFrom(byte[] data)
+    public static lvi.ActorOuterClass.Actor parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static Actor parseFrom(
+    public static lvi.ActorOuterClass.Actor parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static Actor parseFrom(java.io.InputStream input)
+    public static lvi.ActorOuterClass.Actor parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static Actor parseFrom(
+    public static lvi.ActorOuterClass.Actor parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static Actor parseDelimitedFrom(java.io.InputStream input)
+    public static lvi.ActorOuterClass.Actor parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static Actor parseDelimitedFrom(
+    public static lvi.ActorOuterClass.Actor parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static Actor parseFrom(
+    public static lvi.ActorOuterClass.Actor parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static Actor parseFrom(
+    public static lvi.ActorOuterClass.Actor parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -1278,23 +1278,23 @@ public final class ActorOuterClass {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    @Override
+    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(Actor prototype) {
+    public static Builder newBuilder(lvi.ActorOuterClass.Actor prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-    @Override
+    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
     }
 
-    @Override
+    @java.lang.Override
     protected Builder newBuilderForType(
-        BuilderParent parent) {
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -1304,18 +1304,18 @@ public final class ActorOuterClass {
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:lvi.Actor)
-        ActorOrBuilder {
+        lvi.ActorOuterClass.ActorOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return ActorOuterClass.internal_static_lvi_Actor_descriptor;
+        return lvi.ActorOuterClass.internal_static_lvi_Actor_descriptor;
       }
 
-      @Override
-      protected FieldAccessorTable
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return ActorOuterClass.internal_static_lvi_Actor_fieldAccessorTable
+        return lvi.ActorOuterClass.internal_static_lvi_Actor_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                Actor.class, Builder.class);
+                lvi.ActorOuterClass.Actor.class, lvi.ActorOuterClass.Actor.Builder.class);
       }
 
       // Construct using lvi.ActorOuterClass.Actor.newBuilder()
@@ -1324,7 +1324,7 @@ public final class ActorOuterClass {
       }
 
       private Builder(
-          BuilderParent parent) {
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -1333,7 +1333,7 @@ public final class ActorOuterClass {
                 .alwaysUseFieldBuilders) {
         }
       }
-      @Override
+      @java.lang.Override
       public Builder clear() {
         super.clear();
         userId_ = 0L;
@@ -1349,29 +1349,29 @@ public final class ActorOuterClass {
         return this;
       }
 
-      @Override
+      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return ActorOuterClass.internal_static_lvi_Actor_descriptor;
+        return lvi.ActorOuterClass.internal_static_lvi_Actor_descriptor;
       }
 
-      @Override
-      public Actor getDefaultInstanceForType() {
-        return Actor.getDefaultInstance();
+      @java.lang.Override
+      public lvi.ActorOuterClass.Actor getDefaultInstanceForType() {
+        return lvi.ActorOuterClass.Actor.getDefaultInstance();
       }
 
-      @Override
-      public Actor build() {
-        Actor result = buildPartial();
+      @java.lang.Override
+      public lvi.ActorOuterClass.Actor build() {
+        lvi.ActorOuterClass.Actor result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      @Override
-      public Actor buildPartial() {
-        Actor result = new Actor(this);
+      @java.lang.Override
+      public lvi.ActorOuterClass.Actor buildPartial() {
+        lvi.ActorOuterClass.Actor result = new lvi.ActorOuterClass.Actor(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) != 0)) {
@@ -1389,50 +1389,50 @@ public final class ActorOuterClass {
         return result;
       }
 
-      @Override
+      @java.lang.Override
       public Builder clone() {
         return super.clone();
       }
-      @Override
+      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return super.setField(field, value);
       }
-      @Override
+      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
-      @Override
+      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
-      @Override
+      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
+          int index, java.lang.Object value) {
         return super.setRepeatedField(field, index, value);
       }
-      @Override
+      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return super.addRepeatedField(field, value);
       }
-      @Override
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof Actor) {
-          return mergeFrom((Actor)other);
+        if (other instanceof lvi.ActorOuterClass.Actor) {
+          return mergeFrom((lvi.ActorOuterClass.Actor)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(Actor other) {
-        if (other == Actor.getDefaultInstance()) return this;
+      public Builder mergeFrom(lvi.ActorOuterClass.Actor other) {
+        if (other == lvi.ActorOuterClass.Actor.getDefaultInstance()) return this;
         if (other.hasUserId()) {
           setUserId(other.getUserId());
         }
@@ -1448,21 +1448,21 @@ public final class ActorOuterClass {
         return this;
       }
 
-      @Override
+      @java.lang.Override
       public final boolean isInitialized() {
         return true;
       }
 
-      @Override
+      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        Actor parsedMessage = null;
+        lvi.ActorOuterClass.Actor parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (Actor) e.getUnfinishedMessage();
+          parsedMessage = (lvi.ActorOuterClass.Actor) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -1478,7 +1478,7 @@ public final class ActorOuterClass {
        * <code>int64 userId = 1 [(.lvi.required) = true, (.lvi.description) = "Identifier in the master table"];</code>
        * @return Whether the userId field is set.
        */
-      @Override
+      @java.lang.Override
       public boolean hasUserId() {
         return ((bitField0_ & 0x00000001) != 0);
       }
@@ -1486,7 +1486,7 @@ public final class ActorOuterClass {
        * <code>int64 userId = 1 [(.lvi.required) = true, (.lvi.description) = "Identifier in the master table"];</code>
        * @return The userId.
        */
-      @Override
+      @java.lang.Override
       public long getUserId() {
         return userId_;
       }
@@ -1512,21 +1512,21 @@ public final class ActorOuterClass {
         return this;
       }
 
-      private Object email_ = "";
+      private java.lang.Object email_ = "";
       /**
        * <code>string email = 2 [(.lvi.required) = false, (.lvi.description) = "Email address of the actor"];</code>
        * @return The email.
        */
-      public String getEmail() {
-        Object ref = email_;
-        if (!(ref instanceof String)) {
+      public java.lang.String getEmail() {
+        java.lang.Object ref = email_;
+        if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
+          java.lang.String s = bs.toStringUtf8();
           email_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
       /**
@@ -1535,11 +1535,11 @@ public final class ActorOuterClass {
        */
       public com.google.protobuf.ByteString
           getEmailBytes() {
-        Object ref = email_;
+        java.lang.Object ref = email_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
+                  (java.lang.String) ref);
           email_ = b;
           return b;
         } else {
@@ -1552,7 +1552,7 @@ public final class ActorOuterClass {
        * @return This builder for chaining.
        */
       public Builder setEmail(
-          String value) {
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -1588,9 +1588,9 @@ public final class ActorOuterClass {
         return this;
       }
 
-      private Address address_;
+      private lvi.ActorOuterClass.Address address_;
       private com.google.protobuf.SingleFieldBuilderV3<
-          Address, Address.Builder, AddressOrBuilder> addressBuilder_;
+          lvi.ActorOuterClass.Address, lvi.ActorOuterClass.Address.Builder, lvi.ActorOuterClass.AddressOrBuilder> addressBuilder_;
       /**
        * <code>.lvi.Address address = 3;</code>
        * @return Whether the address field is set.
@@ -1602,9 +1602,9 @@ public final class ActorOuterClass {
        * <code>.lvi.Address address = 3;</code>
        * @return The address.
        */
-      public Address getAddress() {
+      public lvi.ActorOuterClass.Address getAddress() {
         if (addressBuilder_ == null) {
-          return address_ == null ? Address.getDefaultInstance() : address_;
+          return address_ == null ? lvi.ActorOuterClass.Address.getDefaultInstance() : address_;
         } else {
           return addressBuilder_.getMessage();
         }
@@ -1612,7 +1612,7 @@ public final class ActorOuterClass {
       /**
        * <code>.lvi.Address address = 3;</code>
        */
-      public Builder setAddress(Address value) {
+      public Builder setAddress(lvi.ActorOuterClass.Address value) {
         if (addressBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1629,7 +1629,7 @@ public final class ActorOuterClass {
        * <code>.lvi.Address address = 3;</code>
        */
       public Builder setAddress(
-          Address.Builder builderForValue) {
+          lvi.ActorOuterClass.Address.Builder builderForValue) {
         if (addressBuilder_ == null) {
           address_ = builderForValue.build();
           onChanged();
@@ -1642,11 +1642,11 @@ public final class ActorOuterClass {
       /**
        * <code>.lvi.Address address = 3;</code>
        */
-      public Builder mergeAddress(Address value) {
+      public Builder mergeAddress(lvi.ActorOuterClass.Address value) {
         if (addressBuilder_ == null) {
           if (address_ != null) {
             address_ =
-              Address.newBuilder(address_).mergeFrom(value).buildPartial();
+              lvi.ActorOuterClass.Address.newBuilder(address_).mergeFrom(value).buildPartial();
           } else {
             address_ = value;
           }
@@ -1674,7 +1674,7 @@ public final class ActorOuterClass {
       /**
        * <code>.lvi.Address address = 3;</code>
        */
-      public Address.Builder getAddressBuilder() {
+      public lvi.ActorOuterClass.Address.Builder getAddressBuilder() {
         
         onChanged();
         return getAddressFieldBuilder().getBuilder();
@@ -1682,23 +1682,23 @@ public final class ActorOuterClass {
       /**
        * <code>.lvi.Address address = 3;</code>
        */
-      public AddressOrBuilder getAddressOrBuilder() {
+      public lvi.ActorOuterClass.AddressOrBuilder getAddressOrBuilder() {
         if (addressBuilder_ != null) {
           return addressBuilder_.getMessageOrBuilder();
         } else {
           return address_ == null ?
-              Address.getDefaultInstance() : address_;
+              lvi.ActorOuterClass.Address.getDefaultInstance() : address_;
         }
       }
       /**
        * <code>.lvi.Address address = 3;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          Address, Address.Builder, AddressOrBuilder>
+          lvi.ActorOuterClass.Address, lvi.ActorOuterClass.Address.Builder, lvi.ActorOuterClass.AddressOrBuilder> 
           getAddressFieldBuilder() {
         if (addressBuilder_ == null) {
           addressBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-              Address, Address.Builder, AddressOrBuilder>(
+              lvi.ActorOuterClass.Address, lvi.ActorOuterClass.Address.Builder, lvi.ActorOuterClass.AddressOrBuilder>(
                   getAddress(),
                   getParentForChildren(),
                   isClean());
@@ -1706,13 +1706,13 @@ public final class ActorOuterClass {
         }
         return addressBuilder_;
       }
-      @Override
+      @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFields(unknownFields);
       }
 
-      @Override
+      @java.lang.Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
@@ -1723,18 +1723,18 @@ public final class ActorOuterClass {
     }
 
     // @@protoc_insertion_point(class_scope:lvi.Actor)
-    private static final Actor DEFAULT_INSTANCE;
+    private static final lvi.ActorOuterClass.Actor DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new Actor();
+      DEFAULT_INSTANCE = new lvi.ActorOuterClass.Actor();
     }
 
-    public static Actor getDefaultInstance() {
+    public static lvi.ActorOuterClass.Actor getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
     private static final com.google.protobuf.Parser<Actor>
         PARSER = new com.google.protobuf.AbstractParser<Actor>() {
-      @Override
+      @java.lang.Override
       public Actor parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1747,13 +1747,13 @@ public final class ActorOuterClass {
       return PARSER;
     }
 
-    @Override
+    @java.lang.Override
     public com.google.protobuf.Parser<Actor> getParserForType() {
       return PARSER;
     }
 
-    @Override
-    public Actor getDefaultInstanceForType() {
+    @java.lang.Override
+    public lvi.ActorOuterClass.Actor getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1777,7 +1777,7 @@ public final class ActorOuterClass {
   private static  com.google.protobuf.Descriptors.FileDescriptor
       descriptor;
   static {
-    String[] descriptorData = {
+    java.lang.String[] descriptorData = {
       "\n\022protos/actor.proto\022\003lvi\032\035protos/bigque" +
       "ry_options.proto\":\n\007Address\022\016\n\006street\030\001 " +
       "\001(\t\022\016\n\006number\030\002 \001(\t\022\017\n\007country\030\003 \001(\t\"\235\001\n" +
@@ -1797,13 +1797,13 @@ public final class ActorOuterClass {
     internal_static_lvi_Address_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_lvi_Address_descriptor,
-        new String[] { "Street", "Number", "Country", });
+        new java.lang.String[] { "Street", "Number", "Country", });
     internal_static_lvi_Actor_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_lvi_Actor_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_lvi_Actor_descriptor,
-        new String[] { "UserId", "Email", "Address", "UserId", });
+        new java.lang.String[] { "UserId", "Email", "Address", "UserId", });
     com.google.protobuf.ExtensionRegistry registry =
         com.google.protobuf.ExtensionRegistry.newInstance();
     registry.add(lvi.BigqueryOptions.description);

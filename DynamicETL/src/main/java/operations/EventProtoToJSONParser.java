@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.protobuf.Descriptors;
 import com.google.protobuf.util.JsonFormat;
 import lvi.BigqueryOptions;
 import lvi.Event;
@@ -19,9 +20,11 @@ import org.apache.beam.sdk.values.TupleTagList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class EventProtoToJSONParser<OriginalT> extends PTransform<PCollection<FailSafeElement<OriginalT, byte[]>>, PCollectionTuple> {
 
@@ -50,35 +53,162 @@ public class EventProtoToJSONParser<OriginalT> extends PTransform<PCollection<Fa
             try {
                 String JsonString = JsonFormat.printer().print(Event.EventBatch.parseFrom(input.getPayload()));
 
-                for(String el: unBatchElements(JsonString)) {
+                /*for (String el : unBatchElements(JsonString)) {
                     LOG.info(el);
                     c.output(new FailSafeElement<>(input.getOriginalPayload(), el));
-                }
+                }*/
 
             } catch (Exception e) {
                 LOG.info(e.getMessage());
                 c.output(DLQTag, input);
             }
         }
+    }
 
-        private List<String> unBatchElements(String jsonString) throws JsonProcessingException {
-            ObjectMapper jacksonObjMapper = new ObjectMapper();
-            ObjectNode node = (ObjectNode)jacksonObjMapper.readTree(jsonString);
-            ArrayNode batch = (ArrayNode)(node).remove(Event.EventBatch.getDescriptor().getOptions().getExtension(BigqueryOptions.batchField));
-            List<String> elements = new LinkedList<>();
+    private static List<String> unBatchElements(String jsonString, ArrayNode schema) throws Exception {
+        ObjectMapper jacksonObjMapper = new ObjectMapper();
+        ObjectNode node = (ObjectNode) jacksonObjMapper.readTree(jsonString);
+        ArrayNode batch = (ArrayNode) (node).remove(Event.EventBatch.getDescriptor().getOptions().getExtension(BigqueryOptions.batchField));
+        List<String> elements = new LinkedList<>();
 
-            for (Iterator<JsonNode> it = batch.elements(); it.hasNext(); ) {
-                ObjectNode batchField = (ObjectNode)it.next();
-                node.setAll(batchField);
+        for (Iterator<JsonNode> it = batch.elements(); it.hasNext(); ) {
+            ObjectNode batchField = (ObjectNode) it.next();
+            node.setAll(batchField);
 
+            if (validateElement(node, schema, "/")) {
                 elements.add(jacksonObjMapper.writeValueAsString(node));
             }
-
-            return elements;
         }
 
-        private boolean isValid(String jsonString) {
-            return false; // validate input event based on the schema inc. required/batch/oneof/
+        return elements;
+    }
+
+    private static boolean validateElement(ObjectNode node, ArrayNode schema, String path) throws Exception {
+
+        boolean allValid = true;
+        // System.out.println(Arrays.toString(fields.stream().map(Descriptors.FieldDescriptor::getName).collect(Collectors.toList()).toArray()));
+        Iterator<JsonNode> tableFields = schema.elements();
+        JsonNode tableField;
+
+        while (tableFields.hasNext()) {
+
+            tableField = tableFields.next();
+
+            if (tableField.get("mode").asText().equals("REQUIRED")) {
+                JsonNode val = node.at(path + tableField.get("name").asText());
+                // System.out.println(schema.toPrettyString());
+                // System.out.println(node.toPrettyString());
+                // System.out.println(path + tableField.get("name").asText() + ": " + val.isEmpty() + " " + val.asText().isEmpty());
+                // System.out.println();
+
+                if(val.isEmpty() && val.asText().isEmpty()) {
+                    throw new Exception();
+                }
+
+            }
+
+            JsonNode fields = tableField.get("fields");
+            if (fields != null && fields.isArray()) {
+                validateElement(node, (ArrayNode) tableField.get("fields"), path + tableField.get("name").asText() + "/");
+            }
         }
+
+        return allValid;
+    }
+
+    public static void main(String[] args) throws Exception {
+        String jsonString = "{\n" +
+                "  \"client\": {\n" +
+                "    \"tenantId\": \"1337\",\n" +
+                "    \"name\": \"LVI\"\n" +
+                "  },\n" +
+                "  \"events\": [\n" +
+                "    {\n" +
+                "      \"actor\": {\n" +
+                "        \"userId\": \"80080\",\n" +
+                "        \"email\": \"laurens@hotmail.com\",\n" +
+                "        \"address\": {\n" +
+                "          \"street\": \"Maastrichterpoort\",\n" +
+                "          \"number\": \"2\",\n" +
+                "          \"country\": \"Belgium\"\n" +
+                "        }\n" +
+                "      }\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}";
+
+        String tableSchema = "[\n" +
+                "  {\n" +
+                "    \"description\": \"Owner of the event\",\n" +
+                "    \"mode\": \"REQUIRED\",\n" +
+                "    \"name\": \"client\",\n" +
+                "    \"type\": \"RECORD\",\n" +
+                "    \"fields\": [\n" +
+                "      {\n" +
+                "        \"description\": \"Identifier in the client catalog\",\n" +
+                "        \"mode\": \"REQUIRED\",\n" +
+                "        \"name\": \"tenantId\",\n" +
+                "        \"type\": \"INTEGER\"\n" +
+                "      },\n" +
+                "      {\n" +
+                "        \"description\": \"\",\n" +
+                "        \"mode\": \"NULLABLE\",\n" +
+                "        \"name\": \"name\",\n" +
+                "        \"type\": \"STRING\"\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  },\n" +
+                "  {\n" +
+                "    \"description\": \"Actor concerned with the event\",\n" +
+                "    \"mode\": \"REQUIRED\",\n" +
+                "    \"name\": \"actor\",\n" +
+                "    \"type\": \"RECORD\",\n" +
+                "    \"fields\": [\n" +
+                "      {\n" +
+                "        \"description\": \"Identifier in the master table\",\n" +
+                "        \"mode\": \"REQUIRED\",\n" +
+                "        \"name\": \"userId\",\n" +
+                "        \"type\": \"INTEGER\"\n" +
+                "      },\n" +
+                "      {\n" +
+                "        \"description\": \"Email address of the actor\",\n" +
+                "        \"mode\": \"NULLABLE\",\n" +
+                "        \"name\": \"email\",\n" +
+                "        \"type\": \"STRING\"\n" +
+                "      },\n" +
+                "      {\n" +
+                "        \"description\": \"\",\n" +
+                "        \"mode\": \"NULLABLE\",\n" +
+                "        \"name\": \"address\",\n" +
+                "        \"type\": \"RECORD\",\n" +
+                "        \"fields\": [\n" +
+                "          {\n" +
+                "            \"description\": \"\",\n" +
+                "            \"mode\": \"NULLABLE\",\n" +
+                "            \"name\": \"street\",\n" +
+                "            \"type\": \"STRING\"\n" +
+                "          },\n" +
+                "          {\n" +
+                "            \"description\": \"\",\n" +
+                "            \"mode\": \"NULLABLE\",\n" +
+                "            \"name\": \"number\",\n" +
+                "            \"type\": \"STRING\"\n" +
+                "          },\n" +
+                "          {\n" +
+                "            \"description\": \"\",\n" +
+                "            \"mode\": \"NULLABLE\",\n" +
+                "            \"name\": \"country\",\n" +
+                "            \"type\": \"STRING\"\n" +
+                "          }\n" +
+                "        ]\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  }\n" +
+                "]";
+
+        ObjectMapper jacksonObjMapper = new ObjectMapper();
+        ObjectNode node = (ObjectNode) jacksonObjMapper.readTree(jsonString);
+        System.out.println(node.toPrettyString());
+        unBatchElements(jsonString, (ArrayNode) jacksonObjMapper.readTree(tableSchema));
     }
 }

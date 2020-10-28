@@ -146,7 +146,7 @@ def _generate_repository(request):
                         # https://googleapis.dev/python/protobuf/latest/google/protobuf/descriptor_pb2.html#module-google.protobuf.descriptor_pb2
                         has_option_specified = f.options.HasExtension(bigquery_options_pb2.required)
                         is_required = f.options.Extensions[bigquery_options_pb2.required] # Defaults to False
-                        logging.warning("Field: %s option present: %s required: %s", f.name, has_option_specified, is_required)
+                        # logging.warning("Field: %s option present: %s required: %s", f.name, has_option_specified, is_required)
 
                     data.update({
                         # https://stackoverflow.com/questions/32836315/python-protocol-buffer-field-options/32867712#32867712
@@ -160,7 +160,8 @@ def _generate_repository(request):
                                 'fieldTypeValue': f.type_name,
                                 'fieldRequired': f.options.Extensions[bigquery_options_pb2.required],
                                 'fieldIndex': f.number,
-                                'isBatchField': item.options.Extensions[bigquery_options_pb2.batch_field] == f.name
+                                # 'isBatchField': item.options.Extensions[bigquery_options_pb2.batch_field] == f.name
+                                'isBatchField': f.options.Extensions[bigquery_options_pb2.batch_attribute],
                              } for f in item.field
                         ]
                     })
@@ -189,29 +190,29 @@ def _contruct_schema_rec(repository, field, schema_arr):
 
     for f in field["fields"]:
 
-        batchField = f["isBatchField"]
+        batch_field = f["isBatchField"]
 
-        if batchField:
+        if batch_field:
             # Batch fields should be handled seperately, the idea is that the intermediate level is ignored
             schema_arr.extend(_contruct_schema_rec(repository, repository.get(f["fieldTypeValue"]), []))
         else:
-            protoType = ProtoTypeEnum._member_map_[f["fieldType"]]
+            proto_type = ProtoTypeEnum._member_map_[f["fieldType"]]
             logging.warning("test: %s %s", f["fieldName"], f['fieldRequired'])
 
-            tableField = {
+            table_field = {
                 "description": f["fieldDescription"],
-                "mode": "REQUIRED" if f['fieldRequired'] else "NULLABLE", # FUTURE: Add option to indicate required?
+                "mode": "REQUIRED" if f['fieldRequired'] else "NULLABLE",
                 "name": f["fieldName"],
-                "type": _BQ_TO_TYPE_VALUE[_PROTO_TO_BQ_TYPE_MAP[protoType]]
+                "type": _BQ_TO_TYPE_VALUE[_PROTO_TO_BQ_TYPE_MAP[proto_type]]
             }
 
             # Handle complex types
-            if protoType == ProtoTypeEnum.TYPE_MESSAGE:
-                tableField.update({
+            if proto_type == ProtoTypeEnum.TYPE_MESSAGE:
+                table_field.update({
                     "fields": _contruct_schema_rec(repository, repository.get(f["fieldTypeValue"]), [])
                 })
 
-            schema_arr.append(tableField)
+            schema_arr.append(table_field)
 
     return schema_arr
 
@@ -253,6 +254,7 @@ if __name__ == '__main__':
 
     # Create response
     response = plugin.CodeGeneratorResponse()
+    response.supported_features= response.FEATURE_PROTO3_OPTIONAL
 
     # Generate code
     generate_code(request, response)

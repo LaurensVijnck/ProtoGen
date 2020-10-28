@@ -15,7 +15,11 @@ mkdir -p $DST_DIR/bigquery
 protoc -I=. \
     --java_out=$DST_DIR/java \
     --python_out=$DST_DIR/python \
+    --experimental_allow_proto3_optional \
    protos/*
 
-# Invoke Custom BigQuery plugin
-protoc -I=. --plugin=protoc-gen-bq=proto-to-bq.py --bq_out=$DST_DIR/bigquery protos/*
+# Invoke Custom BigQuery pluging
+protoc -I=. \
+  --experimental_allow_proto3_optional \
+  --plugin=protoc-gen-bq=proto-to-bq.py \
+  --bq_out=$DST_DIR/bigquery protos/*

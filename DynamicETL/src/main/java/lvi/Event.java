@@ -36,7 +36,7 @@ public final class Event {
   /**
    * Protobuf type {@code lvi.BatchEvent}
    */
-  public  static final class BatchEvent extends
+  public static final class BatchEvent extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:lvi.BatchEvent)
       BatchEventOrBuilder {
@@ -129,6 +129,7 @@ public final class Event {
      * <code>.lvi.Actor actor = 2 [(.lvi.required) = true, (.lvi.description) = "Actor concerned with the event"];</code>
      * @return Whether the actor field is set.
      */
+    @Override
     public boolean hasActor() {
       return actor_ != null;
     }
@@ -136,12 +137,14 @@ public final class Event {
      * <code>.lvi.Actor actor = 2 [(.lvi.required) = true, (.lvi.description) = "Actor concerned with the event"];</code>
      * @return The actor.
      */
+    @Override
     public ActorOuterClass.Actor getActor() {
       return actor_ == null ? ActorOuterClass.Actor.getDefaultInstance() : actor_;
     }
     /**
      * <code>.lvi.Actor actor = 2 [(.lvi.required) = true, (.lvi.description) = "Actor concerned with the event"];</code>
      */
+    @Override
     public ActorOuterClass.ActorOrBuilder getActorOrBuilder() {
       return getActor();
     }
@@ -637,16 +640,28 @@ public final class Event {
       com.google.protobuf.MessageOrBuilder {
 
     /**
+     * <pre>
+     * option (batch_field) = "events";
+     * </pre>
+     *
      * <code>.lvi.Client client = 1 [(.lvi.required) = true, (.lvi.description) = "Owner of the event"];</code>
      * @return Whether the client field is set.
      */
     boolean hasClient();
     /**
+     * <pre>
+     * option (batch_field) = "events";
+     * </pre>
+     *
      * <code>.lvi.Client client = 1 [(.lvi.required) = true, (.lvi.description) = "Owner of the event"];</code>
      * @return The client.
      */
     ClientOuterClass.Client getClient();
     /**
+     * <pre>
+     * option (batch_field) = "events";
+     * </pre>
+     *
      * <code>.lvi.Client client = 1 [(.lvi.required) = true, (.lvi.description) = "Owner of the event"];</code>
      */
     ClientOuterClass.ClientOrBuilder getClientOrBuilder();
@@ -678,7 +693,7 @@ public final class Event {
   /**
    * Protobuf type {@code lvi.EventBatch}
    */
-  public  static final class EventBatch extends
+  public static final class EventBatch extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:lvi.EventBatch)
       EventBatchOrBuilder {
@@ -782,22 +797,37 @@ public final class Event {
     public static final int CLIENT_FIELD_NUMBER = 1;
     private ClientOuterClass.Client client_;
     /**
+     * <pre>
+     * option (batch_field) = "events";
+     * </pre>
+     *
      * <code>.lvi.Client client = 1 [(.lvi.required) = true, (.lvi.description) = "Owner of the event"];</code>
      * @return Whether the client field is set.
      */
+    @Override
     public boolean hasClient() {
       return client_ != null;
     }
     /**
+     * <pre>
+     * option (batch_field) = "events";
+     * </pre>
+     *
      * <code>.lvi.Client client = 1 [(.lvi.required) = true, (.lvi.description) = "Owner of the event"];</code>
      * @return The client.
      */
+    @Override
     public ClientOuterClass.Client getClient() {
       return client_ == null ? ClientOuterClass.Client.getDefaultInstance() : client_;
     }
     /**
+     * <pre>
+     * option (batch_field) = "events";
+     * </pre>
+     *
      * <code>.lvi.Client client = 1 [(.lvi.required) = true, (.lvi.description) = "Owner of the event"];</code>
      */
+    @Override
     public ClientOuterClass.ClientOrBuilder getClientOrBuilder() {
       return getClient();
     }
@@ -807,12 +837,14 @@ public final class Event {
     /**
      * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
      */
+    @Override
     public java.util.List<BatchEvent> getEventsList() {
       return events_;
     }
     /**
      * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
      */
+    @Override
     public java.util.List<? extends BatchEventOrBuilder>
         getEventsOrBuilderList() {
       return events_;
@@ -820,18 +852,21 @@ public final class Event {
     /**
      * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
      */
+    @Override
     public int getEventsCount() {
       return events_.size();
     }
     /**
      * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
      */
+    @Override
     public BatchEvent getEvents(int index) {
       return events_.get(index);
     }
     /**
      * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
      */
+    @Override
     public BatchEventOrBuilder getEventsOrBuilder(
         int index) {
       return events_.get(index);
@@ -1213,6 +1248,10 @@ public final class Event {
       private com.google.protobuf.SingleFieldBuilderV3<
           ClientOuterClass.Client, ClientOuterClass.Client.Builder, ClientOuterClass.ClientOrBuilder> clientBuilder_;
       /**
+       * <pre>
+       * option (batch_field) = "events";
+       * </pre>
+       *
        * <code>.lvi.Client client = 1 [(.lvi.required) = true, (.lvi.description) = "Owner of the event"];</code>
        * @return Whether the client field is set.
        */
@@ -1220,6 +1259,10 @@ public final class Event {
         return clientBuilder_ != null || client_ != null;
       }
       /**
+       * <pre>
+       * option (batch_field) = "events";
+       * </pre>
+       *
        * <code>.lvi.Client client = 1 [(.lvi.required) = true, (.lvi.description) = "Owner of the event"];</code>
        * @return The client.
        */
@@ -1231,6 +1274,10 @@ public final class Event {
         }
       }
       /**
+       * <pre>
+       * option (batch_field) = "events";
+       * </pre>
+       *
        * <code>.lvi.Client client = 1 [(.lvi.required) = true, (.lvi.description) = "Owner of the event"];</code>
        */
       public Builder setClient(ClientOuterClass.Client value) {
@@ -1247,6 +1294,10 @@ public final class Event {
         return this;
       }
       /**
+       * <pre>
+       * option (batch_field) = "events";
+       * </pre>
+       *
        * <code>.lvi.Client client = 1 [(.lvi.required) = true, (.lvi.description) = "Owner of the event"];</code>
        */
       public Builder setClient(
@@ -1261,6 +1312,10 @@ public final class Event {
         return this;
       }
       /**
+       * <pre>
+       * option (batch_field) = "events";
+       * </pre>
+       *
        * <code>.lvi.Client client = 1 [(.lvi.required) = true, (.lvi.description) = "Owner of the event"];</code>
        */
       public Builder mergeClient(ClientOuterClass.Client value) {
@@ -1279,6 +1334,10 @@ public final class Event {
         return this;
       }
       /**
+       * <pre>
+       * option (batch_field) = "events";
+       * </pre>
+       *
        * <code>.lvi.Client client = 1 [(.lvi.required) = true, (.lvi.description) = "Owner of the event"];</code>
        */
       public Builder clearClient() {
@@ -1293,6 +1352,10 @@ public final class Event {
         return this;
       }
       /**
+       * <pre>
+       * option (batch_field) = "events";
+       * </pre>
+       *
        * <code>.lvi.Client client = 1 [(.lvi.required) = true, (.lvi.description) = "Owner of the event"];</code>
        */
       public ClientOuterClass.Client.Builder getClientBuilder() {
@@ -1301,6 +1364,10 @@ public final class Event {
         return getClientFieldBuilder().getBuilder();
       }
       /**
+       * <pre>
+       * option (batch_field) = "events";
+       * </pre>
+       *
        * <code>.lvi.Client client = 1 [(.lvi.required) = true, (.lvi.description) = "Owner of the event"];</code>
        */
       public ClientOuterClass.ClientOrBuilder getClientOrBuilder() {
@@ -1312,6 +1379,10 @@ public final class Event {
         }
       }
       /**
+       * <pre>
+       * option (batch_field) = "events";
+       * </pre>
+       *
        * <code>.lvi.Client client = 1 [(.lvi.required) = true, (.lvi.description) = "Owner of the event"];</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
@@ -1643,10 +1714,10 @@ public final class Event {
       "ry_options.proto\032\023protos/client.proto\032\022p" +
       "rotos/actor.proto\"M\n\nBatchEvent\022?\n\005actor" +
       "\030\002 \001(\0132\n.lvi.ActorB$\220?\001\242?\036Actor concerne" +
-      "d with the event\"y\n\nEventBatch\0225\n\006client" +
+      "d with the event\"o\n\nEventBatch\0225\n\006client" +
       "\030\001 \001(\0132\013.lvi.ClientB\030\220?\001\242?\022Owner of the " +
       "event\022$\n\006events\030\002 \003(\0132\017.lvi.BatchEventB\003" +
-      "\230?\001:\016\220\202\031\001\232\202\031\006eventsb\006proto3"
+      "\250?\001:\004\220\202\031\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -1670,7 +1741,6 @@ public final class Event {
     com.google.protobuf.ExtensionRegistry registry =
         com.google.protobuf.ExtensionRegistry.newInstance();
     registry.add(BigqueryOptions.batchAttribute);
-    registry.add(BigqueryOptions.batchField);
     registry.add(BigqueryOptions.description);
     registry.add(BigqueryOptions.required);
     registry.add(BigqueryOptions.tableRoot);

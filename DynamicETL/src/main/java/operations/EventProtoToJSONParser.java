@@ -1,11 +1,12 @@
 package operations;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.protobuf.Descriptors;
+import com.google.api.services.bigquery.model.TableCell;
+import com.google.api.services.bigquery.model.TableRow;
 import com.google.protobuf.util.JsonFormat;
 import lvi.BigqueryOptions;
 import lvi.Event;
@@ -20,11 +21,9 @@ import org.apache.beam.sdk.values.TupleTagList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class EventProtoToJSONParser<OriginalT> extends PTransform<PCollection<FailSafeElement<OriginalT, byte[]>>, PCollectionTuple> {
 
@@ -114,6 +113,51 @@ public class EventProtoToJSONParser<OriginalT> extends PTransform<PCollection<Fa
         }
 
         return allValid;
+    }
+
+
+
+    public List<TableRow> convertTableRow(Event.EventBatch eventBatch) {
+        List<TableRow> rows = new LinkedList<>();
+
+        // Client
+        TableCell clientCell = new TableCell();
+        if(eventBatch.hasClient()) {
+
+            if(eventBatch.getClient().hasTenantId()) {
+                clientCell.set("tenantId", eventBatch.getClient().getTenantId());
+            }
+
+            clientCell.set("name", eventBatch.getClient().getName());
+        }
+
+        for(Event.BatchEvent event: eventBatch.getEventsList()) {
+
+            TableCell actorCell = new TableCell();
+            if(event.hasActor()) {
+
+                if(event.getActor().hasUserId()) {
+                    actorCell.set("userId", event.getActor().getUserId());
+                }
+
+                clientCell.set("email", eventBatch.getClient().getName());
+
+                TableCell addressCell = new TableCell();
+                if(event.getActor().hasAddress()) {
+                    addressCell.set("street", event.getActor().getAddress().getStreet());
+                    addressCell.set("number", event.getActor().getAddress().getNumber());
+                    addressCell.set("country", event.getActor().getAddress().getCountry());
+                }
+
+                clientCell.set("address", addressCell);
+            }
+
+            rows.add(new TableRow()
+                    .set("client", clientCell)
+                    .set("actor", actorCell));
+        }
+
+        return rows;
     }
 
     public static void main(String[] args) throws Exception {

@@ -48,6 +48,8 @@ public final class EventParser {
 				} 
 
 				actorCell.set("address", addressCell);
+			} else {
+				throw new Exception();
 			} 
 
 			row.set("actor", actorCell);

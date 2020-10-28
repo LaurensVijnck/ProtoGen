@@ -322,7 +322,7 @@ def parser_handle_batch_field(repository, depth, root_var, field, proto_path, fi
     file.content += indent("} \n", depth)
 
 
-def parser_handle_nested_field(repository, depth, root_var, field, attribute_name, proto_path, file):
+def parser_handle_nested_field(repository, depth, root_var, field, proto_path, file):
     """
     Generate code for a nested proto message
 
@@ -334,20 +334,29 @@ def parser_handle_nested_field(repository, depth, root_var, field, attribute_nam
     :param file: output file to write code to
     :return:
     """
-    cell_name = f"{attribute_name}Cell"
-    has_cell = underscore_to_camelcase(f"has_{field['name']}()")
-    get_cell = underscore_to_camelcase(f"get_{field['name']}()")
+    logging.warning(field["fieldName"])
+    field_name = field["fieldName"]
+    field_type = repository.get(field["fieldTypeValue"])
+    cell_name = f"{field_name}Cell"
+    has_cell = underscore_to_camelcase(f"has_{field_type['name']}()")
+    get_cell = underscore_to_camelcase(f"get_{field_type['name']}()")
     new_path = f"{proto_path}.{get_cell}"
 
     file.content += "\n"
-    file.content += indent(f"// {field['name']}", depth)
+    file.content += indent(f"// {field_type['name']}", depth)
     file.content += indent(f"TableCell {cell_name} = new TableCell();", depth)
     file.content += indent(f"if({proto_path}.{has_cell}) {{", depth)
 
-    parser_handle_fields(repository, depth + 1, cell_name, field["fields"], new_path, file)
+    parser_handle_fields(repository, depth + 1, cell_name, field_type["fields"], new_path, file)
 
-    file.content += indent("} \n", depth)
-    file.content += indent(f"{root_var}.set(\"{attribute_name}\", {cell_name});", depth)
+    if not field['fieldRequired']:
+        file.content += indent("} \n", depth)
+    else:
+        file.content += indent("} else {", depth)
+        file.content += indent("throw new Exception();", depth + 1)
+        file.content += indent("} \n", depth)
+
+    file.content += indent(f"{root_var}.set(\"{field_name}\", {cell_name});", depth)
 
 
 def parser_handle_fields(repository, depth, root_var, fields, proto_path, file):
@@ -366,7 +375,7 @@ def parser_handle_fields(repository, depth, root_var, fields, proto_path, file):
         proto_type = ProtoTypeEnum._member_map_[f["fieldType"]]
 
         if proto_type == ProtoTypeEnum.TYPE_MESSAGE:
-            parser_handle_nested_field(repository, depth, root_var, repository.get(f["fieldTypeValue"]), f["fieldName"], proto_path, file)
+            parser_handle_nested_field(repository, depth, root_var, f, proto_path, file)
         else:
             parser_handle_base_field(depth, root_var, f, proto_path, file)
 

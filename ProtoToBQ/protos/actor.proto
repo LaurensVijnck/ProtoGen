@@ -15,4 +15,3 @@ message Actor {
   optional string email = 2 [(required) = true, (description) = "Email address of the actor"];
   Address address = 3;
 }
-

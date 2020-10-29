@@ -53,24 +53,24 @@ class ProtoTypeEnum(Enum):
 
 
 _PROTO_TO_BQ_TYPE_MAP = {
-  ProtoTypeEnum.TYPE_DOUBLE: BigQueryTypeEnum.TYPE_NUMERIC,
-  ProtoTypeEnum.TYPE_FLOAT: BigQueryTypeEnum.TYPE_FLOAT64,
-  ProtoTypeEnum.TYPE_ENUM: BigQueryTypeEnum.TYPE_STRING, # FUTURE: Map onto int value
-  ProtoTypeEnum.TYPE_INT64: BigQueryTypeEnum.TYPE_INT64,
-  ProtoTypeEnum.TYPE_SINT64: BigQueryTypeEnum.TYPE_INT64,
-  ProtoTypeEnum.TYPE_SFIXED64: BigQueryTypeEnum.TYPE_INT64,
-  ProtoTypeEnum.TYPE_UINT64: BigQueryTypeEnum.TYPE_INT64,
-  ProtoTypeEnum.TYPE_FIXED64: BigQueryTypeEnum.TYPE_INT64,
-  ProtoTypeEnum.TYPE_INT32: BigQueryTypeEnum.TYPE_INT64,
-  ProtoTypeEnum.TYPE_SFIXED32: BigQueryTypeEnum.TYPE_INT64,
-  ProtoTypeEnum.TYPE_SINT32: BigQueryTypeEnum.TYPE_INT64,
-  ProtoTypeEnum.TYPE_UINT32: BigQueryTypeEnum.TYPE_INT64,
-  ProtoTypeEnum.TYPE_FIXED32: BigQueryTypeEnum.TYPE_INT64,
-  ProtoTypeEnum.TYPE_BYTES: BigQueryTypeEnum.TYPE_BYTES,
-  ProtoTypeEnum.TYPE_STRING: BigQueryTypeEnum.TYPE_STRING,
-  ProtoTypeEnum.TYPE_BOOL: BigQueryTypeEnum.TYPE_BOOL,
-  ProtoTypeEnum.TYPE_MESSAGE: BigQueryTypeEnum.TYPE_STRUCT,
-  ProtoTypeEnum.TYPE_GROUP:  BigQueryTypeEnum.TYPE_STRUCT
+    ProtoTypeEnum.TYPE_DOUBLE: BigQueryTypeEnum.TYPE_NUMERIC,
+    ProtoTypeEnum.TYPE_FLOAT: BigQueryTypeEnum.TYPE_FLOAT64,
+    ProtoTypeEnum.TYPE_ENUM: BigQueryTypeEnum.TYPE_STRING,  # FUTURE: Map onto int value
+    ProtoTypeEnum.TYPE_INT64: BigQueryTypeEnum.TYPE_INT64,
+    ProtoTypeEnum.TYPE_SINT64: BigQueryTypeEnum.TYPE_INT64,
+    ProtoTypeEnum.TYPE_SFIXED64: BigQueryTypeEnum.TYPE_INT64,
+    ProtoTypeEnum.TYPE_UINT64: BigQueryTypeEnum.TYPE_INT64,
+    ProtoTypeEnum.TYPE_FIXED64: BigQueryTypeEnum.TYPE_INT64,
+    ProtoTypeEnum.TYPE_INT32: BigQueryTypeEnum.TYPE_INT64,
+    ProtoTypeEnum.TYPE_SFIXED32: BigQueryTypeEnum.TYPE_INT64,
+    ProtoTypeEnum.TYPE_SINT32: BigQueryTypeEnum.TYPE_INT64,
+    ProtoTypeEnum.TYPE_UINT32: BigQueryTypeEnum.TYPE_INT64,
+    ProtoTypeEnum.TYPE_FIXED32: BigQueryTypeEnum.TYPE_INT64,
+    ProtoTypeEnum.TYPE_BYTES: BigQueryTypeEnum.TYPE_BYTES,
+    ProtoTypeEnum.TYPE_STRING: BigQueryTypeEnum.TYPE_STRING,
+    ProtoTypeEnum.TYPE_BOOL: BigQueryTypeEnum.TYPE_BOOL,
+    ProtoTypeEnum.TYPE_MESSAGE: BigQueryTypeEnum.TYPE_STRUCT,
+    ProtoTypeEnum.TYPE_GROUP: BigQueryTypeEnum.TYPE_STRUCT
 }
 
 _BQ_TO_TYPE_VALUE = {
@@ -89,9 +89,9 @@ _BQ_TO_TYPE_VALUE = {
     BigQueryTypeEnum.TYPE_GEOGRAPHY: "GEOGRAPHY"
 }
 
+
 # https://expobrain.net/2015/09/13/create-a-plugin-for-google-protocol-buffer/
 def _traverse(proto_file):
-
     def _traverse(package, items):
         for item in items:
             yield item, package
@@ -146,7 +146,7 @@ def _generate_repository(request):
                     for f in item.field:
                         # https://googleapis.dev/python/protobuf/latest/google/protobuf/descriptor_pb2.html#module-google.protobuf.descriptor_pb2
                         has_option_specified = f.options.HasExtension(bigquery_options_pb2.required)
-                        is_required = f.options.Extensions[bigquery_options_pb2.required] # Defaults to False
+                        is_required = f.options.Extensions[bigquery_options_pb2.required]  # Defaults to False
                         # logging.warning("Field: %s option present: %s required: %s", f.name, has_option_specified, is_required)
 
                     data.update({
@@ -164,7 +164,7 @@ def _generate_repository(request):
                                 # 'isBatchField': item.options.Extensions[bigquery_options_pb2.batch_field] == f.name
                                 'isBatchField': f.options.Extensions[bigquery_options_pb2.batch_attribute],
                                 'isOptionalField': f.proto3_optional
-                             } for f in item.field
+                            } for f in item.field
                         ]
                     })
 
@@ -254,9 +254,8 @@ def indent(str, depth):
 
 def parser_handle_base_field(depth, root_var, field, proto_path, file):
     """
-    Generate code for a non-optional proto message attribute
+    Generate code for base proto message attribute
 
-    :param repository: the repository of message types and enums
     :param depth: depth for formatting purposes
     :param root_var: root element to add contents to (either table row or cell)
     :param field: field being handled by the parser
@@ -264,14 +263,11 @@ def parser_handle_base_field(depth, root_var, field, proto_path, file):
     :param file: output file to write code to
     :return:
     """
-    if field["isOptionalField"]:
-        parser_handle_optional_field(depth, root_var, field, proto_path, file)
-    else:
-        get_cell = underscore_to_camelcase(f"{proto_path}.get_{field['fieldName']}()")
-        file.content += indent(f"{root_var}.set(\"{field['fieldName']}\", {get_cell});", depth)
+    get_cell = underscore_to_camelcase(f"{proto_path}.get_{field['fieldName']}()")
+    file.content += indent(f"{root_var}.set(\"{field['fieldName']}\", {get_cell});", depth)
 
 
-def parser_handle_optional_field(depth, root_var, field, proto_path, file):
+def parser_handle_optional_field(repository, depth, root_var, field, proto_path, file):
     """
     Generate code for an optional proto message attribute
 
@@ -284,10 +280,9 @@ def parser_handle_optional_field(depth, root_var, field, proto_path, file):
     :return:
     """
     has_cell = underscore_to_camelcase(f"{proto_path}.has_{field['fieldName']}()")
-    get_cell = underscore_to_camelcase(f"{proto_path}.get_{field['fieldName']}()")
 
     file.content += indent(f"if({has_cell}) {{", depth)
-    file.content += indent(f"{root_var}.set(\"{field['fieldName']}\", {get_cell});", depth + 1)
+    parser_handle_fields(repository, depth + 1, root_var, field, proto_path, file)
 
     if not field['fieldRequired']:
         file.content += indent("} \n", depth)
@@ -309,15 +304,16 @@ def parser_handle_batch_field(repository, depth, root_var, field, proto_path, fi
     :param file: output file to write code to
     :return:
     """
-    has_cell = underscore_to_camelcase(f"has_{field['name']}()")
-    get_cell = underscore_to_camelcase(f"get_{field['name']}()")
+    field_type = repository.get(field["fieldTypeValue"])
+    has_cell = underscore_to_camelcase(f"has_{field_type['name']}()")
+    get_cell = underscore_to_camelcase(f"get_{field_type['name']}()")
     new_path = f"{proto_path}.{get_cell}"
 
     file.content += "\n"
-    file.content += indent(f"// {field['name']}", depth)
+    file.content += indent(f"// {field_type['name']}", depth)
     file.content += indent(f"if({proto_path}.{has_cell}) {{", depth)
 
-    parser_handle_fields(repository, depth + 1, root_var, field["fields"], new_path, file)
+    parser_handle_fields(repository, depth + 1, root_var, field, new_path, file)
 
     file.content += indent("} \n", depth)
 
@@ -334,7 +330,6 @@ def parser_handle_nested_field(repository, depth, root_var, field, proto_path, f
     :param file: output file to write code to
     :return:
     """
-    logging.warning(field["fieldName"])
     field_name = field["fieldName"]
     field_type = repository.get(field["fieldTypeValue"])
     cell_name = f"{field_name}Cell"
@@ -347,7 +342,7 @@ def parser_handle_nested_field(repository, depth, root_var, field, proto_path, f
     file.content += indent(f"TableCell {cell_name} = new TableCell();", depth)
     file.content += indent(f"if({proto_path}.{has_cell}) {{", depth)
 
-    parser_handle_fields(repository, depth + 1, cell_name, field_type["fields"], new_path, file)
+    parser_handle_fields(repository, depth + 1, cell_name, field, new_path, file)
 
     if not field['fieldRequired']:
         file.content += indent("} \n", depth)
@@ -359,7 +354,7 @@ def parser_handle_nested_field(repository, depth, root_var, field, proto_path, f
     file.content += indent(f"{root_var}.set(\"{field_name}\", {cell_name});", depth)
 
 
-def parser_handle_fields(repository, depth, root_var, fields, proto_path, file):
+def parser_handle_fields(repository, depth, root_var, field, proto_path, file):
     """
     Generate code for a specific proto message
 
@@ -371,16 +366,23 @@ def parser_handle_fields(repository, depth, root_var, fields, proto_path, file):
     :param file: output file to write code to
     :return:
     """
-    for f in fields:
-        proto_type = ProtoTypeEnum._member_map_[f["fieldType"]]
+    field_type = repository.get(field["fieldTypeValue"])
 
-        if proto_type == ProtoTypeEnum.TYPE_MESSAGE:
-            parser_handle_nested_field(repository, depth, root_var, f, proto_path, file)
-        else:
-            parser_handle_base_field(depth, root_var, f, proto_path, file)
+    if field_type is None:  # Base fields are not found in repo
+        return parser_handle_base_field(depth, root_var, field, proto_path, file)
+    else:
+        for f in field_type["fields"]:
+            proto_type = ProtoTypeEnum._member_map_[f["fieldType"]]
+
+            if proto_type == ProtoTypeEnum.TYPE_MESSAGE:
+                parser_handle_nested_field(repository, depth, root_var, f, proto_path, file)
+            elif f["isOptionalField"]:
+                parser_handle_optional_field(repository, depth, root_var, f, proto_path, file)
+            else:
+                parser_handle_base_field(depth, root_var, f, proto_path, file)
 
 
-def parser_handle_batch_table(repository, outer_name, depth, root_var, field, batch_field, batch_attribute, file):
+def parser_handle_batch_table(repository, outer_name, depth, root_var, field, batch_field, file):
     """
     Code generation for table with batching enabled.
 
@@ -393,21 +395,23 @@ def parser_handle_batch_table(repository, outer_name, depth, root_var, field, ba
     :param file: output file to write code to
     :return:
     """
+    batch_field_name = batch_field["fieldName"]
+    batch_field_type = repository.get(batch_field["fieldTypeValue"])
     root_var_name = "row"
-    list_name = underscore_to_camelcase(f"{batch_attribute}_rows")
-    get_list = underscore_to_camelcase(f"{root_var}.get_{batch_attribute}_list()")
-    item = f"{to_variable(batch_field['name'])}"
+    list_name = underscore_to_camelcase(f"{batch_field_name}_rows")
+    get_list = underscore_to_camelcase(f"{root_var}.get_{batch_field_name}_list()")
+    item = f"{to_variable(batch_field_type['name'])}"
     file.content += indent(f"List<TableRow> {list_name} = new LinkedList<>();", depth)
     file.content += indent("", depth)
-    file.content += indent(f"for({outer_name}.{batch_field['name']} {item}: {get_list}) {{", depth)
+    file.content += indent(f"for({outer_name}.{batch_field_type['name']} {item}: {get_list}) {{", depth)
     file.content += indent("", depth)
     file.content += indent(f"TableRow {root_var_name} = new TableRow();", depth + 1)
 
     for f in field["fields"]:
         if f["isBatchField"]:
-            parser_handle_fields(repository, depth+1, root_var_name, batch_field["fields"], item, file)
+            parser_handle_fields(repository, depth + 1, root_var_name, batch_field, item, file)
         else:
-            parser_handle_batch_field(repository, depth+1, root_var_name, repository.get(f["fieldTypeValue"]), root_var, file)
+            parser_handle_batch_field(repository, depth + 1, root_var_name, f, root_var, file)
 
     file.content += indent(f"{list_name}.add({root_var_name});", depth + 1)
     file.content += indent("}\n", depth)
@@ -427,7 +431,7 @@ def parser_handle_table(repository, depth, root_var, field, file):
     """
     root_var_name = "row"
     file.content += indent(f"TableRow {root_var_name} = new TableRow();", depth)
-    parser_handle_fields(repository, depth, root_var_name, field["fields"], root_var, file)
+    parser_handle_fields(repository, depth, root_var_name, field, root_var, file)
     file.content += indent(f"return Collections.singletonList({root_var_name});", depth)
 
 
@@ -444,10 +448,10 @@ def generate_parser(repository, parserName, field, file):
     path = to_variable(field['name'])
     file.content += indent("// Generated by the proto-to-bq Proto compiler plugin.  DO NOT EDIT!", 0)
     file.content += indent(f"package {field['package']}; \n", 0)
-    file.content += indent("import com.google.api.services.bigquery.model.TableRow;", 0)
-    file.content += indent("import com.google.api.services.bigquery.model.TableCell;\n", 0)
-    file.content += indent("import java.util.LinkedList;", 0)
-    file.content += indent("import java.util.List;\n", 0)
+    file.content += indent(f"import com.google.api.services.bigquery.model.TableRow;", 0)
+    file.content += indent(f"import com.google.api.services.bigquery.model.TableCell;\n", 0)
+    file.content += indent(f"import java.util.LinkedList;", 0)
+    file.content += indent(f"import java.util.List;\n", 0)
     file.content += indent(f"public final class {parserName} {{\n", 0)
     file.content += indent(f"public static List<TableRow> convertToTableRow({outer_name}.{field['name']} {path}) throws Exception {{", 1)
 
@@ -455,7 +459,7 @@ def generate_parser(repository, parserName, field, file):
     for f in field["fields"]:
         if f["isBatchField"]:
             batch_field_found = True
-            parser_handle_batch_table(repository, outer_name, 2, path, field, repository.get(f["fieldTypeValue"]), f["fieldName"], file)
+            parser_handle_batch_table(repository, outer_name, 2, path, field, f, file)
 
     if not batch_field_found:
         parser_handle_table(repository, 2, path, field, file)

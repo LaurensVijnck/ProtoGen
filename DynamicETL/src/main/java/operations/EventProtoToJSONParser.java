@@ -117,7 +117,7 @@ public class EventProtoToJSONParser<OriginalT> extends PTransform<PCollection<Fa
 
 
 
-    /*public List<TableRow> convertTableRow(Event.EventBatch eventBatch) {
+    public List<TableRow> convertTableRow(Event.EventBatch eventBatch) {
         List<TableRow> rows = new LinkedList<>();
 
         // Client
@@ -158,7 +158,7 @@ public class EventProtoToJSONParser<OriginalT> extends PTransform<PCollection<Fa
         }
 
         return rows;
-    }*/
+    }
 
     public static void main(String[] args) throws Exception {
         String jsonString = "{\n" +

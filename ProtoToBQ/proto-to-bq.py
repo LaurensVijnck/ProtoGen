@@ -263,6 +263,7 @@ def parser_handle_base_field(depth, root_var, field, proto_path, file):
     :param file: output file to write code to
     :return:
     """
+    logging.warning("base: " + field["fieldName"])
     get_cell = underscore_to_camelcase(f"{proto_path}.get_{field['fieldName']}()")
     file.content += indent(f"{root_var}.set(\"{field['fieldName']}\", {get_cell});", depth)
 
@@ -279,6 +280,8 @@ def parser_handle_optional_field(repository, depth, root_var, field, proto_path,
     :param file: output file to write code to
     :return:
     """
+
+    logging.warning("optional: " + field["fieldName"])
     has_cell = underscore_to_camelcase(f"{proto_path}.has_{field['fieldName']}()")
 
     file.content += indent(f"if({has_cell}) {{", depth)
@@ -304,6 +307,7 @@ def parser_handle_batch_field(repository, depth, root_var, field, proto_path, fi
     :param file: output file to write code to
     :return:
     """
+    logging.warning("batch: " + field["fieldName"])
     field_type = repository.get(field["fieldTypeValue"])
     has_cell = underscore_to_camelcase(f"has_{field_type['name']}()")
     get_cell = underscore_to_camelcase(f"get_{field_type['name']}()")
@@ -331,6 +335,7 @@ def parser_handle_nested_field(repository, depth, root_var, field, proto_path, f
     :param file: output file to write code to
     :return:
     """
+    logging.warning("nested: " + field["fieldName"])
     field_name = field["fieldName"]
     field_type = repository.get(field["fieldTypeValue"])
     cell_name = f"{field_name}Cell"
@@ -353,12 +358,19 @@ def parser_handle_fields(repository, depth, root_var, field, proto_path, file):
     :param repository: the repository of message types and enums
     :param depth: depth for formatting purposes
     :param root_var: root element to add contents to (either table row or cell)
-    :param fields: fields of the message currently being handled
+    :param field: fields of the message currently being handled
     :param proto_path: path in proto element to retrieve final value
     :param file: output file to write code to
     :return:
     """
+    logging.warning("handling: " + field["fieldName"])
+    logging.warning(depth)
+    logging.warning(field)
+    logging.warning(root_var)
+    logging.warning(proto_path)
     field_type = repository.get(field["fieldTypeValue"])
+
+    # TODO aren't we missing generation code here as well? e.g. checking whether the "client" exists? instead we immediately dive into the fields
 
     if field_type is None:  # Base fields are not found in repo
         return parser_handle_base_field(depth, root_var, field, proto_path, file)
@@ -400,7 +412,7 @@ def parser_handle_batch_table(repository, outer_name, depth, root_var, field, ba
     file.content += indent(f"TableRow {root_var_name} = new TableRow();", depth + 1)
 
     for f in field["fields"]:
-        if f["isBatchField"]:
+        if f["isBatchField"]:  # TODO unclear, why are you calling non-batch when batch is there?
             parser_handle_fields(repository, depth + 1, root_var_name, batch_field, item, file)
         else:
             parser_handle_batch_field(repository, depth + 1, root_var_name, f, root_var, file)
@@ -423,7 +435,8 @@ def parser_handle_table(repository, depth, root_var, field, file):
     """
     root_var_name = "row"
     file.content += indent(f"TableRow {root_var_name} = new TableRow();", depth)
-    parser_handle_fields(repository, depth, root_var_name, field, root_var, file)
+    for f in field["fields"]:
+        parser_handle_fields(repository, depth, root_var_name, f, root_var, file)
     file.content += indent(f"return Collections.singletonList({root_var_name});", depth)
 
 

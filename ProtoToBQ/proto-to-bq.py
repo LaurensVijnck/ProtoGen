@@ -305,17 +305,13 @@ def parser_handle_batch_field(repository, depth, root_var, field, proto_path, fi
     :return:
     """
     field_type = repository.get(field["fieldTypeValue"])
-    has_cell = underscore_to_camelcase(f"has_{field_type['name']}()")
     get_cell = underscore_to_camelcase(f"get_{field_type['name']}()")
     new_path = f"{proto_path}.{get_cell}"
 
     file.content += "\n"
     file.content += indent(f"// {field_type['name']}", depth)
-    file.content += indent(f"if({proto_path}.{has_cell}) {{", depth)
 
-    parser_handle_fields(repository, depth + 1, root_var, field, new_path, file)
-
-    file.content += indent("} \n", depth)
+    parser_handle_optional_field(repository, depth, root_var, field, new_path, file)
 
 
 def parser_handle_nested_field(repository, depth, root_var, field, proto_path, file):

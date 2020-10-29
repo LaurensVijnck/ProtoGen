@@ -333,23 +333,14 @@ def parser_handle_nested_field(repository, depth, root_var, field, proto_path, f
     field_name = field["fieldName"]
     field_type = repository.get(field["fieldTypeValue"])
     cell_name = f"{field_name}Cell"
-    has_cell = underscore_to_camelcase(f"has_{field_type['name']}()")
     get_cell = underscore_to_camelcase(f"get_{field_type['name']}()")
     new_path = f"{proto_path}.{get_cell}"
 
     file.content += "\n"
     file.content += indent(f"// {field_type['name']}", depth)
     file.content += indent(f"TableCell {cell_name} = new TableCell();", depth)
-    file.content += indent(f"if({proto_path}.{has_cell}) {{", depth)
 
-    parser_handle_fields(repository, depth + 1, cell_name, field, new_path, file)
-
-    if not field['fieldRequired']:
-        file.content += indent("} \n", depth)
-    else:
-        file.content += indent("} else {", depth)
-        file.content += indent("throw new Exception();", depth + 1)
-        file.content += indent("} \n", depth)
+    parser_handle_optional_field(repository, depth, cell_name, field, new_path, file)
 
     file.content += indent(f"{root_var}.set(\"{field_name}\", {cell_name});", depth)
 

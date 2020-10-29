@@ -294,7 +294,7 @@ def parser_handle_optional_field(repository, depth, root_var, field, proto_path,
 
 def parser_handle_batch_field(repository, depth, root_var, field, proto_path, file):
     """
-    Generate code for a batch attribute
+    Generate code for a batch attribute, only changes the proto path
 
     :param repository: the repository of message types and enums
     :param depth: depth for formatting purposes
@@ -309,7 +309,6 @@ def parser_handle_batch_field(repository, depth, root_var, field, proto_path, fi
     new_path = f"{proto_path}.{get_cell}"
 
     file.content += "\n"
-    file.content += indent(f"// {field_type['name']}", depth)
 
     parser_handle_optional_field(repository, depth, root_var, field, new_path, file)
 

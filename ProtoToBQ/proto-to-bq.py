@@ -2,13 +2,17 @@
 from enum import Enum
 import itertools
 import json
+import io
 import sys
 import logging
 import re
+from google.cloud import bigquery
 
 from output.python.protos import bigquery_options_pb2
 from google.protobuf.compiler import plugin_pb2 as plugin
 from google.protobuf.descriptor_pb2 import DescriptorProto, EnumDescriptorProto
+
+from fields import Field, MessageFieldType, EnumFieldType, EnumFieldValue, FieldType
 
 
 # https://cloud.google.com/bigquery/docs/reference/standard-sql/data-types
@@ -112,111 +116,92 @@ def _traverse(proto_file):
     )
 
 
+def _resolve_repository_fields(request, repository):
+    for proto_file in request.proto_file:
+
+        # Parse request
+        for item, package in _traverse(proto_file):
+
+            if isinstance(item, DescriptorProto):
+
+                field = repository.get(FieldType.to_fq_name(proto_file.package, item.name))
+                fields = []
+                for f in item.field:
+                    fields.append(
+                        Field(
+                            field_index=f.number,
+                            field_name=f.name,
+                            field_description=f.options.Extensions[bigquery_options_pb2.description],
+                            field_type=ProtoTypeEnum(f.type).name,
+                            field_type_value=repository.get(f.type_name, None),
+                            field_required=f.options.Extensions[bigquery_options_pb2.required],
+                            is_batch_field=f.options.Extensions[bigquery_options_pb2.batch_attribute],
+                            is_optional_field=f.proto3_optional
+                        )
+                    )
+
+                field.set_fields(fields)
+
+
 def _generate_repository(request):
-    """
-    Collects all known message and enum types.
-    :param request:
-    :return: the root elements and a repository with all known message and enum types
-    """
 
     repository = {}
-    root_el = []
+    root_elements = []
 
+    # Make sure all types are present
     for proto_file in request.proto_file:
 
         # Parse request
         for item, package in _traverse(proto_file):
 
             if isinstance(item, DescriptorProto) or isinstance(item, EnumDescriptorProto):
-                data = {
-                    'package': proto_file.package or '&lt;root&gt;',
-                    'filename': proto_file.name,
-                    'name': item.name,
-                }
+
+                field = None
 
                 if isinstance(item, DescriptorProto):
 
-                    if item.options.HasExtension(bigquery_options_pb2.table_root):
-                        root_el.append(f".{proto_file.package}.{item.name}")
+                    table_root = item.options.HasExtension(bigquery_options_pb2.table_root)
+                    field = MessageFieldType(proto_file.package, proto_file.name, item.name)
+                    field.set_table_root(table_root)
 
-                    # https://googleapis.dev/python/protobuf/latest/google/protobuf/descriptor.html
-                    # logging.warning(item.DESCRIPTOR.fields_by_name.keys())
-                    # logging.warning(item.DESCRIPTOR.extensions_by_name.keys())
-                    # logging.warning(item.DESCRIPTOR.options)
-                    for f in item.field:
-                        # https://googleapis.dev/python/protobuf/latest/google/protobuf/descriptor_pb2.html#module-google.protobuf.descriptor_pb2
-                        has_option_specified = f.options.HasExtension(bigquery_options_pb2.required)
-                        is_required = f.options.Extensions[bigquery_options_pb2.required]  # Defaults to False
-                        # logging.warning("Field: %s option present: %s required: %s", f.name, has_option_specified, is_required)
-
-                    data.update({
-                        # https://stackoverflow.com/questions/32836315/python-protocol-buffer-field-options/32867712#32867712
-                        "root": item.options.HasExtension(bigquery_options_pb2.table_root),
-                        'type': 'Message',
-                        'fields': [
-                            {
-                                'fieldName': f.name,
-                                'fieldDescription': f.options.Extensions[bigquery_options_pb2.description],
-                                'fieldType': ProtoTypeEnum(f.type).name,
-                                'fieldTypeValue': f.type_name,
-                                'fieldRequired': f.options.Extensions[bigquery_options_pb2.required],
-                                'fieldIndex': f.number,
-                                # 'isBatchField': item.options.Extensions[bigquery_options_pb2.batch_field] == f.name
-                                'isBatchField': f.options.Extensions[bigquery_options_pb2.batch_attribute],
-                                'isOptionalField': f.proto3_optional
-                            } for f in item.field
-                        ]
-                    })
+                    if table_root:
+                        root_elements.append(field)
 
                 elif isinstance(item, EnumDescriptorProto):
-                    data.update({
-                        'type': 'Enum',
-                        'values': [{'name': v.name, 'value': v.number}
-                                   for v in item.value]
-                    })
 
-                repository[f".{proto_file.package}.{item.name}"] = data
+                    field = EnumFieldType(proto_file.package, proto_file.name, item.name)
+                    field.set_values([EnumFieldValue(v.name, v.number) for v in item.value])
 
-    return (root_el, repository)
+                repository[field.get_fq_name()] = field
+
+    _resolve_repository_fields(request, repository)
+
+    return repository, root_elements
 
 
-def _contruct_schema_rec(repository, field, schema_arr):
-    """
-    Constructs a schema for a specific message, given a repository of message types and enums.
+def _contruct_bigquery_schema_rec(field: MessageFieldType, schema_fields: list):
 
-    :param repository: the repository of message types and enums
-    :param field: the message type for which to create a schema
-    :param schema_arr:
-    :return: the resulting BQ schema for the message type
-    """
+    if field is None:
+        return []
 
-    for f in field["fields"]:
+    for field in field.fields:
 
-        batch_field = f["isBatchField"]
+        if field.is_batch_field:
+            schema_fields.extend(_contruct_bigquery_schema_rec(field.field_type_value, []))
 
-        if batch_field:
-            # Batch fields should be handled seperately, the idea is that the intermediate level is ignored
-            schema_arr.extend(_contruct_schema_rec(repository, repository.get(f["fieldTypeValue"]), []))
         else:
-            proto_type = ProtoTypeEnum._member_map_[f["fieldType"]]
-            logging.warning("test: %s %s", f["fieldName"], f['fieldRequired'])
+            proto_type = ProtoTypeEnum._member_map_[field.field_type]
+            schema_fields.append(
+                bigquery.SchemaField(
+                    name=field.field_name,
+                    description=field.field_description,
+                    mode="REQUIRED" if field.field_required else "NULLABLE",
+                    field_type=_BQ_TO_TYPE_VALUE[_PROTO_TO_BQ_TYPE_MAP[proto_type]],
+                    fields=_contruct_bigquery_schema_rec(field.field_type_value, [])
+                )
+            )
 
-            table_field = {
-                "description": f["fieldDescription"],
-                "mode": "REQUIRED" if f['fieldRequired'] else "NULLABLE",
-                "name": f["fieldName"],
-                "type": _BQ_TO_TYPE_VALUE[_PROTO_TO_BQ_TYPE_MAP[proto_type]]
-            }
-
-            # Handle complex types
-            if proto_type == ProtoTypeEnum.TYPE_MESSAGE:
-                table_field.update({
-                    "fields": _contruct_schema_rec(repository, repository.get(f["fieldTypeValue"]), [])
-                })
-
-            schema_arr.append(table_field)
-
-    return schema_arr
+    return schema_fields
 
 
 def underscore_to_camelcase(s):
@@ -467,32 +452,23 @@ def generate_code(request, response):
     :return: None
     """
 
-    # Construct repository
-    table_root_el, repository = _generate_repository(request)
+    client = bigquery.Client() # JSON Serializing the schema requires the BigQuery client :(
 
-    # Generate schema for every root el
-    for table_root in table_root_el:
-        schema = []
-        root = repository[table_root]
-        _contruct_schema_rec(repository, root, schema)  # TODO why pass in schema?
+    repo, root_elements = _generate_repository(request)
+    for root_element in root_elements:
+        schema_fields = []
+        _contruct_bigquery_schema_rec(root_element, schema_fields)
 
-        # Fill response
-        f = response.file.add()
-        f.name = root["name"] + ".json"
-        f.content = json.dumps(schema, indent=2)
+        f = io.StringIO("")
+        client.schema_to_json(schema_fields, f)
+        file = response.file.add()
+        file.name = root_element.name + ".json"
+        file.content = f.getvalue()
 
-    # Generate parser for every root el
-    for table_root in table_root_el:
-        f = response.file.add()
-        root = repository[table_root]
-        name = f'{root["name"]}Parser'
-        f.name = f'{name}.java'
-        generate_parser(repository, name, root, f)
-
-    # Drop repository
+    # Drop new repository
     f = response.file.add()
-    f.name = 'repository.json'
-    f.content = json.dumps(repository, indent=2)
+    f.name = 'repository_new.json'
+    f.content = json.dumps({k: v.to_json() for k, v in repo.items()}, indent=2)
 
 
 if __name__ == '__main__':

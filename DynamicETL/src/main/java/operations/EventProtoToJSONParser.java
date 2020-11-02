@@ -118,7 +118,7 @@ public class EventProtoToJSONParser<OriginalT> extends PTransform<PCollection<Fa
 
 
     public List<TableRow> convertTableRow(Event.EventBatch eventBatch) {
-        List<TableRow> rows = new LinkedList<>();
+        // List<TableRow> rows = new LinkedList<>();
 
         // Client
         TableCell clientCell = new TableCell();
@@ -131,7 +131,7 @@ public class EventProtoToJSONParser<OriginalT> extends PTransform<PCollection<Fa
             clientCell.set("name", eventBatch.getClient().getName());
         }
 
-        for(Event.BatchEvent event: eventBatch.getEventsList()) {
+        /*for(Event.BatchEvent event: eventBatch.getEventsList()) {
 
             TableCell actorCell = new TableCell();
             if(event.hasActor()) {
@@ -155,7 +155,7 @@ public class EventProtoToJSONParser<OriginalT> extends PTransform<PCollection<Fa
             rows.add(new TableRow()
                     .set("client", clientCell)
                     .set("actor", actorCell));
-        }
+        }*/
 
         return rows;
     }

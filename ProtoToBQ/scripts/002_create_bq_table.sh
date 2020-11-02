@@ -17,4 +17,4 @@ bq mk \
   --table \
   --description "Proto generated table" \
 ${GCP_PROJECT}:${DATASET_ID}.${TABLE_ID} \
-output/bigquery/EventBatch.json
+output/bigquery/Event.json

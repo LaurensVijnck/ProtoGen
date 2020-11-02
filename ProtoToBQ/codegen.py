@@ -41,6 +41,9 @@ class Variable:
 
 
 class CodeGenImp:
+    """
+    Interface for the code generation components.
+    """
     @staticmethod
     def indent(s, depth):
         return "\t" * depth + f"{s}"
@@ -73,7 +76,7 @@ class CodeGenBaseNode(CodeGenNode):
 
 class CodeGenConditionalNode(CodeGenNode):
     """
-    Code generation for conditional.
+    Conditional code generation for a given field.
     """
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
         print(self.indent(f"if({root_var.has(self._field)}) {{", depth))
@@ -84,7 +87,7 @@ class CodeGenConditionalNode(CodeGenNode):
 
 class CodeGenGetFieldNode(CodeGenNode):
     """
-    Code generation for conditional.
+    Code generation to apply a getter on the root variable.
     """
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
         root_var.push_getter(self._field)
@@ -96,7 +99,7 @@ class CodeGenGetFieldNode(CodeGenNode):
 
 class CodeGenNestedNode(CodeGenNode):
     """
-    Code generation for message fields
+    Code generation for (nested) message fields
     """
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
         var = Variable(Variable.to_variable(self._field.field_name), "TableCell")
@@ -108,6 +111,9 @@ class CodeGenNestedNode(CodeGenNode):
 
 
 class CodeGenFunctionNode(CodeGenImp):
+    """
+    Code generator for the convertToTableRow function.
+    """
     def __init__(self, field_type: MessageFieldType, code_gen_nodes: []):
         self.field_type = field_type
         self.code_gen_nodes = code_gen_nodes
@@ -123,6 +129,9 @@ class CodeGenFunctionNode(CodeGenImp):
 
 
 class CodeGenClassNode(CodeGenImp):
+    """
+    Code generator for the Parser class.
+    """
     def __init__(self, field_type: MessageFieldType, func_node: CodeGenFunctionNode):
         self.field_type = field_type
         self.func_node = func_node
@@ -169,7 +178,6 @@ if __name__ == '__main__':
     nested.add_child(c3)
     root.add_child(nested)
 
-    # root.gen_code(None, Variable("row"), Variable("event"), 0)
     event = MessageFieldType("lvi", "file1", "Event")
     func_node = CodeGenFunctionNode(event, [root])
     cl = CodeGenClassNode(event, func_node)

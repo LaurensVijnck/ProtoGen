@@ -300,7 +300,9 @@ def generate_code(request: plugin.CodeGeneratorRequest, response: plugin.CodeGen
         file.name = root_element.name + ".json"
         file.content = f.getvalue()
 
-        create_codegen_tree(root_element).gen_code(None, None, None, 0)
+        file = response.file.add()
+        file.name = root_element.name + "Parser.java"
+        create_codegen_tree(root_element).gen_code(file, None, None, 0)
 
     # Drop new repository
     f = response.file.add()

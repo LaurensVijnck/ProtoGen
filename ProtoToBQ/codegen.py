@@ -72,7 +72,7 @@ class CodeGenImp(ABC):
 
     @staticmethod
     def indent(s, depth):
-        return "\t" * depth + f"{s}"
+        return "\t" * depth + f"{s}\n"
 
 
 class CodeGenNode(CodeGenImp):
@@ -90,7 +90,7 @@ class CodeGenBaseNode(CodeGenNode):
     """
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
         root_var.push_getter(self._field)
-        logging.warning(self.indent(element.set(self._field.field_name, root_var), depth))
+        file.content += self.indent(element.set(self._field.field_name, root_var), depth)
         root_var.pop_getter()
 
 
@@ -99,16 +99,16 @@ class CodeGenConditionalNode(CodeGenNode):
     Conditional code generation for a given field.
     """
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
-        logging.warning(self.indent(f"if({root_var.has(self._field)}) {{", depth))
+        file.content += self.indent(f"if({root_var.has(self._field)}) {{", depth)
 
         for child in self._children:
             child.gen_code(file, element, root_var, depth + 1)
 
         if self._field.field_required:
-            logging.warning(self.indent("} else {", depth))
-            logging.warning(self.indent("throw new Exception();", depth + 1))
+            file.content += self.indent("} else {", depth)
+            file.content += self.indent("throw new Exception();", depth + 1)
 
-        logging.warning(self.indent("}", depth))
+        file.content += self.indent("}", depth)
 
 
 class CodeGenGetFieldNode(CodeGenNode):
@@ -131,14 +131,13 @@ class CodeGenNestedNode(CodeGenNode):
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
         var = Variable(Variable.to_variable(self._field.field_name), "TableCell")
 
-        logging.warning(f"")
-        logging.warning(self.indent(f"// {self._field.field_name}", depth))
-        logging.warning(self.indent(var.initialize(), depth))
+        # file.content += self.indent(f"// {self._field.field_name}", depth)
+        file.content += self.indent(var.initialize(), depth)
 
         for child in self._children:
             child.gen_code(file, var, root_var, depth)
 
-        logging.warning(self.indent(element.set(self._field.field_name, var), depth))
+        file.content += self.indent(element.set(self._field.field_name, var), depth)
 
 
 class CodeGenNoBatchNode(CodeGenNode):
@@ -149,12 +148,12 @@ class CodeGenNoBatchNode(CodeGenNode):
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
         row = Variable("row", "TableRow")
 
-        logging.warning(self.indent(row.initialize(), depth))
+        file.content += self.indent(row.initialize(), depth)
 
         for child in self._children:
             child.gen_code(file, row, root_var, depth)
 
-        logging.warning(self.indent(element.add(row), depth))
+        file.content += self.indent(element.add(row), depth)
 
 
 class CodeGenBatchNode(CodeGenNode):
@@ -165,16 +164,14 @@ class CodeGenBatchNode(CodeGenNode):
         root = Variable(Variable.to_variable(self._field.field_type_value.name), self._field.field_type)
         row = Variable("row", "TableRow")
 
-        logging.warning(self.indent(f"for({self._field.field_type_value.name} {root.get()}: {root_var.get()}.getEventsList()) {{", depth)) # nopep8
-
-        logging.warning(self.indent(row.initialize(), depth + 1))
+        file.content += self.indent(f"for({self._field.field_type_value.name} {root.get()}: {root_var.get()}.getEventsList()) {{", depth) # nopep8
+        file.content += self.indent(row.initialize(), depth + 1)
 
         for child in self._children:
             child.gen_code(file, row, root, depth + 1)
 
-        logging.warning(self.indent(element.add(row), depth + 1))
-
-        logging.warning(self.indent("}", depth))
+        file.content += self.indent(element.add(row), depth + 1)
+        file.content += self.indent("}", depth)
 
 
 class CodeGenFunctionNode(CodeGenImp):
@@ -187,17 +184,16 @@ class CodeGenFunctionNode(CodeGenImp):
 
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
         variable = Variable(Variable.to_variable(self.field_type.name), self.field_type.name)
-        # row = Variable("row", "TableRow")
         rows = ListVariable("rows", "ArrayList<TableRow>")
 
-        logging.warning(self.indent(f"public static List<TableRow> convertToTableRow({self.field_type.name} {variable.get()}) throws Exception {{", depth))
-        logging.warning(self.indent(rows.initialize(), depth + 1))
+        file.content += self.indent(f"public static List<TableRow> convertToTableRow({self.field_type.name} {variable.get()}) throws Exception {{", depth)
+        file.content += self.indent(rows.initialize(), depth + 1)
 
         for child in self._children:
-            child.gen_code(None, rows, variable, depth + 1)
+            child.gen_code(file, rows, variable, depth + 1)
 
-        logging.warning(self.indent(f"return {rows.get()};", depth + 1))
-        logging.warning(self.indent("}", depth))
+        file.content += self.indent(f"return {rows.get()};", depth + 1)
+        file.content += self.indent("}", depth)
 
 
 class CodeGenClassNode(CodeGenImp):
@@ -210,16 +206,14 @@ class CodeGenClassNode(CodeGenImp):
 
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
         parser_name = "EventParser"
-        logging.warning("// Generated by the proto-to-bq Proto compiler plugin.  DO NOT EDIT!")
-        logging.warning(f"package {self.field_type.package};")
-        logging.warning(f"")
-        logging.warning(f"public final class {parser_name} {{")
-        logging.warning(f"")
+        file.content += self.indent("// Generated by the proto-to-bq Proto compiler plugin.  DO NOT EDIT!", depth)
+        file.content += self.indent(f"package {self.field_type.package};", depth)
+        file.content += self.indent(f"public final class {parser_name} {{", depth)
 
         for child in self._children:
             child.gen_code(file, element, root_var, depth + 1)
 
-        logging.warning("}")
+        file.content += self.indent("}", depth)
 
 
 # if __name__ == '__main__':

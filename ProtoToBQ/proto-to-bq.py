@@ -5,7 +5,6 @@ import json
 import io
 import sys
 import logging
-import re
 from google.cloud import bigquery
 
 from output.python.protos import bigquery_options_pb2
@@ -13,6 +12,7 @@ from google.protobuf.compiler import plugin_pb2 as plugin
 from google.protobuf.descriptor_pb2 import DescriptorProto, EnumDescriptorProto
 
 from fields import Field, MessageFieldType, EnumFieldType, EnumFieldValue, FieldType
+from codegen import *
 
 
 # https://cloud.google.com/bigquery/docs/reference/standard-sql/data-types
@@ -59,7 +59,7 @@ class ProtoTypeEnum(Enum):
 _PROTO_TO_BQ_TYPE_MAP = {
     ProtoTypeEnum.TYPE_DOUBLE: BigQueryTypeEnum.TYPE_NUMERIC,
     ProtoTypeEnum.TYPE_FLOAT: BigQueryTypeEnum.TYPE_FLOAT64,
-    ProtoTypeEnum.TYPE_ENUM: BigQueryTypeEnum.TYPE_STRING,  # FUTURE: Map onto int value
+    ProtoTypeEnum.TYPE_ENUM: BigQueryTypeEnum.TYPE_STRING,  # FUTURE: Map onto int value?
     ProtoTypeEnum.TYPE_INT64: BigQueryTypeEnum.TYPE_INT64,
     ProtoTypeEnum.TYPE_SINT64: BigQueryTypeEnum.TYPE_INT64,
     ProtoTypeEnum.TYPE_SFIXED64: BigQueryTypeEnum.TYPE_INT64,
@@ -122,7 +122,7 @@ def _traverse(proto_file):
     )
 
 
-def _resolve_repository_fields(request, repository):
+def _resolve_repository_fields(request: plugin.CodeGeneratorRequest, repository):
     """
     Function to resolve the fields of the items in the repository.
 
@@ -137,8 +137,10 @@ def _resolve_repository_fields(request, repository):
 
             if isinstance(item, DescriptorProto):
 
-                field = repository.get(FieldType.to_fq_name(proto_file.package, item.name))
+                field_type = repository.get(FieldType.to_fq_name(proto_file.package, item.name))
                 fields = []
+                batch_table = False
+
                 for f in item.field:
                     fields.append(
                         Field(
@@ -153,10 +155,14 @@ def _resolve_repository_fields(request, repository):
                         )
                     )
 
-                field.set_fields(fields)
+                    batch_table = batch_table or f.options.Extensions[bigquery_options_pb2.batch_attribute]
+
+                field_type.set_batch_table(batch_table) # FUTURE: Maybe not the ideal position to set this.
+
+                field_type.set_fields(fields)
 
 
-def _generate_repository(request):
+def _generate_repository(request: plugin.CodeGeneratorRequest):
     """
     Function to generate a repository from the given request.
 
@@ -174,23 +180,23 @@ def _generate_repository(request):
 
             if isinstance(item, DescriptorProto) or isinstance(item, EnumDescriptorProto):
 
-                field = None
+                field_type = None
 
                 if isinstance(item, DescriptorProto):
 
                     table_root = item.options.HasExtension(bigquery_options_pb2.table_root)
-                    field = MessageFieldType(proto_file.package, proto_file.name, item.name)
-                    field.set_table_root(table_root)
+                    field_type = MessageFieldType(proto_file.package, proto_file.name, item.name)
+                    field_type.set_table_root(table_root)
 
                     if table_root:
-                        root_elements.append(field)
+                        root_elements.append(field_type)
 
                 elif isinstance(item, EnumDescriptorProto):
 
-                    field = EnumFieldType(proto_file.package, proto_file.name, item.name)
-                    field.set_values([EnumFieldValue(v.name, v.number) for v in item.value])
+                    field_type = EnumFieldType(proto_file.package, proto_file.name, item.name)
+                    field_type.set_values([EnumFieldValue(v.name, v.number) for v in item.value])
 
-                repository[field.get_fq_name()] = field
+                repository[field_type.get_fq_name()] = field_type
 
     _resolve_repository_fields(request, repository)
 
@@ -214,7 +220,7 @@ def _contruct_bigquery_schema_rec(field: MessageFieldType, schema_fields: list):
             schema_fields.extend(_contruct_bigquery_schema_rec(field.field_type_value, []))
 
         else:
-            proto_type = ProtoTypeEnum._member_map_[field.field_type]
+            proto_type = ProtoTypeEnum._member_map_[field.field_type] # FUTURE: Resolve this in the repository
             schema_fields.append(
                 bigquery.SchemaField(
                     name=field.field_name,
@@ -228,7 +234,53 @@ def _contruct_bigquery_schema_rec(field: MessageFieldType, schema_fields: list):
     return schema_fields
 
 
-def generate_code(request, response):
+def codegen_rec(field: Field, root: CodeGenImp):
+    proto_type = ProtoTypeEnum._member_map_[field.field_type] # FUTURE: Resolve this in the repository
+
+    node = None
+    if proto_type == ProtoTypeEnum.TYPE_MESSAGE:
+
+        node = CodeGenConditionalNode(field)
+
+        if field.is_batch_field:
+            batch = CodeGenBatchNode(field)
+            node.add_child(batch)
+
+            for f in field.field_type_value.fields:
+                codegen_rec(f, batch)
+
+        else:
+            nested = CodeGenNestedNode(field)
+            get = CodeGenGetFieldNode(field)
+            nested.add_child(get)
+            node.add_child(nested)
+
+            for f in field.field_type_value.fields:
+                codegen_rec(f, get)
+    else:
+
+        if field.is_optional_field:
+            node = CodeGenConditionalNode(field)
+            node.add_child(CodeGenBaseNode(field))
+        else:
+            node = CodeGenBaseNode(field)
+
+    root.add_child(node)
+
+
+def create_codegen_tree(root: MessageFieldType):
+    class_node = CodeGenClassNode(root)
+
+    function_node = CodeGenFunctionNode(root)
+    class_node.add_child(function_node)
+
+    for field in root.fields:
+        codegen_rec(field, function_node)
+
+    return class_node
+
+
+def generate_code(request: plugin.CodeGeneratorRequest, response: plugin.CodeGeneratorResponse):
     """
     :param request: the plugin's input source
     :param response: the plugin's output sink
@@ -247,6 +299,8 @@ def generate_code(request, response):
         file = response.file.add()
         file.name = root_element.name + ".json"
         file.content = f.getvalue()
+
+        create_codegen_tree(root_element).gen_code(None, None, None, 0)
 
     # Drop new repository
     f = response.file.add()

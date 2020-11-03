@@ -29,6 +29,7 @@ class MessageFieldType(FieldType):
         FieldType.__init__(self, package, file_name, name)
         self.fields = None
         self.table_root = False
+        self.batch_table = False
 
     def set_fields(self, fields: list):
         self.fields = fields
@@ -36,12 +37,16 @@ class MessageFieldType(FieldType):
     def set_table_root(self, table_root: bool):
         self.table_root = table_root
 
+    def set_batch_table(self, batch_table: bool):
+        self.batch_table = batch_table
+
     def to_json(self):
         return {
             "package": self.package,
             "filename": self.file_name,
             "name": self.name,
             "table_root": self.table_root,
+            "batch_table": self.batch_table,
             "fields": [f.to_json() for f in self.fields]
         }
 

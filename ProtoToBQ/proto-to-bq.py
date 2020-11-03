@@ -96,6 +96,12 @@ _BQ_TO_TYPE_VALUE = {
 
 # https://expobrain.net/2015/09/13/create-a-plugin-for-google-protocol-buffer/
 def _traverse(proto_file):
+    """
+    Function to return all the items in the given proto file.
+
+    :param proto_file:
+    :return: list containing all the items in the proto file.
+    """
     def _traverse(package, items):
         for item in items:
             yield item, package
@@ -117,6 +123,13 @@ def _traverse(proto_file):
 
 
 def _resolve_repository_fields(request, repository):
+    """
+    Function to resolve the fields of the items in the repository.
+
+    :param request:
+    :param repository:
+    :return:
+    """
     for proto_file in request.proto_file:
 
         # Parse request
@@ -144,7 +157,12 @@ def _resolve_repository_fields(request, repository):
 
 
 def _generate_repository(request):
+    """
+    Function to generate a repository from the given request.
 
+    :param request:
+    :return: Repository
+    """
     repository = {}
     root_elements = []
 
@@ -180,7 +198,13 @@ def _generate_repository(request):
 
 
 def _contruct_bigquery_schema_rec(field: MessageFieldType, schema_fields: list):
+    """
+    Function to recursively generate a BigQuery schema for a message.
 
+    :param field: MessageFieldType
+    :param schema_fields: wrapper for the fields
+    :return:
+    """
     if field is None:
         return []
 
@@ -202,247 +226,6 @@ def _contruct_bigquery_schema_rec(field: MessageFieldType, schema_fields: list):
             )
 
     return schema_fields
-
-
-def underscore_to_camelcase(s):
-    """
-    Transform given string in undercase format to string in upperCamelCase format.
-
-    :param s: string to format
-    :return: CamelCase string
-    """
-    return re.sub(r'(?!^)_([a-zA-Z])', lambda m: m.group(1).upper(), s)
-
-
-def to_variable(s):
-    """
-    Generate a variable name from the given string
-
-    :param s: the string
-    :return: variable name for the string
-    """
-    if len(s) > 0:
-        return s[0].lower() + underscore_to_camelcase(s[1:])
-    return s
-
-
-def indent(str, depth):
-    """
-    Indent given string to the given depth.
-
-    :param str: string to indent
-    :param depth: depth to indent to
-    :return: indented string
-    """
-    return "\t" * depth + str + "\n"
-
-
-def parser_handle_base_field(depth, root_var, field, proto_path, file):
-    """
-    Generate code for base proto message attribute
-
-    :param depth: depth for formatting purposes
-    :param root_var: root element to add contents to (either table row or cell)
-    :param field: field being handled by the parser
-    :param proto_path: path in proto element to retrieve final value
-    :param file: output file to write code to
-    :return:
-    """
-    get_cell = underscore_to_camelcase(f"{proto_path}.get_{field['fieldName']}()")
-    file.content += indent(f"{root_var}.set(\"{field['fieldName']}\", {get_cell});", depth)
-
-
-def parser_handle_optional_field(repository, depth, root_var, field, proto_path, file):
-    """
-    Generate code for an optional proto message attribute
-
-    :param repository: the repository of message types and enums
-    :param depth: depth for formatting purposes
-    :param root_var: root element to add contents to (either table row or cell)
-    :param field: field being handled by the parser
-    :param proto_path: path in proto element to retrieve final value
-    :param file: output file to write code to
-    :return:
-    """
-    has_cell = underscore_to_camelcase(f"{proto_path}.has_{field['fieldName']}()")
-
-    file.content += indent(f"if({has_cell}) {{", depth)
-    parser_handle_fields(repository, depth + 1, root_var, field, proto_path, file)
-
-    if not field['fieldRequired']:
-        file.content += indent("} \n", depth)
-    else:
-        file.content += indent("} else {", depth)
-        file.content += indent("throw new Exception();", depth + 1)
-        file.content += indent("} \n", depth)
-
-
-def parser_handle_batch_field(repository, depth, root_var, field, proto_path, file):
-    """
-    Generate code for a batch attribute
-
-    :param repository: the repository of message types and enums
-    :param depth: depth for formatting purposes
-    :param root_var: root element to add contents to (either table row or cell)
-    :param field: field being handled by the parser
-    :param proto_path: path in proto element to retrieve final value
-    :param file: output file to write code to
-    :return:
-    """
-    field_type = repository.get(field["fieldTypeValue"])
-    has_cell = underscore_to_camelcase(f"has_{field_type['name']}()")
-    get_cell = underscore_to_camelcase(f"get_{field_type['name']}()")
-    new_path = f"{proto_path}.{get_cell}"
-
-    file.content += "\n"
-    file.content += indent(f"// {field_type['name']}", depth)
-    file.content += indent(f"if({proto_path}.{has_cell}) {{", depth)
-
-    parser_handle_fields(repository, depth + 1, root_var, field, new_path, file)
-
-    file.content += indent("} \n", depth)
-    #parser_handle_optional_field(repository, depth + 1, root_var, field, proto_path, file)
-
-
-def parser_handle_nested_field(repository, depth, root_var, field, proto_path, file):
-    """
-    Generate code for a nested proto message
-
-    :param repository: the repository of message types and enums
-    :param depth: depth for formatting purposes
-    :param root_var: root element to add contents to (either table row or cell)
-    :param field: field being handled by the parser
-    :param proto_path: path in proto element to retrieve final value
-    :param file: output file to write code to
-    :return:
-    """
-    field_name = field["fieldName"]
-    field_type = repository.get(field["fieldTypeValue"])
-    cell_name = f"{field_name}Cell"
-    get_cell = underscore_to_camelcase(f"get_{field_type['name']}()")
-    new_path = f"{proto_path}.{get_cell}"
-
-    file.content += "\n"
-    file.content += indent(f"// {field_type['name']}", depth)
-    file.content += indent(f"TableCell {cell_name} = new TableCell();", depth)
-
-    parser_handle_optional_field(repository, depth, cell_name, field, new_path, file)
-
-    file.content += indent(f"{root_var}.set(\"{field_name}\", {cell_name});", depth)
-
-
-def parser_handle_fields(repository, depth, root_var, field, proto_path, file):
-    """
-    Generate code for a specific proto message
-
-    :param repository: the repository of message types and enums
-    :param depth: depth for formatting purposes
-    :param root_var: root element to add contents to (either table row or cell)
-    :param fields: fields of the message currently being handled
-    :param proto_path: path in proto element to retrieve final value
-    :param file: output file to write code to
-    :return:
-    """
-    field_type = repository.get(field["fieldTypeValue"])
-
-    if field_type is None:  # Base fields are not found in repo
-        return parser_handle_base_field(depth, root_var, field, proto_path, file)
-    else:
-        for f in field_type["fields"]:
-            proto_type = ProtoTypeEnum._member_map_[f["fieldType"]]
-
-            if proto_type == ProtoTypeEnum.TYPE_MESSAGE:
-                parser_handle_nested_field(repository, depth, root_var, f, proto_path, file)
-            elif f["isOptionalField"]:
-                parser_handle_optional_field(repository, depth, root_var, f, proto_path, file)
-            else:
-                parser_handle_base_field(depth, root_var, f, proto_path, file)
-
-
-def parser_handle_batch_table(repository, outer_name, depth, root_var, field, batch_field, file):
-    """
-    Code generation for table with batching enabled.
-
-    :param repository: the repository of message types and enums
-    :param depth: depth for formatting purposes
-    :param root_var: root element to add contents to (either table row or cell)
-    :param field: field being handled by the parser
-    :param batch_field: reference to the batch field in the repository
-    :param batch_attribute: name of the batch attribute
-    :param file: output file to write code to
-    :return:
-    """
-    batch_field_name = batch_field["fieldName"]
-    batch_field_type = repository.get(batch_field["fieldTypeValue"])
-    root_var_name = "row"
-    list_name = underscore_to_camelcase(f"{batch_field_name}_rows")
-    get_list = underscore_to_camelcase(f"{root_var}.get_{batch_field_name}_list()")
-    item = f"{to_variable(batch_field_type['name'])}"
-    file.content += indent(f"List<TableRow> {list_name} = new LinkedList<>();", depth)
-    file.content += indent("", depth)
-    file.content += indent(f"for({outer_name}.{batch_field_type['name']} {item}: {get_list}) {{", depth)
-    file.content += indent("", depth)
-    file.content += indent(f"TableRow {root_var_name} = new TableRow();", depth + 1)
-
-    for f in field["fields"]:
-        if f["isBatchField"]:
-            parser_handle_fields(repository, depth + 1, root_var_name, batch_field, item, file)
-        else:
-            parser_handle_batch_field(repository, depth + 1, root_var_name, f, root_var, file)
-
-    file.content += indent(f"{list_name}.add({root_var_name});", depth + 1)
-    file.content += indent("}\n", depth)
-    file.content += indent(f"return {list_name};", depth)
-
-
-def parser_handle_table(repository, depth, root_var, field, file):
-    """
-    Code generation for a table where batching is disabled.
-
-    :param repository: the repository of message types and enums
-    :param depth: depth for formatting purposes
-    :param root_var: root element to add contents to (either table row or cell)
-    :param field: field being handled by the parser
-    :param file: output file to write code to
-    :return:
-    """
-    root_var_name = "row"
-    file.content += indent(f"TableRow {root_var_name} = new TableRow();", depth)
-    parser_handle_fields(repository, depth, root_var_name, field, root_var, file)
-    file.content += indent(f"return Collections.singletonList({root_var_name});", depth)
-
-
-def generate_parser(repository, parserName, field, file):
-    """
-    Entrypoint for the code generator.
-
-    :param repository: the repository of message types and enums
-    :param field: root field for the table
-    :param file: output file to write code to
-    :return:
-    """
-    outer_name = "EventOuterClass"  # TODO
-    path = to_variable(field['name'])
-    file.content += indent("// Generated by the proto-to-bq Proto compiler plugin.  DO NOT EDIT!", 0)
-    file.content += indent(f"package {field['package']}; \n", 0)
-    file.content += indent(f"import com.google.api.services.bigquery.model.TableRow;", 0)
-    file.content += indent(f"import com.google.api.services.bigquery.model.TableCell;\n", 0)
-    file.content += indent(f"import java.util.LinkedList;", 0)
-    file.content += indent(f"import java.util.List;\n", 0)
-    file.content += indent(f"public final class {parserName} {{\n", 0)
-    file.content += indent(f"public static List<TableRow> convertToTableRow({outer_name}.{field['name']} {path}) throws Exception {{", 1)
-
-    batch_field_found = False
-    for f in field["fields"]:
-        if f["isBatchField"]:
-            batch_field_found = True
-            parser_handle_batch_table(repository, outer_name, 2, path, field, f, file)
-
-    if not batch_field_found:
-        parser_handle_table(repository, 2, path, field, file)
-
-    file.content += indent("}", 1)
-    file.content += indent("}", 0)
 
 
 def generate_code(request, response):

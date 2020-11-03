@@ -43,7 +43,9 @@ class Variable:
 
 
 class ListVariable(Variable):
-
+    """
+    Representation of a list variable.
+    """
     def __init__(self, name: str, type: str):
         super().__init__(name, type)
         self.name = name
@@ -58,12 +60,18 @@ class CodeGenImp(ABC):
     """
     Interface for the code generation components.
     """
-    @staticmethod
-    def indent(s, depth):
-        return "\t" * depth + f"{s}"
+    def __init__(self):
+        self._children = []
+
+    def add_child(self, node):
+        self._children.append(node)
 
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
         ...
+
+    @staticmethod
+    def indent(s, depth):
+        return "\t" * depth + f"{s}"
 
 
 class CodeGenNode(CodeGenImp):
@@ -71,11 +79,8 @@ class CodeGenNode(CodeGenImp):
     Abstract node in the code generation tree.
     """
     def __init__(self, field: Field):
+        super().__init__()
         self._field = field
-        self._children = []
-
-    def add_child(self, node):
-        self._children.append(node)
 
 
 class CodeGenBaseNode(CodeGenNode):
@@ -135,24 +140,38 @@ class CodeGenNestedNode(CodeGenNode):
         print(self.indent(element.set(self._field.field_name, var), depth))
 
 
+class CodeGenNoBatchNode(CodeGenNode):
+    """
+    Code generation for simple tables, i.e., those without batched fields
+    """
+
+    def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
+        row = Variable("row", "TableRow")
+
+        print(self.indent(row.initialize(), depth))
+
+        for child in self._children:
+            child.gen_code(file, row, root_var, depth)
+
+        print(self.indent(element.add(row), depth))
+
+
 class CodeGenBatchNode(CodeGenNode):
     """
-    Code generation for batch fields
+    Code generation for a table with a batch field
     """
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
-        rows = ListVariable(Variable.to_variable(f"{self._field.field_name}_list"), "ArrayList<TableRow>")
         root = Variable(Variable.to_variable(self._field.field_name), self._field.field_type)
         row = Variable("row", "TableRow")
 
-        print(self.indent(rows.initialize(), depth))
-        print(self.indent(f"for({self._field.field_type_value.name} {root.get()}: {root_var.get()}.getEventsList()) {{", depth))
+        print(self.indent(f"for({self._field.field_type_value.name} {root.get()}: {root_var.get()}.getEventsList()) {{", depth)) # nopep8
 
         print(self.indent(row.initialize(), depth + 1))
 
         for child in self._children:
-            child.gen_code(file, element, root, depth + 1)
+            child.gen_code(file, row, root, depth + 1)
 
-        print(self.indent(rows.add(row), depth + 1))
+        print(self.indent(element.add(row), depth + 1))
 
         print(self.indent("}", depth))
 
@@ -161,20 +180,22 @@ class CodeGenFunctionNode(CodeGenImp):
     """
     Code generator for the convertToTableRow function.
     """
-    def __init__(self, field_type: MessageFieldType, code_gen_nodes: []):
+    def __init__(self, field_type: MessageFieldType):
+        super().__init__()
         self.field_type = field_type
-        self.code_gen_nodes = code_gen_nodes
 
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
         variable = Variable(Variable.to_variable(self.field_type.name), self.field_type.name)
-        row = Variable("row", "TableRow")
+        # row = Variable("row", "TableRow")
+        rows = ListVariable("rows", "ArrayList<TableRow>")
 
-        print(self.indent(f"public static List<TableRow> convertToTableRow({self.field_type.name} {variable.get()}) {{", depth))
-        # print(self.indent(row.initialize(), depth + 1))
+        print(self.indent(f"public static List<TableRow> convertToTableRow({self.field_type.name} {variable.get()}) throws Exception {{", depth))
+        print(self.indent(rows.initialize(), depth + 1))
 
-        for code_gen_node in self.code_gen_nodes:
-            code_gen_node.gen_code(None, row, variable, depth + 1)
+        for child in self._children:
+            child.gen_code(None, rows, variable, depth + 1)
 
+        print(self.indent(f"return {rows.get()};", depth + 1))
         print(self.indent("}", depth))
 
 
@@ -182,9 +203,9 @@ class CodeGenClassNode(CodeGenImp):
     """
     Code generator for the Parser class.
     """
-    def __init__(self, field_type: MessageFieldType, func_node: CodeGenFunctionNode):
+    def __init__(self, field_type: MessageFieldType):
+        super().__init__()
         self.field_type = field_type
-        self.func_node = func_node
 
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
         parser_name = "EventParser"
@@ -193,7 +214,10 @@ class CodeGenClassNode(CodeGenImp):
         print(f"")
         print(f"public final class {parser_name} {{")
         print(f"")
-        self.func_node.gen_code(file, element, root_var, depth + 1)
+
+        for child in self._children:
+            child.gen_code(file, element, root_var, depth + 1)
+
         print("}")
 
 
@@ -237,6 +261,8 @@ if __name__ == '__main__':
     conditional.add_child(nested)
 
     event = MessageFieldType("lvi", "file1", "Event")
-    func_node = CodeGenFunctionNode(event, [root])
-    cl = CodeGenClassNode(event, func_node)
+    func_node = CodeGenFunctionNode(event)
+    func_node.add_child(root)
+    cl = CodeGenClassNode(event)
+    cl.add_child(func_node)
     cl.gen_code(None, None, None, 0)

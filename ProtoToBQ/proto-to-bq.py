@@ -232,7 +232,7 @@ def _contruct_bigquery_schema_rec(field: MessageFieldType, schema_fields: list):
     return schema_fields
 
 
-def codegen_rec(field_type: MessageFieldType, root: CodeGenImp, include_conditional = True):
+def codegen_rec(field_type: MessageFieldType, root: CodeGenImp):
 
     node = CodeNopNode()
     for field in field_type.fields:
@@ -243,20 +243,16 @@ def codegen_rec(field_type: MessageFieldType, root: CodeGenImp, include_conditio
             if field.is_batch_field:
                 batch = CodeGenGetBatchNode(node)
                 root.add_child(batch)
-                codegen_rec(field.field_type_value, batch, True)
+                codegen_rec(field.field_type_value, batch)
                 node.set_initialize_row(True)
             else:
-                if include_conditional:
-                    nested = CodeGenNestedNode(field)
-                    conditional = CodeGenConditionalNode(field)
-                    get = CodeGenGetFieldNode(field)
-                    node.add_child(nested)
-                    nested.add_child(conditional)
-                    conditional.add_child(get)
-                    codegen_rec(field.field_type_value, get, True)
-                else:
-                    next = CodeNopNode()
-                    codegen_rec(field.field_type_value, next, True)
+                nested = CodeGenNestedNode(field)
+                conditional = CodeGenConditionalNode(field)
+                get = CodeGenGetFieldNode(field)
+                node.add_child(nested)
+                nested.add_child(conditional)
+                conditional.add_child(get)
+                codegen_rec(field.field_type_value, get)
         else:
             if field.is_optional_field:
                 conditional = CodeGenConditionalNode(field)

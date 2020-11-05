@@ -47,11 +47,8 @@ class ListVariable(Variable):
     """
     Representation of a list variable.
     """
-    def __init__(self, name: str, type: str):
-        super().__init__(name, type)
-        self.name = name
-        self.type = type
-        self.getters = []
+    def __init__(self, name: str, list_type: str, value_type: str):
+        super().__init__(name, f'{list_type}<{value_type}>')
 
     def add(self, var: Variable):
         return f'{self.name}.add({var.get()});'
@@ -111,6 +108,16 @@ class CodeGenConditionalNode(CodeGenNode):
         file.content += self.indent("}", depth)
 
 
+class CodeGenGetNopNode(CodeGenNode):
+    """
+    Code generation to not apply anything.
+    """
+    def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
+
+        for child in self._children:
+            child.gen_code(file, element, root_var, depth)
+
+
 class CodeGenGetFieldNode(CodeGenNode):
     """
     Code generation to apply a getter on the root variable.
@@ -140,40 +147,54 @@ class CodeGenNestedNode(CodeGenNode):
         file.content += self.indent(element.set(self._field.field_name, var), depth)
 
 
-class CodeGenNoBatchNode(CodeGenNode):
-    """
-    Code generation for simple tables, i.e., those without batched fields
-    """
-    def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
-        row = Variable("row", "TableRow")
+# class CodeGenNoBatchNode(CodeGenNode):
+#     """
+#     Code generation for simple tables, i.e., those without batched fields
+#     """
+#     def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
+#         row = Variable("row", "TableRow")
+#
+#         file.content += self.indent(row.initialize(), depth)
+#
+#         for child in self._children:
+#             child.gen_code(file, row, root_var, depth)
+#
+#         file.content += self.indent(element.add(row), depth)
 
-        file.content += self.indent(row.initialize(), depth)
 
-        for child in self._children:
-            child.gen_code(file, row, root_var, depth)
-
-        file.content += self.indent(element.add(row), depth)
-
-
-class CodeGenBatchNode(CodeGenNode): # TODO This should be a message node (in contrast to field)
+class CodeGenBatchNode(CodeGenImp):
     """
     Code generation for a table with a batch field
     """
-    # TODO should know which field is the batchField (based on fields in message, and the is_batch_field getter)
+    def __init__(self, field_type: MessageFieldType):
+        super().__init__()
+        self.field_type = field_type
+
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
-        root = Variable(Variable.to_variable(self._field.field_type_value.name), self._field.field_type)
+
+        # Non-batch attributes are added to the common row
+        common = Variable("common", "TableRow")
+        file.content += self.indent(common.initialize(), depth)
+
+        batch_child = None
+        for child in self._children:
+            if child._field.is_batch_field:
+                batch_child = child
+                continue
+
+            child.gen_code(file, common, root_var, depth)
+
+        # Batch attribute
+        root = Variable(Variable.to_variable(batch_child._field.field_type_value.name), "batch_root_type")
         row = Variable("row", "TableRow")
 
-        # TODO generate 'common' row via Variable
-        # TODO for all fields that are not the batch field, pass the 'common' row
-
-        file.content += self.indent(f"for({self._field.field_type_value.name} {root.get()}: {root_var.get()}.getEventsList()) {{", depth) # nopep8
+        # TODO: Find better name to construct the following loop code snippet
+        file.content += self.indent(f"for({batch_child._field.field_type_value.name} {root.get()}: {root_var.get()}.{Variable.underscore_to_camelcase(f'get_{batch_child._field.field_name}_list()')}) {{", depth) # nopep8
         file.content += self.indent(row.initialize(), depth + 1)
 
-        for child in self._children:
-            child.gen_code(file, row, root, depth + 1)
+        batch_child.gen_code(file, row, root, depth + 1)
 
-        # TODO Merge 'common' row with row
+        file.content += self.indent(f"{row.get()}.setF({common.get()}.getF());", depth + 1) # TODO Move to variable class?
         file.content += self.indent(element.add(row), depth + 1)
         file.content += self.indent("}", depth)
 
@@ -188,9 +209,9 @@ class CodeGenFunctionNode(CodeGenImp):
 
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
         variable = Variable(Variable.to_variable(self.field_type.name), self.field_type.name)
-        rows = ListVariable("rows", "ArrayList<TableRow>")
+        rows = ListVariable("rows", "LinkedList", "TableRow")
 
-        file.content += self.indent(f"public static List<TableRow> convertToTableRow({self.field_type.name} {variable.get()}) throws Exception {{", depth)
+        file.content += self.indent(f"public static LinkedList<TableRow> convertToTableRow({self.field_type.name} {variable.get()}) throws Exception {{", depth)
         file.content += self.indent(rows.initialize(), depth + 1)
 
         for child in self._children:
@@ -212,6 +233,12 @@ class CodeGenClassNode(CodeGenImp):
         parser_name = "EventParser"
         file.content += self.indent("// Generated by the proto-to-bq Proto compiler plugin.  DO NOT EDIT!", depth)
         file.content += self.indent(f"package {self.field_type.package};", depth)
+        file.content += self.indent("", depth)
+        file.content += self.indent(f"import com.google.api.services.bigquery.model.TableRow;", depth)
+        file.content += self.indent(f"import com.google.api.services.bigquery.model.TableCell;", depth)
+        file.content += self.indent("", depth)
+        file.content += self.indent(f"import java.util.LinkedList;", depth)
+        file.content += self.indent("", depth)
         file.content += self.indent(f"public final class {parser_name} {{", depth)
 
         for child in self._children:
@@ -220,48 +247,48 @@ class CodeGenClassNode(CodeGenImp):
         file.content += self.indent("}", depth)
 
 
-if __name__ == '__main__':
-    type = MessageFieldType("lvi", "file1", "Actor")
-    batch_type = MessageFieldType("lvi", "file2", "BatchEvent")
-    field = Field(1, "actor", "actor of message", "TYPE_MESSAGE", type, False, False, False)
-    batch_field = Field(1, "batch_event", "batch of events", "TYPE_GROUP", batch_type, False, False, False)
-
-    atomic1 = Field(2, "name", "", "TYPE_UINT64", None, False, False, False)
-    atomic2 = Field(3, "email", "", "TYPE_STRING", None, True, False, False)
-
-    type2 = MessageFieldType("lvi", "file3", "Address")
-    nested_type = Field(4, "address", "address of the actor", "TYPE_MESSAGE", type2, False, False, False)
-    nested1 = Field(5, "steet", "", "TYPE_STRING", None, False, False, False)
-    nested2 = Field(6, "number", "", "TYPE_STRING", None, False, False, False)
-    nested3 = Field(7, "city", "", "TYPE_STRING", None, False, False, False)
-
-    batch = CodeGenNestedNode(field)
-
-    root = CodeGenBatchNode(batch_field)
-    root.add_child(batch)
-
-    conditional = CodeGenConditionalNode(field)
-    c2 = CodeGenConditionalNode(atomic2)
-    batch.add_child(conditional)
-
-    get1 = CodeGenGetFieldNode(field)
-    conditional.add_child(get1)
-
-    get1.add_child(CodeGenBaseNode(atomic1))
-    get1.add_child(c2)
-    c2.add_child(CodeGenBaseNode(atomic2))
-
-    nested = CodeGenNestedNode(nested_type)
-    c3 = CodeGenConditionalNode(nested_type)
-    c3.add_child(CodeGenBaseNode(nested1))
-    c3.add_child(CodeGenBaseNode(nested2))
-    c3.add_child(CodeGenBaseNode(nested3))
-    nested.add_child(c3)
-    conditional.add_child(nested)
-
-    event = MessageFieldType("lvi", "file1", "Event")
-    func_node = CodeGenFunctionNode(event)
-    func_node.add_child(root)
-    cl = CodeGenClassNode(event)
-    cl.add_child(func_node)
-    cl.gen_code(None, None, None, 0)
+# if __name__ == '__main__':
+#     type = MessageFieldType("lvi", "file1", "Actor")
+#     batch_type = MessageFieldType("lvi", "file2", "BatchEvent")
+#     field = Field(1, "actor", "actor of message", "TYPE_MESSAGE", type, False, False, False)
+#     batch_field = Field(1, "batch_event", "batch of events", "TYPE_GROUP", batch_type, False, False, False)
+#
+#     atomic1 = Field(2, "name", "", "TYPE_UINT64", None, False, False, False)
+#     atomic2 = Field(3, "email", "", "TYPE_STRING", None, True, False, False)
+#
+#     type2 = MessageFieldType("lvi", "file3", "Address")
+#     nested_type = Field(4, "address", "address of the actor", "TYPE_MESSAGE", type2, False, False, False)
+#     nested1 = Field(5, "steet", "", "TYPE_STRING", None, False, False, False)
+#     nested2 = Field(6, "number", "", "TYPE_STRING", None, False, False, False)
+#     nested3 = Field(7, "city", "", "TYPE_STRING", None, False, False, False)
+#
+#     batch = CodeGenNestedNode(field)
+#
+#     root = CodeGenBatchNode(batch_field)
+#     root.add_child(batch)
+#
+#     conditional = CodeGenConditionalNode(field)
+#     c2 = CodeGenConditionalNode(atomic2)
+#     batch.add_child(conditional)
+#
+#     get1 = CodeGenGetFieldNode(field)
+#     conditional.add_child(get1)
+#
+#     get1.add_child(CodeGenBaseNode(atomic1))
+#     get1.add_child(c2)
+#     c2.add_child(CodeGenBaseNode(atomic2))
+#
+#     nested = CodeGenNestedNode(nested_type)
+#     c3 = CodeGenConditionalNode(nested_type)
+#     c3.add_child(CodeGenBaseNode(nested1))
+#     c3.add_child(CodeGenBaseNode(nested2))
+#     c3.add_child(CodeGenBaseNode(nested3))
+#     nested.add_child(c3)
+#     conditional.add_child(nested)
+#
+#     event = MessageFieldType("lvi", "file1", "Event")
+#     func_node = CodeGenFunctionNode(event)
+#     func_node.add_child(root)
+#     cl = CodeGenClassNode(event)
+#     cl.add_child(func_node)
+#     cl.gen_code(None, None, None, 0)

@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 from enum import Enum
 import itertools
-import json
 import io
 import sys
 import logging
@@ -11,7 +10,6 @@ from output.python.protos import bigquery_options_pb2
 from google.protobuf.compiler import plugin_pb2 as plugin
 from google.protobuf.descriptor_pb2 import DescriptorProto, EnumDescriptorProto
 
-from fields import Field, MessageFieldType, EnumFieldType, EnumFieldValue, FieldType
 from codegen import *
 
 
@@ -240,23 +238,20 @@ def codegen_rec(field: Field, root: CodeGenImp):
     node = None
     if proto_type == ProtoTypeEnum.TYPE_MESSAGE:
 
-        node = CodeGenConditionalNode(field)
-
+        local_root = None
         if field.is_batch_field:
-            batch = CodeGenBatchNode(field)
-            node.add_child(batch)
-
-            for f in field.field_type_value.fields:
-                codegen_rec(f, batch)
-
+            node = CodeGenGetNopNode(field)
+            local_root = node
         else:
+            node = CodeGenConditionalNode(field)
             nested = CodeGenNestedNode(field)
             get = CodeGenGetFieldNode(field)
             nested.add_child(get)
             node.add_child(nested)
+            local_root = get
 
-            for f in field.field_type_value.fields:
-                codegen_rec(f, get)
+        for f in field.field_type_value.fields:
+            codegen_rec(f, local_root)
     else:
 
         if field.is_optional_field:
@@ -274,8 +269,16 @@ def create_codegen_tree(root: MessageFieldType):
     function_node = CodeGenFunctionNode(root)
     class_node.add_child(function_node)
 
+    table_node = None
+    if root.batch_table:
+        table_node = CodeGenBatchNode(root)
+    else:
+        pass # normal table node
+
+    function_node.add_child(table_node)
+
     for field in root.fields:
-        codegen_rec(field, function_node)
+        codegen_rec(field, table_node)
 
     return class_node
 

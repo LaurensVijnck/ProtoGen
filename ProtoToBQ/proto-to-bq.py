@@ -271,9 +271,9 @@ def create_codegen_tree(root: MessageFieldType):
 
     table_node = None
     if root.batch_table:
-        table_node = CodeGenBatchNode(root)
+        table_node = CodeGenBatchTable(root)
     else:
-        pass # normal table node
+        table_node = CodeGenNoBatchNode(root)
 
     function_node.add_child(table_node)
 

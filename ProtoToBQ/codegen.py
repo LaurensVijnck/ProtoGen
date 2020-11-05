@@ -110,7 +110,7 @@ class CodeGenConditionalNode(CodeGenNode):
 
 class CodeGenGetNopNode(CodeGenNode):
     """
-    Code generation to not apply anything.
+    Code generation to bundle nodes.
     """
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
 
@@ -147,22 +147,22 @@ class CodeGenNestedNode(CodeGenNode):
         file.content += self.indent(element.set(self._field.field_name, var), depth)
 
 
-# class CodeGenNoBatchNode(CodeGenNode):
-#     """
-#     Code generation for simple tables, i.e., those without batched fields
-#     """
-#     def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
-#         row = Variable("row", "TableRow")
-#
-#         file.content += self.indent(row.initialize(), depth)
-#
-#         for child in self._children:
-#             child.gen_code(file, row, root_var, depth)
-#
-#         file.content += self.indent(element.add(row), depth)
+class CodeGenNoBatchNode(CodeGenNode):
+    """
+    Code generation for simple tables, i.e., those without batched fields
+    """
+    def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
+        row = Variable("row", "TableRow")
+
+        file.content += self.indent(row.initialize(), depth)
+
+        for child in self._children:
+            child.gen_code(file, row, root_var, depth)
+
+        file.content += self.indent(element.add(row), depth)
 
 
-class CodeGenBatchNode(CodeGenImp):
+class CodeGenBatchTable(CodeGenImp):
     """
     Code generation for a table with a batch field
     """

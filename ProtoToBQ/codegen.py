@@ -144,7 +144,6 @@ class CodeGenNoBatchNode(CodeGenNode):
     """
     Code generation for simple tables, i.e., those without batched fields
     """
-
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
         row = Variable("row", "TableRow")
 
@@ -156,13 +155,17 @@ class CodeGenNoBatchNode(CodeGenNode):
         file.content += self.indent(element.add(row), depth)
 
 
-class CodeGenBatchNode(CodeGenNode):
+class CodeGenBatchNode(CodeGenNode): # TODO This should be a message node (in contrast to field)
     """
     Code generation for a table with a batch field
     """
+    # TODO should know which field is the batchField (based on fields in message, and the is_batch_field getter)
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
         root = Variable(Variable.to_variable(self._field.field_type_value.name), self._field.field_type)
         row = Variable("row", "TableRow")
+
+        # TODO generate 'common' row via Variable
+        # TODO for all fields that are not the batch field, pass the 'common' row
 
         file.content += self.indent(f"for({self._field.field_type_value.name} {root.get()}: {root_var.get()}.getEventsList()) {{", depth) # nopep8
         file.content += self.indent(row.initialize(), depth + 1)
@@ -170,6 +173,7 @@ class CodeGenBatchNode(CodeGenNode):
         for child in self._children:
             child.gen_code(file, row, root, depth + 1)
 
+        # TODO Merge 'common' row with row
         file.content += self.indent(element.add(row), depth + 1)
         file.content += self.indent("}", depth)
 
@@ -216,48 +220,48 @@ class CodeGenClassNode(CodeGenImp):
         file.content += self.indent("}", depth)
 
 
-# if __name__ == '__main__':
-#     type = MessageFieldType("lvi", "file1", "Actor")
-#     batch_type = MessageFieldType("lvi", "file2", "BatchEvent")
-#     field = Field(1, "actor", "actor of message", "TYPE_MESSAGE", type, False, False, False)
-#     batch_field = Field(1, "batch_event", "batch of events", "TYPE_GROUP", batch_type, False, False, False)
-#
-#     atomic1 = Field(2, "name", "", "TYPE_UINT64", None, False, False, False)
-#     atomic2 = Field(3, "email", "", "TYPE_STRING", None, True, False, False)
-#
-#     type2 = MessageFieldType("lvi", "file3", "Address")
-#     nested_type = Field(4, "address", "address of the actor", "TYPE_MESSAGE", type2, False, False, False)
-#     nested1 = Field(5, "steet", "", "TYPE_STRING", None, False, False, False)
-#     nested2 = Field(6, "number", "", "TYPE_STRING", None, False, False, False)
-#     nested3 = Field(7, "city", "", "TYPE_STRING", None, False, False, False)
-#
-#     batch = CodeGenNestedNode(field)
-#
-#     root = CodeGenBatchNode(batch_field)
-#     root.add_child(batch)
-#
-#     conditional = CodeGenConditionalNode(field)
-#     c2 = CodeGenConditionalNode(atomic2)
-#     batch.add_child(conditional)
-#
-#     get1 = CodeGenGetFieldNode(field)
-#     conditional.add_child(get1)
-#
-#     get1.add_child(CodeGenBaseNode(atomic1))
-#     get1.add_child(c2)
-#     c2.add_child(CodeGenBaseNode(atomic2))
-#
-#     nested = CodeGenNestedNode(nested_type)
-#     c3 = CodeGenConditionalNode(nested_type)
-#     c3.add_child(CodeGenBaseNode(nested1))
-#     c3.add_child(CodeGenBaseNode(nested2))
-#     c3.add_child(CodeGenBaseNode(nested3))
-#     nested.add_child(c3)
-#     conditional.add_child(nested)
-#
-#     event = MessageFieldType("lvi", "file1", "Event")
-#     func_node = CodeGenFunctionNode(event)
-#     func_node.add_child(root)
-#     cl = CodeGenClassNode(event)
-#     cl.add_child(func_node)
-#     cl.gen_code(None, None, None, 0)
+if __name__ == '__main__':
+    type = MessageFieldType("lvi", "file1", "Actor")
+    batch_type = MessageFieldType("lvi", "file2", "BatchEvent")
+    field = Field(1, "actor", "actor of message", "TYPE_MESSAGE", type, False, False, False)
+    batch_field = Field(1, "batch_event", "batch of events", "TYPE_GROUP", batch_type, False, False, False)
+
+    atomic1 = Field(2, "name", "", "TYPE_UINT64", None, False, False, False)
+    atomic2 = Field(3, "email", "", "TYPE_STRING", None, True, False, False)
+
+    type2 = MessageFieldType("lvi", "file3", "Address")
+    nested_type = Field(4, "address", "address of the actor", "TYPE_MESSAGE", type2, False, False, False)
+    nested1 = Field(5, "steet", "", "TYPE_STRING", None, False, False, False)
+    nested2 = Field(6, "number", "", "TYPE_STRING", None, False, False, False)
+    nested3 = Field(7, "city", "", "TYPE_STRING", None, False, False, False)
+
+    batch = CodeGenNestedNode(field)
+
+    root = CodeGenBatchNode(batch_field)
+    root.add_child(batch)
+
+    conditional = CodeGenConditionalNode(field)
+    c2 = CodeGenConditionalNode(atomic2)
+    batch.add_child(conditional)
+
+    get1 = CodeGenGetFieldNode(field)
+    conditional.add_child(get1)
+
+    get1.add_child(CodeGenBaseNode(atomic1))
+    get1.add_child(c2)
+    c2.add_child(CodeGenBaseNode(atomic2))
+
+    nested = CodeGenNestedNode(nested_type)
+    c3 = CodeGenConditionalNode(nested_type)
+    c3.add_child(CodeGenBaseNode(nested1))
+    c3.add_child(CodeGenBaseNode(nested2))
+    c3.add_child(CodeGenBaseNode(nested3))
+    nested.add_child(c3)
+    conditional.add_child(nested)
+
+    event = MessageFieldType("lvi", "file1", "Event")
+    func_node = CodeGenFunctionNode(event)
+    func_node.add_child(root)
+    cl = CodeGenClassNode(event)
+    cl.add_child(func_node)
+    cl.gen_code(None, None, None, 0)

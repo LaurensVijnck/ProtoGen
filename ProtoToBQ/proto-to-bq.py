@@ -232,35 +232,41 @@ def _contruct_bigquery_schema_rec(field: MessageFieldType, schema_fields: list):
     return schema_fields
 
 
-def codegen_rec(field: Field, root: CodeGenImp):
-    proto_type = ProtoTypeEnum._member_map_[field.field_type] # FUTURE: Resolve this in the repository
+def codegen_rec(field_type: MessageFieldType, root: CodeGenImp, include_conditional = True):
 
-    node = None
-    if proto_type == ProtoTypeEnum.TYPE_MESSAGE:
+    node = CodeNopNode()
+    for field in field_type.fields:
 
-        local_root = None
-        if field.is_batch_field:
-            node = CodeGenGetNopNode(field)
-            local_root = node
+        proto_type = ProtoTypeEnum._member_map_[field.field_type]  # FUTURE: Resolve this in the repository
+
+        if proto_type == ProtoTypeEnum.TYPE_MESSAGE:
+            if field.is_batch_field:
+                batch = CodeGenGetBatchNode(node)
+                root.add_child(batch)
+                codegen_rec(field.field_type_value, batch, True)
+                node.set_initialize_row(True)
+            else:
+                if include_conditional:
+                    nested = CodeGenNestedNode(field)
+                    conditional = CodeGenConditionalNode(field)
+                    get = CodeGenGetFieldNode(field)
+                    node.add_child(nested)
+                    nested.add_child(conditional)
+                    conditional.add_child(get)
+                    codegen_rec(field.field_type_value, get, True)
+                else:
+                    next = CodeNopNode()
+                    codegen_rec(field.field_type_value, next, True)
         else:
-            node = CodeGenConditionalNode(field)
-            nested = CodeGenNestedNode(field)
-            get = CodeGenGetFieldNode(field)
-            nested.add_child(get)
-            node.add_child(nested)
-            local_root = get
-
-        for f in field.field_type_value.fields:
-            codegen_rec(f, local_root)
-    else:
-
-        if field.is_optional_field:
-            node = CodeGenConditionalNode(field)
-            node.add_child(CodeGenBaseNode(field))
-        else:
-            node = CodeGenBaseNode(field)
+            if field.is_optional_field:
+                conditional = CodeGenConditionalNode(field)
+                node.add_child(conditional)
+                conditional.add_child(CodeGenBaseNode(field))
+            else:
+                node.add_child(CodeGenBaseNode(field))
 
     root.add_child(node)
+    return root
 
 
 def create_codegen_tree(root: MessageFieldType):
@@ -269,16 +275,7 @@ def create_codegen_tree(root: MessageFieldType):
     function_node = CodeGenFunctionNode(root)
     class_node.add_child(function_node)
 
-    table_node = None
-    if root.batch_table:
-        table_node = CodeGenBatchTable(root)
-    else:
-        table_node = CodeGenNoBatchNode(root)
-
-    function_node.add_child(table_node)
-
-    for field in root.fields:
-        codegen_rec(field, table_node)
+    codegen_rec(root, function_node)
 
     return class_node
 

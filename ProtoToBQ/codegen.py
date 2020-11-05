@@ -62,7 +62,10 @@ class CodeGenImp(ABC):
         self._children = []
 
     def add_child(self, node):
-        self._children.append(node)
+        self._children.insert(0, node)
+
+    def add_children(self, children):
+        self._children.extend(children)
 
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
         ...
@@ -108,14 +111,55 @@ class CodeGenConditionalNode(CodeGenNode):
         file.content += self.indent("}", depth)
 
 
-class CodeGenGetNopNode(CodeGenNode):
-    """
-    Code generation to bundle nodes.
-    """
+class CodeNopNode(CodeGenImp):
+
+    def __init__(self):
+        super().__init__()
+        self._initialize_row = False
+        self._variable = None
+
+    def set_initialize_row(self, initialize_row: bool):
+        self._initialize_row = initialize_row
+
+    def get_variable(self):
+        return self._variable
+
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
+
+        if self._initialize_row:
+            self._variable = Variable("common", "TableRow")
+            file.content += self.indent(self._variable.initialize(), depth)
+            element = self._variable
 
         for child in self._children:
             child.gen_code(file, element, root_var, depth)
+
+
+class CodeGenGetBatchNode(CodeGenImp):
+    """
+    Code generation for batched nodes.
+    """
+    def __init__(self, neighbour: CodeNopNode):
+        super().__init__()
+        self._neighbour = neighbour
+
+    def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
+        # Batch attribute
+        root = Variable("batch_field_type", "batch_root_type")
+        row = Variable("row", "TableRow")
+
+        # file.content += self.indent(f"for({batch_child._field.field_type_value.name} {root.get()}: {root_var.get()}.{Variable.underscore_to_camelcase(f'get_{batch_child._field.field_name}_list()')}) {{", depth) # nopep8
+        file.content += self.indent(f"for(type var: list()) {{", depth)  # nopep8
+        file.content += self.indent(row.initialize(), depth + 1)
+
+        for child in self._children:
+            child.gen_code(file, row, root, depth + 1)
+
+        variable = self._neighbour.get_variable()
+        if variable is not None:
+            file.content += self.indent(f"{row.get()}.setF({variable.get()}.getF());", depth + 1)  # TODO Move to variable class?
+        file.content += self.indent(element.add(row), depth + 1)
+        file.content += self.indent("}", depth)
 
 
 class CodeGenGetFieldNode(CodeGenNode):
@@ -147,56 +191,41 @@ class CodeGenNestedNode(CodeGenNode):
         file.content += self.indent(element.set(self._field.field_name, var), depth)
 
 
-class CodeGenNoBatchNode(CodeGenNode):
-    """
-    Code generation for simple tables, i.e., those without batched fields
-    """
-    def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
-        row = Variable("row", "TableRow")
-
-        file.content += self.indent(row.initialize(), depth)
-
-        for child in self._children:
-            child.gen_code(file, row, root_var, depth)
-
-        file.content += self.indent(element.add(row), depth)
-
-
-class CodeGenBatchTable(CodeGenImp):
-    """
-    Code generation for a table with a batch field
-    """
-    def __init__(self, field_type: MessageFieldType):
-        super().__init__()
-        self.field_type = field_type
-
-    def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
-
-        # Non-batch attributes are added to the common row
-        common = Variable("common", "TableRow")
-        file.content += self.indent(common.initialize(), depth)
-
-        batch_child = None
-        for child in self._children:
-            if child._field.is_batch_field:
-                batch_child = child
-                continue
-
-            child.gen_code(file, common, root_var, depth)
-
-        # Batch attribute
-        root = Variable(Variable.to_variable(batch_child._field.field_type_value.name), "batch_root_type")
-        row = Variable("row", "TableRow")
-
-        # TODO: Find better name to construct the following loop code snippet
-        file.content += self.indent(f"for({batch_child._field.field_type_value.name} {root.get()}: {root_var.get()}.{Variable.underscore_to_camelcase(f'get_{batch_child._field.field_name}_list()')}) {{", depth) # nopep8
-        file.content += self.indent(row.initialize(), depth + 1)
-
-        batch_child.gen_code(file, row, root, depth + 1)
-
-        file.content += self.indent(f"{row.get()}.setF({common.get()}.getF());", depth + 1) # TODO Move to variable class?
-        file.content += self.indent(element.add(row), depth + 1)
-        file.content += self.indent("}", depth)
+# class CodeGenBatchTable(CodeGenImp):
+#     """
+#     Code generation for a table with a batch field
+#     """
+#     def __init__(self, field_type: MessageFieldType):
+#         super().__init__()
+#         self.field_type = field_type
+#
+#     def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
+#
+#         # Non-batch attributes are added to the common row
+#         common = Variable("common", "TableRow")
+#         file.content += self.indent(common.initialize(), depth)
+#
+#         batch_child = None
+#         for child in self._children:
+#             if child._field.is_batch_field:
+#                 batch_child = child
+#                 continue
+#
+#             child.gen_code(file, common, root_var, depth)
+#
+#         # Batch attribute
+#         root = Variable(Variable.to_variable(batch_child._field.field_type_value.name), "batch_root_type")
+#         row = Variable("row", "TableRow")
+#
+#         # TODO: Find better name to construct the following loop code snippet
+#         file.content += self.indent(f"for({batch_child._field.field_type_value.name} {root.get()}: {root_var.get()}.{Variable.underscore_to_camelcase(f'get_{batch_child._field.field_name}_list()')}) {{", depth) # nopep8
+#         file.content += self.indent(row.initialize(), depth + 1)
+#
+#         batch_child.gen_code(file, row, root, depth + 1)
+#
+#         file.content += self.indent(f"{row.get()}.setF({common.get()}.getF());", depth + 1) # TODO Move to variable class?
+#         file.content += self.indent(element.add(row), depth + 1)
+#         file.content += self.indent("}", depth)
 
 
 class CodeGenFunctionNode(CodeGenImp):

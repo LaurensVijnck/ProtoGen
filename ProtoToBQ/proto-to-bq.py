@@ -240,7 +240,7 @@ def codegen_rec(field_type: MessageFieldType, root: CodeGenImp, table_root: bool
         proto_type = ProtoTypeEnum._member_map_[field.field_type]  # FUTURE: Resolve this in the repository
 
         if proto_type == ProtoTypeEnum.TYPE_MESSAGE:
-            if field.is_batch_field:
+            if table_root and field.is_batch_field:
                 batch = CodeGenGetBatchNode(field, node)
                 root.add_child(batch)
                 codegen_rec(field.field_type_value, batch)

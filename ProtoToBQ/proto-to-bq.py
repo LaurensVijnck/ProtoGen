@@ -232,9 +232,9 @@ def _contruct_bigquery_schema_rec(field: MessageFieldType, schema_fields: list):
     return schema_fields
 
 
-def codegen_rec(field_type: MessageFieldType, root: CodeGenImp):
+def codegen_rec(field_type: MessageFieldType, root: CodeGenImp, table_root: bool = False):
 
-    node = CodeNopNode()
+    node = CodeNopNode(table_root, field_type.batch_table)
     for field in field_type.fields:
 
         proto_type = ProtoTypeEnum._member_map_[field.field_type]  # FUTURE: Resolve this in the repository
@@ -244,7 +244,6 @@ def codegen_rec(field_type: MessageFieldType, root: CodeGenImp):
                 batch = CodeGenGetBatchNode(node)
                 root.add_child(batch)
                 codegen_rec(field.field_type_value, batch)
-                node.set_initialize_row(True)
             else:
                 nested = CodeGenNestedNode(field)
                 conditional = CodeGenConditionalNode(field)
@@ -271,7 +270,7 @@ def create_codegen_tree(root: MessageFieldType):
     function_node = CodeGenFunctionNode(root)
     class_node.add_child(function_node)
 
-    codegen_rec(root, function_node)
+    codegen_rec(root, function_node, table_root=True)
 
     return class_node
 

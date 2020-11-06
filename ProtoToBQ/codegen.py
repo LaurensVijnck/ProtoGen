@@ -113,26 +113,28 @@ class CodeGenConditionalNode(CodeGenNode):
 
 class CodeNopNode(CodeGenImp):
 
-    def __init__(self):
+    def __init__(self, table_root: bool, batch_table: bool):
         super().__init__()
-        self._initialize_row = False
+        self._table_root = table_root
+        self._batch_table = batch_table
         self._variable = None
-
-    def set_initialize_row(self, initialize_row: bool):
-        self._initialize_row = initialize_row
 
     def get_variable(self):
         return self._variable
 
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
 
-        if self._initialize_row:
+        new_root = element
+        if self._table_root:
             self._variable = Variable("common", "TableRow")
             file.content += self.indent(self._variable.initialize(), depth)
-            element = self._variable
+            new_root = self._variable
 
         for child in self._children:
-            child.gen_code(file, element, root_var, depth)
+            child.gen_code(file, new_root, root_var, depth)
+
+        if self._table_root and not self._batch_table:
+            file.content += self.indent(element.add(self._variable), depth)
 
 
 class CodeGenGetBatchNode(CodeGenImp):

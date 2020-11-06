@@ -7,8 +7,7 @@ import "protos/client.proto";
 import "protos/actor.proto";
 
 message BatchEvent {
-    option (table_root) = true;
-    Actor actor = 2  [(batch_attribute) = true, (required) = true, (description) = "Actor concerned with the event"];
+    Actor actor = 2  [(required) = true, (description) = "Actor concerned with the event"];
 }
 
 message Event {

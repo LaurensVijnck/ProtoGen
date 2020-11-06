@@ -94,6 +94,27 @@ class CodeGenBaseNode(CodeGenNode):
         root_var.pop_getter()
 
 
+class CodeGenRepeatedNode(CodeGenNode):
+    """
+    Code generation for repeated atomic fields.
+    """
+    def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
+        list_var = ListVariable("cells", "LinkedList", "TableCell")
+        var = Variable("cell", "TableCell")
+        res = Variable("el", "Element")
+        file.content += self.indent(list_var.initialize(), depth)
+
+        file.content += self.indent(f"for(type el: els) {{", depth)  # nopep8
+        file.content += self.indent(var.initialize(), depth + 1)
+
+        for child in self._children:
+            child.gen_code(file, var, res, depth + 1)
+
+        file.content += self.indent(list_var.add(var), depth + 1)
+        file.content += self.indent("}", depth)
+        file.content += self.indent(element.set(self._field.field_name, list_var), depth)
+
+
 class CodeGenConditionalNode(CodeGenNode):
     """
     Conditional code generation for a given field.

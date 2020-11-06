@@ -149,7 +149,8 @@ def _resolve_repository_fields(request: plugin.CodeGeneratorRequest, repository)
                             field_type_value=repository.get(f.type_name, None),
                             field_required=f.options.Extensions[bigquery_options_pb2.required],
                             is_batch_field=f.options.Extensions[bigquery_options_pb2.batch_attribute],
-                            is_optional_field=f.proto3_optional
+                            is_optional_field=f.proto3_optional,
+                            is_repeated_field=f.label == f.LABEL_REPEATED
                         )
                     )
 
@@ -244,6 +245,10 @@ def codegen_rec(field_type: MessageFieldType, root: CodeGenImp, table_root: bool
                 batch = CodeGenGetBatchNode(field, node)
                 root.add_child(batch)
                 codegen_rec(field.field_type_value, batch)
+            elif field.is_repeated_field:
+                rep = CodeGenRepeatedNode(field)
+                node.add_child(rep)
+                codegen_rec(field.field_type_value, rep)
             else:
                 nested = CodeGenNestedNode(field)
                 conditional = CodeGenConditionalNode(field)

@@ -13,5 +13,5 @@ message BatchEvent {
 message Event {
     option (table_root) = true;
     Client client = 1  [(required) = false, (description) = "Owner of the event"];
-    repeated BatchEvent events = 2 ;//[(required) = true, (batch_attribute) = true];
+    repeated BatchEvent events = 2 [(required) = true, (batch_attribute) = true];
 }

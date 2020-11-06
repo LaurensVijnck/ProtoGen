@@ -241,7 +241,7 @@ def codegen_rec(field_type: MessageFieldType, root: CodeGenImp, table_root: bool
 
         if proto_type == ProtoTypeEnum.TYPE_MESSAGE:
             if field.is_batch_field:
-                batch = CodeGenGetBatchNode(node)
+                batch = CodeGenGetBatchNode(field, node)
                 root.add_child(batch)
                 codegen_rec(field.field_type_value, batch)
             else:

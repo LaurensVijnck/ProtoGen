@@ -137,26 +137,26 @@ class CodeNopNode(CodeGenImp):
             file.content += self.indent(element.add(self._variable), depth)
 
 
-class CodeGenGetBatchNode(CodeGenImp):
+class CodeGenGetBatchNode(CodeGenNode):
     """
     Code generation for batched nodes.
     """
-    def __init__(self, neighbour: CodeNopNode):
-        super().__init__()
+    def __init__(self, field: Field, neighbour: CodeNopNode):
+        super().__init__(field)
         self._neighbour = neighbour
 
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
         # Batch attribute
-        root = Variable("batch_field_type", "batch_root_type")
+        root = Variable(Variable.to_variable(self._field.field_type_value.name), self._field.field_type_value.name)
         row = Variable("row", "TableRow")
 
-        # file.content += self.indent(f"for({batch_child._field.field_type_value.name} {root.get()}: {root_var.get()}.{Variable.underscore_to_camelcase(f'get_{batch_child._field.field_name}_list()')}) {{", depth) # nopep8
-        file.content += self.indent(f"for(type var: list()) {{", depth)  # nopep8
+        file.content += self.indent(f"for({self._field.field_type_value.name} {root.get()}: {root.get()}: {root_var.get()}.{Variable.underscore_to_camelcase(f'get_{self._field.field_name}_list()')}) {{", depth) # nopep8
         file.content += self.indent(row.initialize(), depth + 1)
 
         for child in self._children:
             child.gen_code(file, row, root, depth + 1)
 
+        # FUTURE: Could check if neighbour actually has children
         variable = self._neighbour.get_variable()
         if variable is not None:
             file.content += self.indent(f"{row.get()}.setF({variable.get()}.getF());", depth + 1)  # TODO Move to variable class?

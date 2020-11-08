@@ -233,6 +233,7 @@ def _contruct_bigquery_schema_rec(field: MessageFieldType, schema_fields: list):
     return schema_fields
 
 
+
 def codegen_rec(field_type: MessageFieldType, root: CodeGenImp, table_root: bool = False):
 
     node = CodeNopNode(table_root, field_type.batch_table)

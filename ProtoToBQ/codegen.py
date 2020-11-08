@@ -198,13 +198,23 @@ class CodeGenGetFieldNode(CodeGenNode):
     """
     Code generation to apply a getter on the root variable.
     """
+    def __init__(self, field: Field):
+        super().__init__(field)
+        self._get_required = not self._field.is_repeated_field
+
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
-        root_var.push_getter(self._field)
 
-        for child in self._children:
-            child.gen_code(file, element, root_var, depth)
+        if self._get_required:
 
-        root_var.pop_getter()
+            root_var.push_getter(self._field)
+
+            for child in self._children:
+                child.gen_code(file, element, root_var, depth)
+
+            root_var.pop_getter()
+        else:
+            for child in self._children:
+                child.gen_code(file, element, root_var, depth)
 
 
 class CodeGenNestedNode(CodeGenNode):
@@ -213,18 +223,24 @@ class CodeGenNestedNode(CodeGenNode):
     """
     def __init__(self, field: Field):
         super().__init__(field)
+        self._declaration_required = not self._field.is_repeated_field
 
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
 
-        var = Variable(Variable.to_variable(self._field.field_name), "TableCell")
+        if self._declaration_required:
 
-        # file.content += self.indent(f"// {self._field.field_name}", depth)
-        file.content += self.indent(var.initialize(), depth)
+            var = Variable(Variable.to_variable(self._field.field_name), "TableCell")
 
-        for child in self._children:
-            child.gen_code(file, var, root_var, depth)
+            # file.content += self.indent(f"// {self._field.field_name}", depth)
+            file.content += self.indent(var.initialize(), depth)
 
-        file.content += self.indent(element.set(self._field.field_name, var), depth)
+            for child in self._children:
+                child.gen_code(file, var, root_var, depth)
+
+            file.content += self.indent(element.set(self._field.field_name, var), depth)
+        else:
+            for child in self._children:
+                child.gen_code(file, element, root_var, depth)
 
 
 class CodeGenFunctionNode(CodeGenImp):

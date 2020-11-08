@@ -5,10 +5,10 @@ package lvi;
 import "protos/bigquery_options.proto";
 
 message Test {
-    optional string name = 1 [(required) = true];
+    string name = 1 [(required) = true];
 }
 
 message Client {
     optional int64 tenantId = 1 [(required) = true, (description) = "Identifier in the client catalog"];
-    repeated Test names = 2; // [(required) = true];
+    repeated Test tests = 2; // [(required) = true];
 }

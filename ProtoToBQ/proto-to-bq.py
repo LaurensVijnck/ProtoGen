@@ -236,19 +236,22 @@ def _contruct_bigquery_schema_rec(field: MessageFieldType, schema_fields: list):
 def codegen_rec(field_type: MessageFieldType, root: CodeGenImp, table_root: bool = False):
 
     node = CodeNopNode(table_root, field_type.batch_table)
+    node_copy = node
     for field in field_type.fields:
+
+        if field.is_repeated_field and not field.is_batch_field:
+            rep = CodeGenRepeatedNode(field)
+            node.add_child(rep)
+            node = rep
 
         proto_type = ProtoTypeEnum._member_map_[field.field_type]  # FUTURE: Resolve this in the repository
 
+        # TODO Make nested node self-aware of intermediate variable being required (i.e., for repeated and message fields)
         if proto_type == ProtoTypeEnum.TYPE_MESSAGE:
             if table_root and field.is_batch_field:
                 batch = CodeGenGetBatchNode(field, node)
                 root.add_child(batch)
                 codegen_rec(field.field_type_value, batch)
-            elif field.is_repeated_field:
-                rep = CodeGenRepeatedNode(field)
-                node.add_child(rep)
-                codegen_rec(field.field_type_value, rep)
             else:
                 nested = CodeGenNestedNode(field)
                 conditional = CodeGenConditionalNode(field)
@@ -258,12 +261,11 @@ def codegen_rec(field_type: MessageFieldType, root: CodeGenImp, table_root: bool
                 conditional.add_child(get)
                 codegen_rec(field.field_type_value, get)
         else:
-            if field.is_optional_field:
-                conditional = CodeGenConditionalNode(field)
-                node.add_child(conditional)
-                conditional.add_child(CodeGenBaseNode(field))
-            else:
-                node.add_child(CodeGenBaseNode(field))
+            conditional = CodeGenConditionalNode(field)
+            node.add_child(conditional)
+            conditional.add_child(CodeGenBaseNode(field))
+
+        node = node_copy
 
     root.add_child(node)
     return root

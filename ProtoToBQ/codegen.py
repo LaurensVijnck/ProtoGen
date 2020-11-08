@@ -119,17 +119,25 @@ class CodeGenConditionalNode(CodeGenNode):
     """
     Conditional code generation for a given field.
     """
+    def __init__(self, field: Field):
+        super().__init__(field)
+        self._check_required = field.is_optional_field or field.field_type == "TYPE_MESSAGE"
+
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
-        file.content += self.indent(f"if({root_var.has(self._field)}) {{", depth)
+        if self._check_required:
+            file.content += self.indent(f"if({root_var.has(self._field)}) {{", depth)
 
-        for child in self._children:
-            child.gen_code(file, element, root_var, depth + 1)
+            for child in self._children:
+                child.gen_code(file, element, root_var, depth + 1)
 
-        if self._field.field_required:
-            file.content += self.indent("} else {", depth)
-            file.content += self.indent("throw new Exception();", depth + 1)
+            if self._field.field_required:
+                file.content += self.indent("} else {", depth)
+                file.content += self.indent("throw new Exception();", depth + 1)
 
-        file.content += self.indent("}", depth)
+            file.content += self.indent("}", depth)
+        else:
+            for child in self._children:
+                child.gen_code(file, element, root_var, depth)
 
 
 class CodeNopNode(CodeGenImp):
@@ -203,7 +211,11 @@ class CodeGenNestedNode(CodeGenNode):
     """
     Code generation for (nested) message fields
     """
+    def __init__(self, field: Field):
+        super().__init__(field)
+
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
+
         var = Variable(Variable.to_variable(self._field.field_name), "TableCell")
 
         # file.content += self.indent(f"// {self._field.field_name}", depth)

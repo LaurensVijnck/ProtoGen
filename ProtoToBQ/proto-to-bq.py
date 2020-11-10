@@ -234,6 +234,15 @@ def _contruct_bigquery_schema_rec(field: MessageFieldType, schema_fields: list):
 
 
 def add_codegen_node_conditionally(root: CodeGenImp, node: CodeGenImp, condition = True):
+    """
+    Function to conditionally add a node to the tree, if the conditional succeeds, the node is
+    added and is returned by the function. If the conditional fails, the old root is returned.
+
+    :param root:
+    :param node:
+    :param condition:
+    :return:
+    """
     if condition:
         root.add_child(node)
         return node
@@ -241,6 +250,14 @@ def add_codegen_node_conditionally(root: CodeGenImp, node: CodeGenImp, condition
 
 
 def codegen_rec(field_type: MessageFieldType, root: CodeGenImp, table_root: bool = False):
+    """
+    Recursive function to build the code generation tee.
+
+    :param field_type:
+    :param root:
+    :param table_root:
+    :return:
+    """
 
     node = CodeNopNode(table_root, field_type.batch_table)
     for field in field_type.fields:
@@ -270,6 +287,12 @@ def codegen_rec(field_type: MessageFieldType, root: CodeGenImp, table_root: bool
 
 
 def create_codegen_tree(root: MessageFieldType):
+    """
+    Create the codegeneration tee for the given MessageField.
+
+    :param root:
+    :return:
+    """
     class_node = CodeGenClassNode(root)
 
     function_node = CodeGenFunctionNode(root)

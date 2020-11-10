@@ -233,40 +233,37 @@ def _contruct_bigquery_schema_rec(field: MessageFieldType, schema_fields: list):
     return schema_fields
 
 
+def add_codegen_node_conditionally(root: CodeGenImp, node: CodeGenImp, condition = True):
+    if condition:
+        root.add_child(node)
+        return node
+    return root
+
 
 def codegen_rec(field_type: MessageFieldType, root: CodeGenImp, table_root: bool = False):
 
     node = CodeNopNode(table_root, field_type.batch_table)
-    node_copy = node
     for field in field_type.fields:
 
-        if field.is_repeated_field and not field.is_batch_field:
-            rep = CodeGenRepeatedNode(field)
-            node.add_child(rep)
-            node = rep
+        # FUTURE: Resolve this in the repository
+        proto_type = ProtoTypeEnum._member_map_[field.field_type]
 
-        proto_type = ProtoTypeEnum._member_map_[field.field_type]  # FUTURE: Resolve this in the repository
+        field_root = node
+        field_root = add_codegen_node_conditionally(field_root, CodeGenRepeatedNode(field), field.is_repeated_field and not field.is_batch_field)
 
-        # TODO Make nested node self-aware of intermediate variable being required (i.e., for repeated and message fields)
         if proto_type == ProtoTypeEnum.TYPE_MESSAGE:
             if table_root and field.is_batch_field:
-                batch = CodeGenGetBatchNode(field, node)
-                root.add_child(batch)
-                codegen_rec(field.field_type_value, batch)
+                field_root = add_codegen_node_conditionally(root, CodeGenGetBatchNode(field, node))
             else:
-                nested = CodeGenNestedNode(field)
-                conditional = CodeGenConditionalNode(field)
-                get = CodeGenGetFieldNode(field)
-                node.add_child(nested)
-                nested.add_child(conditional)
-                conditional.add_child(get)
-                codegen_rec(field.field_type_value, get)
-        else:
-            conditional = CodeGenConditionalNode(field)
-            node.add_child(conditional)
-            conditional.add_child(CodeGenBaseNode(field))
+                field_root = add_codegen_node_conditionally(field_root, CodeGenNestedNode(field), not field.is_repeated_field)
+                field_root = add_codegen_node_conditionally(field_root, CodeGenConditionalNode(field, field.field_required), not field.is_repeated_field)
+                field_root = add_codegen_node_conditionally(field_root, CodeGenGetFieldNode(field), not field.is_repeated_field)
 
-        node = node_copy
+            # Recurse child fields
+            codegen_rec(field.field_type_value, field_root)
+        else:
+            field_root = add_codegen_node_conditionally(field_root, CodeGenConditionalNode(field, field.field_required), field.is_optional_field)
+            field_root.add_child(CodeGenBaseNode(field))
 
     root.add_child(node)
     return root

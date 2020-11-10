@@ -67,6 +67,9 @@ class CodeGenImp(ABC):
     def add_children(self, children):
         self._children.extend(children)
 
+    def get_num_children(self):
+        return len(self._children)
+
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
         ...
 
@@ -119,25 +122,21 @@ class CodeGenConditionalNode(CodeGenNode):
     """
     Conditional code generation for a given field.
     """
-    def __init__(self, field: Field):
+    def __init__(self, field: Field, throw_exception = False):
         super().__init__(field)
-        self._check_required = field.is_optional_field or field.field_type == "TYPE_MESSAGE"
+        self._throw_exception = throw_exception
 
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
-        if self._check_required:
-            file.content += self.indent(f"if({root_var.has(self._field)}) {{", depth)
+        file.content += self.indent(f"if({root_var.has(self._field)}) {{", depth)
 
-            for child in self._children:
-                child.gen_code(file, element, root_var, depth + 1)
+        for child in self._children:
+            child.gen_code(file, element, root_var, depth + 1)
 
-            if self._field.field_required:
-                file.content += self.indent("} else {", depth)
-                file.content += self.indent("throw new Exception();", depth + 1)
+        if self._throw_exception:
+            file.content += self.indent("} else {", depth)
+            file.content += self.indent("throw new Exception();", depth + 1)
 
-            file.content += self.indent("}", depth)
-        else:
-            for child in self._children:
-                child.gen_code(file, element, root_var, depth)
+        file.content += self.indent("}", depth)
 
 
 class CodeNopNode(CodeGenImp):
@@ -185,9 +184,8 @@ class CodeGenGetBatchNode(CodeGenNode):
         for child in self._children:
             child.gen_code(file, row, root, depth + 1)
 
-        # FUTURE: Could check if neighbour actually has children
         variable = self._neighbour.get_variable()
-        if variable is not None:
+        if variable is not None and self._neighbour.get_num_children() > 0:
             file.content += self.indent(f"{row.get()}.setF({variable.get()}.getF());", depth + 1)  # TODO Move to variable class?
 
         file.content += self.indent(element.add(row), depth + 1)
@@ -200,21 +198,14 @@ class CodeGenGetFieldNode(CodeGenNode):
     """
     def __init__(self, field: Field):
         super().__init__(field)
-        self._get_required = not self._field.is_repeated_field
 
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
+        root_var.push_getter(self._field)
 
-        if self._get_required:
+        for child in self._children:
+            child.gen_code(file, element, root_var, depth)
 
-            root_var.push_getter(self._field)
-
-            for child in self._children:
-                child.gen_code(file, element, root_var, depth)
-
-            root_var.pop_getter()
-        else:
-            for child in self._children:
-                child.gen_code(file, element, root_var, depth)
+        root_var.pop_getter()
 
 
 class CodeGenNestedNode(CodeGenNode):
@@ -227,20 +218,16 @@ class CodeGenNestedNode(CodeGenNode):
 
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int):
 
-        if self._declaration_required:
+        var = Variable(Variable.to_variable(self._field.field_name), "TableCell")
 
-            var = Variable(Variable.to_variable(self._field.field_name), "TableCell")
+        file.content += self.indent("", depth)
+        file.content += self.indent(f"// {self._field.field_name}", depth)
+        file.content += self.indent(var.initialize(), depth)
 
-            # file.content += self.indent(f"// {self._field.field_name}", depth)
-            file.content += self.indent(var.initialize(), depth)
+        for child in self._children:
+            child.gen_code(file, var, root_var, depth)
 
-            for child in self._children:
-                child.gen_code(file, var, root_var, depth)
-
-            file.content += self.indent(element.set(self._field.field_name, var), depth)
-        else:
-            for child in self._children:
-                child.gen_code(file, element, root_var, depth)
+        file.content += self.indent(element.set(self._field.field_name, var), depth)
 
 
 class CodeGenFunctionNode(CodeGenImp):

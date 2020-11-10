@@ -7,7 +7,7 @@ import "protos/client.proto";
 import "protos/actor.proto";
 
 message BatchEvent {
-    Actor actor = 2  [(required) = true, (description) = "Actor concerned with the event"];
+    Actor actor = 2  [(required) = false, (description) = "Actor concerned with the event"];
 }
 
 message Event {

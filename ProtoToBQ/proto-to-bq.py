@@ -288,7 +288,7 @@ def codegen_rec(field_type: MessageFieldType, root: CodeGenImp, table_root: bool
 
 def create_codegen_tree(root: MessageFieldType):
     """
-    Create the codegeneration tee for the given MessageField.
+    Create the code generation tee for the given MessageField.
 
     :param root:
     :return:

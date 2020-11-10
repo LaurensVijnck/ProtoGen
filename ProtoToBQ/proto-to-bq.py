@@ -258,7 +258,6 @@ def codegen_rec(field_type: MessageFieldType, root: CodeGenImp, table_root: bool
     :param table_root:
     :return:
     """
-
     node = CodeNopNode(table_root, field_type.batch_table)
     for field in field_type.fields:
 
@@ -270,6 +269,8 @@ def codegen_rec(field_type: MessageFieldType, root: CodeGenImp, table_root: bool
 
         if proto_type == ProtoTypeEnum.TYPE_MESSAGE:
             if table_root and field.is_batch_field:
+                # Batch field attached directly to the root, as to allow
+                # grouping of the batch and non-batch nodes.
                 field_root = add_codegen_node_conditionally(root, CodeGenGetBatchNode(field, node))
             else:
                 field_root = add_codegen_node_conditionally(field_root, CodeGenNestedNode(field), not field.is_repeated_field)

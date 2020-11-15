@@ -1,7 +1,7 @@
 import time
 
 from google.cloud import pubsub_v1
-from output.python.protos import event_pb2, actor_pb2, client_pb2
+from protos import event_pb2, client_pb2, actor_pb2
 from google.protobuf.json_format import MessageToJson
 
 project_id = "geometric-ocean-284614"
@@ -25,7 +25,7 @@ def get_callback(f, data):
 
 
 # Construct event
-event = event_pb2.EventBatch()
+event = event_pb2.Event()
 
 client = client_pb2.Client()
 client.tenantId = 1337

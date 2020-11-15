@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export GOOGLE_APPLICATION_CREDENTIALS="/Users/lvijnck/Desktop/geometric-ocean-284614-77fba73ca7b0.json"
+export GOOGLE_APPLICATION_CREDENTIALS="/Users/lvijnck/Documents/google-cloud-sdk/geometric-ocean-284614-77fba73ca7b0.json"
 
 GCP_PROJECT=geometric-ocean-284614
 

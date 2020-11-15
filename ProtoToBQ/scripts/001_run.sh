@@ -3,6 +3,8 @@
 DST_DIR=output
 
 export GOOGLE_APPLICATION_CREDENTIALS=/Users/lvijnck/Documents/google-cloud-sdk/geometric-ocean-284614-77fba73ca7b0.json
+# export GOOGLE_APPLICATION_CREDENTIALS="/Users/lvijnck/Documents/google-cloud-sdk/geometric-ocean-284614-77fba73ca7b0.json"
+
 
 # Make file executable
 chmod +x proto-to-bq.py

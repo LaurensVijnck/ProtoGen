@@ -1,14 +1,14 @@
 package pipelines;
 
+import com.google.api.services.bigquery.model.TableRow;
 import common.operations.GenericPrinter;
 import models.FailSafeElement;
 import models.coders.FailSafeElementCoder;
 import operations.EventProtoToJSONParser;
-import operations.JsonToTableRowConverter;
 import operations.WriteJSONToBigQuery;
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.coders.ByteArrayCoder;
-import org.apache.beam.sdk.coders.StringUtf8Coder;
+import org.apache.beam.sdk.io.gcp.bigquery.TableRowJsonCoder;
 import org.apache.beam.sdk.io.gcp.pubsub.PubsubIO;
 import org.apache.beam.sdk.io.gcp.pubsub.PubsubMessage;
 import org.apache.beam.sdk.io.gcp.pubsub.PubsubMessageWithAttributesCoder;
@@ -27,7 +27,7 @@ public class DynamicETL {
     private static final Logger LOG = LoggerFactory.getLogger(DynamicETL.class);
 
     private static final TupleTag<FailSafeElement<PubsubMessage, byte[]>> PROTO_DLQ = new TupleTag<>() {};
-    private static final TupleTag<FailSafeElement<PubsubMessage, String>> PROTO_MAIN = new TupleTag<>() {};
+    private static final TupleTag<FailSafeElement<PubsubMessage, TableRow>> PROTO_MAIN = new TupleTag<>() {};
 
     public static void main(String[] args) {
 
@@ -38,6 +38,8 @@ public class DynamicETL {
                 .as(DynamicETLPipelineOptions.class);
 
         System.out.println(options.getPubSubInputSubscription());
+
+        options.setTempLocation("gs://dataflow-staging-us-central1-230586129391/temp");
 
         // Create pipeline object
         Pipeline p = Pipeline.create(options);
@@ -54,8 +56,8 @@ public class DynamicETL {
 
         // Write success events
         input
-                .get(PROTO_MAIN).setCoder(FailSafeElementCoder.of(PubsubMessageWithAttributesCoder.of(), StringUtf8Coder.of()))
-                .apply(new WriteJSONToBigQuery<>(new JsonToTableRowConverter<>(), options.getOutputTable(), options.getDeadLetterTable()));
+                .get(PROTO_MAIN).setCoder(FailSafeElementCoder.of(PubsubMessageWithAttributesCoder.of(), TableRowJsonCoder.of()))
+                .apply(new WriteJSONToBigQuery<>(new IdentityConverter<>(), options.getOutputTable(), options.getDeadLetterTable()));
 
 
         // Write failed events
@@ -64,6 +66,13 @@ public class DynamicETL {
                 .apply(ParDo.of(new GenericPrinter<>()));
 
         p.run();
+    }
+
+    public static class IdentityConverter<OriginalT> extends SimpleFunction<FailSafeElement<OriginalT, TableRow>, TableRow> {
+
+        public TableRow apply(FailSafeElement<OriginalT, TableRow> input) {
+            return input.getPayload();
+        }
     }
 
     private static class PubSubBytesConverter extends SimpleFunction<PubsubMessage, FailSafeElement<PubsubMessage, byte[]>> {

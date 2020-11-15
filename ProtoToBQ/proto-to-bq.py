@@ -229,7 +229,7 @@ def _contruct_bigquery_schema_rec(field: MessageFieldType, schema_fields: list):
                 bigquery.SchemaField(
                     name=field.field_name,
                     description=field.field_description,
-                    mode="REQUIRED" if field.field_required else "NULLABLE",
+                    mode="REPEATED" if field.is_repeated_field else "REQUIRED" if field.field_required else "NULLABLE",
                     field_type=_BQ_TO_TYPE_VALUE[_PROTO_TO_BQ_TYPE_MAP[proto_type]],
                     fields=_contruct_bigquery_schema_rec(field.field_type_value, [])
                 )

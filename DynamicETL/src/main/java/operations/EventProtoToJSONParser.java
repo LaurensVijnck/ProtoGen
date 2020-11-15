@@ -1,12 +1,9 @@
 package operations;
 
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.api.services.bigquery.model.TableRow;
 import lvi.EventOuterClass;
+import lvi.EventParser;
 import models.FailSafeElement;
 import org.apache.beam.sdk.transforms.DoFn;
 import org.apache.beam.sdk.transforms.PTransform;
@@ -18,18 +15,14 @@ import org.apache.beam.sdk.values.TupleTagList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
 public class EventProtoToJSONParser<OriginalT> extends PTransform<PCollection<FailSafeElement<OriginalT, byte[]>>, PCollectionTuple> {
 
     private static final Logger LOG = LoggerFactory.getLogger(EventProtoToJSONParser.class);
 
     private final TupleTag<FailSafeElement<OriginalT, byte[]>> DLQTag;  // garbage data, those not complying to validation rules
-    private final TupleTag<FailSafeElement<OriginalT, String>> mainTag; // Guaranteed to be insertable in BigQuery
+    private final TupleTag<FailSafeElement<OriginalT, TableRow>> mainTag; // Guaranteed to be insertable in BigQuery
 
-    public EventProtoToJSONParser(TupleTag<FailSafeElement<OriginalT, String>> mainTag, TupleTag<FailSafeElement<OriginalT, byte[]>> DLQTag) {
+    public EventProtoToJSONParser(TupleTag<FailSafeElement<OriginalT, TableRow>> mainTag, TupleTag<FailSafeElement<OriginalT, byte[]>> DLQTag) {
         this.DLQTag = DLQTag;
         this.mainTag = mainTag;
     }
@@ -41,18 +34,15 @@ public class EventProtoToJSONParser<OriginalT> extends PTransform<PCollection<Fa
                         .withOutputTags(mainTag, TupleTagList.of(DLQTag)));
     }
 
-    private class MapProtoEventToJSON extends DoFn<FailSafeElement<OriginalT, byte[]>, FailSafeElement<OriginalT, String>> {
+    private class MapProtoEventToJSON extends DoFn<FailSafeElement<OriginalT, byte[]>, FailSafeElement<OriginalT, TableRow>> {
 
         @ProcessElement
         public void processElement(@Element FailSafeElement<OriginalT, byte[]> input, ProcessContext c) {
 
             try {
-                // String JsonString = JsonFormat.printer().print(Event.EventBatch.parseFrom(input.getPayload()));
-
-                /*for (String el : unBatchElements(JsonString)) {
-                    LOG.info(el);
-                    c.output(new FailSafeElement<>(input.getOriginalPayload(), el));
-                }*/
+                for(TableRow row: EventParser.convertToTableRow(EventOuterClass.Event.parseFrom(input.getPayload()))) {
+                    c.output(new FailSafeElement<>(input.getOriginalPayload(), row));
+                }
 
             } catch (Exception e) {
                 LOG.info(e.getMessage());

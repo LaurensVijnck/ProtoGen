@@ -2,17 +2,26 @@ import json
 
 from enums import ProtoTypeEnum
 
+
 class FieldType:
     """
     Abstract representation of a field type.
     """
-    def __init__(self, package, file_name, name):
+    def __init__(self, package, file_name, name, ambiguous_file_name):
         self.package = package
         self.file_name = file_name
         self.name = name
+        self.ambiguous_file_name = ambiguous_file_name
 
     def get_fq_name(self):
         return f".{self.package}.{self.name}"
+
+    def get_class_name(self):
+        # FUTURE: This should be extracted in the code-gen class, as it's Java specific.
+        if not self.ambiguous_file_name:
+            return f"{self.file_name[0].upper() + self.file_name[1:]}.{self.name}"
+
+        return f"{self.file_name[0].upper() + self.file_name[1:]}OuterClass.{self.name}"
 
     def to_json(self):
         ...
@@ -26,8 +35,8 @@ class MessageFieldType(FieldType):
     """
     Representation of a message field type, i.e., a field containing one or more fields.
     """
-    def __init__(self, package, file_name, name):
-        FieldType.__init__(self, package, file_name, name)
+    def __init__(self, package, file_name, name, ambiguous_file_name):
+        FieldType.__init__(self, package, file_name, name, ambiguous_file_name)
         self.fields = None
         self.table_root = False
         self.batch_table = False
@@ -45,6 +54,7 @@ class MessageFieldType(FieldType):
         return {
             "package": self.package,
             "filename": self.file_name,
+            "ambiguous_file_name": self.ambiguous_file_name,
             "name": self.name,
             "table_root": self.table_root,
             "batch_table": self.batch_table,
@@ -56,8 +66,8 @@ class EnumFieldType(FieldType):
     """
     Representation of an enum field type, i.e., a field with a mapping from names to values.
     """
-    def __init__(self, package, file_name, name):
-        FieldType.__init__(self, package, file_name, name)
+    def __init__(self, package, file_name, name, ambiguous_file_name):
+        FieldType.__init__(self, package, file_name, name, ambiguous_file_name)
         self.values = None
 
     def set_values(self, values: list):
@@ -106,7 +116,7 @@ class Field:
         """
 
         if self.field_type_value is not None:
-            return self.field_type_value.name
+            return self.field_type_value.get_class_name()
 
         # Primitive types are determined by the type_map
         return type_map[ProtoTypeEnum._member_map_[self.field_type]]

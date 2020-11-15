@@ -14,59 +14,83 @@ public final class EventOuterClass {
     registerAllExtensions(
         (com.google.protobuf.ExtensionRegistryLite) registry);
   }
-  public interface BatchEventOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:lvi.BatchEvent)
+  public interface TagOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lvi.Tag)
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>.lvi.Actor actor = 2 [(.lvi.required) = true, (.lvi.description) = "Actor concerned with the event"];</code>
-     * @return Whether the actor field is set.
+     * <code>string tag_name = 1;</code>
+     * @return The tagName.
      */
-    boolean hasActor();
+    String getTagName();
     /**
-     * <code>.lvi.Actor actor = 2 [(.lvi.required) = true, (.lvi.description) = "Actor concerned with the event"];</code>
-     * @return The actor.
+     * <code>string tag_name = 1;</code>
+     * @return The bytes for tagName.
      */
-    lvi.ActorOuterClass.Actor getActor();
+    com.google.protobuf.ByteString
+        getTagNameBytes();
+
     /**
-     * <code>.lvi.Actor actor = 2 [(.lvi.required) = true, (.lvi.description) = "Actor concerned with the event"];</code>
+     * <code>string tag_code = 2;</code>
+     * @return The tagCode.
      */
-    lvi.ActorOuterClass.ActorOrBuilder getActorOrBuilder();
+    String getTagCode();
+    /**
+     * <code>string tag_code = 2;</code>
+     * @return The bytes for tagCode.
+     */
+    com.google.protobuf.ByteString
+        getTagCodeBytes();
+
+    /**
+     * <code>string tag_namespace = 3;</code>
+     * @return The tagNamespace.
+     */
+    String getTagNamespace();
+    /**
+     * <code>string tag_namespace = 3;</code>
+     * @return The bytes for tagNamespace.
+     */
+    com.google.protobuf.ByteString
+        getTagNamespaceBytes();
   }
   /**
-   * Protobuf type {@code lvi.BatchEvent}
+   * Protobuf type {@code lvi.Tag}
    */
-  public static final class BatchEvent extends
+  public static final class Tag extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:lvi.BatchEvent)
-      BatchEventOrBuilder {
+      // @@protoc_insertion_point(message_implements:lvi.Tag)
+      TagOrBuilder {
   private static final long serialVersionUID = 0L;
-    // Use BatchEvent.newBuilder() to construct.
-    private BatchEvent(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+    // Use Tag.newBuilder() to construct.
+    private Tag(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-    private BatchEvent() {
+    private Tag() {
+      tagName_ = "";
+      tagCode_ = "";
+      tagNamespace_ = "";
     }
 
-    @java.lang.Override
+    @Override
     @SuppressWarnings({"unused"})
-    protected java.lang.Object newInstance(
+    protected Object newInstance(
         UnusedPrivateParameter unused) {
-      return new BatchEvent();
+      return new Tag();
     }
 
-    @java.lang.Override
+    @Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
     }
-    private BatchEvent(
+    private Tag(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
+        throw new NullPointerException();
       }
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
@@ -78,17 +102,22 @@ public final class EventOuterClass {
             case 0:
               done = true;
               break;
-            case 18: {
-              lvi.ActorOuterClass.Actor.Builder subBuilder = null;
-              if (actor_ != null) {
-                subBuilder = actor_.toBuilder();
-              }
-              actor_ = input.readMessage(lvi.ActorOuterClass.Actor.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(actor_);
-                actor_ = subBuilder.buildPartial();
-              }
+            case 10: {
+              String s = input.readStringRequireUtf8();
 
+              tagName_ = s;
+              break;
+            }
+            case 18: {
+              String s = input.readStringRequireUtf8();
+
+              tagCode_ = s;
+              break;
+            }
+            case 26: {
+              String s = input.readStringRequireUtf8();
+
+              tagNamespace_ = s;
               break;
             }
             default: {
@@ -112,45 +141,133 @@ public final class EventOuterClass {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return lvi.EventOuterClass.internal_static_lvi_BatchEvent_descriptor;
+      return EventOuterClass.internal_static_lvi_Tag_descriptor;
     }
 
-    @java.lang.Override
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    @Override
+    protected FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return lvi.EventOuterClass.internal_static_lvi_BatchEvent_fieldAccessorTable
+      return EventOuterClass.internal_static_lvi_Tag_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              lvi.EventOuterClass.BatchEvent.class, lvi.EventOuterClass.BatchEvent.Builder.class);
+              Tag.class, Builder.class);
     }
 
-    public static final int ACTOR_FIELD_NUMBER = 2;
-    private lvi.ActorOuterClass.Actor actor_;
+    public static final int TAG_NAME_FIELD_NUMBER = 1;
+    private volatile Object tagName_;
     /**
-     * <code>.lvi.Actor actor = 2 [(.lvi.required) = true, (.lvi.description) = "Actor concerned with the event"];</code>
-     * @return Whether the actor field is set.
+     * <code>string tag_name = 1;</code>
+     * @return The tagName.
      */
-    @java.lang.Override
-    public boolean hasActor() {
-      return actor_ != null;
+    @Override
+    public String getTagName() {
+      Object ref = tagName_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        tagName_ = s;
+        return s;
+      }
     }
     /**
-     * <code>.lvi.Actor actor = 2 [(.lvi.required) = true, (.lvi.description) = "Actor concerned with the event"];</code>
-     * @return The actor.
+     * <code>string tag_name = 1;</code>
+     * @return The bytes for tagName.
      */
-    @java.lang.Override
-    public lvi.ActorOuterClass.Actor getActor() {
-      return actor_ == null ? lvi.ActorOuterClass.Actor.getDefaultInstance() : actor_;
+    @Override
+    public com.google.protobuf.ByteString
+        getTagNameBytes() {
+      Object ref = tagName_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        tagName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int TAG_CODE_FIELD_NUMBER = 2;
+    private volatile Object tagCode_;
+    /**
+     * <code>string tag_code = 2;</code>
+     * @return The tagCode.
+     */
+    @Override
+    public String getTagCode() {
+      Object ref = tagCode_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        tagCode_ = s;
+        return s;
+      }
     }
     /**
-     * <code>.lvi.Actor actor = 2 [(.lvi.required) = true, (.lvi.description) = "Actor concerned with the event"];</code>
+     * <code>string tag_code = 2;</code>
+     * @return The bytes for tagCode.
      */
-    @java.lang.Override
-    public lvi.ActorOuterClass.ActorOrBuilder getActorOrBuilder() {
-      return getActor();
+    @Override
+    public com.google.protobuf.ByteString
+        getTagCodeBytes() {
+      Object ref = tagCode_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        tagCode_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int TAG_NAMESPACE_FIELD_NUMBER = 3;
+    private volatile Object tagNamespace_;
+    /**
+     * <code>string tag_namespace = 3;</code>
+     * @return The tagNamespace.
+     */
+    @Override
+    public String getTagNamespace() {
+      Object ref = tagNamespace_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        tagNamespace_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string tag_namespace = 3;</code>
+     * @return The bytes for tagNamespace.
+     */
+    @Override
+    public com.google.protobuf.ByteString
+        getTagNamespaceBytes() {
+      Object ref = tagNamespace_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        tagNamespace_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
     private byte memoizedIsInitialized = -1;
-    @java.lang.Override
+    @Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -160,16 +277,848 @@ public final class EventOuterClass {
       return true;
     }
 
-    @java.lang.Override
+    @Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (actor_ != null) {
-        output.writeMessage(2, getActor());
+      if (!getTagNameBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, tagName_);
+      }
+      if (!getTagCodeBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, tagCode_);
+      }
+      if (!getTagNamespaceBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, tagNamespace_);
       }
       unknownFields.writeTo(output);
     }
 
-    @java.lang.Override
+    @Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!getTagNameBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, tagName_);
+      }
+      if (!getTagCodeBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, tagCode_);
+      }
+      if (!getTagNamespaceBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, tagNamespace_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof Tag)) {
+        return super.equals(obj);
+      }
+      Tag other = (Tag) obj;
+
+      if (!getTagName()
+          .equals(other.getTagName())) return false;
+      if (!getTagCode()
+          .equals(other.getTagCode())) return false;
+      if (!getTagNamespace()
+          .equals(other.getTagNamespace())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + TAG_NAME_FIELD_NUMBER;
+      hash = (53 * hash) + getTagName().hashCode();
+      hash = (37 * hash) + TAG_CODE_FIELD_NUMBER;
+      hash = (53 * hash) + getTagCode().hashCode();
+      hash = (37 * hash) + TAG_NAMESPACE_FIELD_NUMBER;
+      hash = (53 * hash) + getTagNamespace().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static Tag parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static Tag parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static Tag parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static Tag parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static Tag parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static Tag parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static Tag parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static Tag parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static Tag parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static Tag parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static Tag parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static Tag parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(Tag prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @Override
+    protected Builder newBuilderForType(
+        BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code lvi.Tag}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:lvi.Tag)
+        TagOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return EventOuterClass.internal_static_lvi_Tag_descriptor;
+      }
+
+      @Override
+      protected FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return EventOuterClass.internal_static_lvi_Tag_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                Tag.class, Builder.class);
+      }
+
+      // Construct using lvi.EventOuterClass.Tag.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @Override
+      public Builder clear() {
+        super.clear();
+        tagName_ = "";
+
+        tagCode_ = "";
+
+        tagNamespace_ = "";
+
+        return this;
+      }
+
+      @Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return EventOuterClass.internal_static_lvi_Tag_descriptor;
+      }
+
+      @Override
+      public Tag getDefaultInstanceForType() {
+        return Tag.getDefaultInstance();
+      }
+
+      @Override
+      public Tag build() {
+        Tag result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @Override
+      public Tag buildPartial() {
+        Tag result = new Tag(this);
+        result.tagName_ = tagName_;
+        result.tagCode_ = tagCode_;
+        result.tagNamespace_ = tagNamespace_;
+        onBuilt();
+        return result;
+      }
+
+      @Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return super.setField(field, value);
+      }
+      @Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof Tag) {
+          return mergeFrom((Tag)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(Tag other) {
+        if (other == Tag.getDefaultInstance()) return this;
+        if (!other.getTagName().isEmpty()) {
+          tagName_ = other.tagName_;
+          onChanged();
+        }
+        if (!other.getTagCode().isEmpty()) {
+          tagCode_ = other.tagCode_;
+          onChanged();
+        }
+        if (!other.getTagNamespace().isEmpty()) {
+          tagNamespace_ = other.tagNamespace_;
+          onChanged();
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        Tag parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (Tag) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private Object tagName_ = "";
+      /**
+       * <code>string tag_name = 1;</code>
+       * @return The tagName.
+       */
+      public String getTagName() {
+        Object ref = tagName_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          tagName_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      /**
+       * <code>string tag_name = 1;</code>
+       * @return The bytes for tagName.
+       */
+      public com.google.protobuf.ByteString
+          getTagNameBytes() {
+        Object ref = tagName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          tagName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string tag_name = 1;</code>
+       * @param value The tagName to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTagName(
+          String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        tagName_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string tag_name = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearTagName() {
+        
+        tagName_ = getDefaultInstance().getTagName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string tag_name = 1;</code>
+       * @param value The bytes for tagName to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTagNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        tagName_ = value;
+        onChanged();
+        return this;
+      }
+
+      private Object tagCode_ = "";
+      /**
+       * <code>string tag_code = 2;</code>
+       * @return The tagCode.
+       */
+      public String getTagCode() {
+        Object ref = tagCode_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          tagCode_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      /**
+       * <code>string tag_code = 2;</code>
+       * @return The bytes for tagCode.
+       */
+      public com.google.protobuf.ByteString
+          getTagCodeBytes() {
+        Object ref = tagCode_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          tagCode_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string tag_code = 2;</code>
+       * @param value The tagCode to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTagCode(
+          String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        tagCode_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string tag_code = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearTagCode() {
+        
+        tagCode_ = getDefaultInstance().getTagCode();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string tag_code = 2;</code>
+       * @param value The bytes for tagCode to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTagCodeBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        tagCode_ = value;
+        onChanged();
+        return this;
+      }
+
+      private Object tagNamespace_ = "";
+      /**
+       * <code>string tag_namespace = 3;</code>
+       * @return The tagNamespace.
+       */
+      public String getTagNamespace() {
+        Object ref = tagNamespace_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          tagNamespace_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      /**
+       * <code>string tag_namespace = 3;</code>
+       * @return The bytes for tagNamespace.
+       */
+      public com.google.protobuf.ByteString
+          getTagNamespaceBytes() {
+        Object ref = tagNamespace_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          tagNamespace_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string tag_namespace = 3;</code>
+       * @param value The tagNamespace to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTagNamespace(
+          String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        tagNamespace_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string tag_namespace = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearTagNamespace() {
+        
+        tagNamespace_ = getDefaultInstance().getTagNamespace();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string tag_namespace = 3;</code>
+       * @param value The bytes for tagNamespace to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTagNamespaceBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        tagNamespace_ = value;
+        onChanged();
+        return this;
+      }
+      @Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:lvi.Tag)
+    }
+
+    // @@protoc_insertion_point(class_scope:lvi.Tag)
+    private static final Tag DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new Tag();
+    }
+
+    public static Tag getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<Tag>
+        PARSER = new com.google.protobuf.AbstractParser<Tag>() {
+      @Override
+      public Tag parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new Tag(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<Tag> parser() {
+      return PARSER;
+    }
+
+    @Override
+    public com.google.protobuf.Parser<Tag> getParserForType() {
+      return PARSER;
+    }
+
+    @Override
+    public Tag getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface BatchEventOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lvi.BatchEvent)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>.lvi.Actor actor = 1 [(.lvi.required) = false, (.lvi.description) = "Actor concerned with the event"];</code>
+     * @return Whether the actor field is set.
+     */
+    boolean hasActor();
+    /**
+     * <code>.lvi.Actor actor = 1 [(.lvi.required) = false, (.lvi.description) = "Actor concerned with the event"];</code>
+     * @return The actor.
+     */
+    ActorOuterClass.Actor getActor();
+    /**
+     * <code>.lvi.Actor actor = 1 [(.lvi.required) = false, (.lvi.description) = "Actor concerned with the event"];</code>
+     */
+    ActorOuterClass.ActorOrBuilder getActorOrBuilder();
+
+    /**
+     * <code>repeated .lvi.Tag tags = 2 [(.lvi.description) = "Tags associated with the event"];</code>
+     */
+    java.util.List<Tag>
+        getTagsList();
+    /**
+     * <code>repeated .lvi.Tag tags = 2 [(.lvi.description) = "Tags associated with the event"];</code>
+     */
+    Tag getTags(int index);
+    /**
+     * <code>repeated .lvi.Tag tags = 2 [(.lvi.description) = "Tags associated with the event"];</code>
+     */
+    int getTagsCount();
+    /**
+     * <code>repeated .lvi.Tag tags = 2 [(.lvi.description) = "Tags associated with the event"];</code>
+     */
+    java.util.List<? extends TagOrBuilder>
+        getTagsOrBuilderList();
+    /**
+     * <code>repeated .lvi.Tag tags = 2 [(.lvi.description) = "Tags associated with the event"];</code>
+     */
+    TagOrBuilder getTagsOrBuilder(
+        int index);
+  }
+  /**
+   * Protobuf type {@code lvi.BatchEvent}
+   */
+  public static final class BatchEvent extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:lvi.BatchEvent)
+      BatchEventOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use BatchEvent.newBuilder() to construct.
+    private BatchEvent(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private BatchEvent() {
+      tags_ = java.util.Collections.emptyList();
+    }
+
+    @Override
+    @SuppressWarnings({"unused"})
+    protected Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new BatchEvent();
+    }
+
+    @Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private BatchEvent(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new NullPointerException();
+      }
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+              ActorOuterClass.Actor.Builder subBuilder = null;
+              if (actor_ != null) {
+                subBuilder = actor_.toBuilder();
+              }
+              actor_ = input.readMessage(ActorOuterClass.Actor.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(actor_);
+                actor_ = subBuilder.buildPartial();
+              }
+
+              break;
+            }
+            case 18: {
+              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
+                tags_ = new java.util.ArrayList<Tag>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              tags_.add(
+                  input.readMessage(Tag.parser(), extensionRegistry));
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000001) != 0)) {
+          tags_ = java.util.Collections.unmodifiableList(tags_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return EventOuterClass.internal_static_lvi_BatchEvent_descriptor;
+    }
+
+    @Override
+    protected FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return EventOuterClass.internal_static_lvi_BatchEvent_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              BatchEvent.class, Builder.class);
+    }
+
+    public static final int ACTOR_FIELD_NUMBER = 1;
+    private ActorOuterClass.Actor actor_;
+    /**
+     * <code>.lvi.Actor actor = 1 [(.lvi.required) = false, (.lvi.description) = "Actor concerned with the event"];</code>
+     * @return Whether the actor field is set.
+     */
+    @Override
+    public boolean hasActor() {
+      return actor_ != null;
+    }
+    /**
+     * <code>.lvi.Actor actor = 1 [(.lvi.required) = false, (.lvi.description) = "Actor concerned with the event"];</code>
+     * @return The actor.
+     */
+    @Override
+    public ActorOuterClass.Actor getActor() {
+      return actor_ == null ? ActorOuterClass.Actor.getDefaultInstance() : actor_;
+    }
+    /**
+     * <code>.lvi.Actor actor = 1 [(.lvi.required) = false, (.lvi.description) = "Actor concerned with the event"];</code>
+     */
+    @Override
+    public ActorOuterClass.ActorOrBuilder getActorOrBuilder() {
+      return getActor();
+    }
+
+    public static final int TAGS_FIELD_NUMBER = 2;
+    private java.util.List<Tag> tags_;
+    /**
+     * <code>repeated .lvi.Tag tags = 2 [(.lvi.description) = "Tags associated with the event"];</code>
+     */
+    @Override
+    public java.util.List<Tag> getTagsList() {
+      return tags_;
+    }
+    /**
+     * <code>repeated .lvi.Tag tags = 2 [(.lvi.description) = "Tags associated with the event"];</code>
+     */
+    @Override
+    public java.util.List<? extends TagOrBuilder>
+        getTagsOrBuilderList() {
+      return tags_;
+    }
+    /**
+     * <code>repeated .lvi.Tag tags = 2 [(.lvi.description) = "Tags associated with the event"];</code>
+     */
+    @Override
+    public int getTagsCount() {
+      return tags_.size();
+    }
+    /**
+     * <code>repeated .lvi.Tag tags = 2 [(.lvi.description) = "Tags associated with the event"];</code>
+     */
+    @Override
+    public Tag getTags(int index) {
+      return tags_.get(index);
+    }
+    /**
+     * <code>repeated .lvi.Tag tags = 2 [(.lvi.description) = "Tags associated with the event"];</code>
+     */
+    @Override
+    public TagOrBuilder getTagsOrBuilder(
+        int index) {
+      return tags_.get(index);
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (actor_ != null) {
+        output.writeMessage(1, getActor());
+      }
+      for (int i = 0; i < tags_.size(); i++) {
+        output.writeMessage(2, tags_.get(i));
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
@@ -177,33 +1126,39 @@ public final class EventOuterClass {
       size = 0;
       if (actor_ != null) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(2, getActor());
+          .computeMessageSize(1, getActor());
+      }
+      for (int i = 0; i < tags_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(2, tags_.get(i));
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
-    @java.lang.Override
-    public boolean equals(final java.lang.Object obj) {
+    @Override
+    public boolean equals(final Object obj) {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof lvi.EventOuterClass.BatchEvent)) {
+      if (!(obj instanceof BatchEvent)) {
         return super.equals(obj);
       }
-      lvi.EventOuterClass.BatchEvent other = (lvi.EventOuterClass.BatchEvent) obj;
+      BatchEvent other = (BatchEvent) obj;
 
       if (hasActor() != other.hasActor()) return false;
       if (hasActor()) {
         if (!getActor()
             .equals(other.getActor())) return false;
       }
+      if (!getTagsList()
+          .equals(other.getTagsList())) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
 
-    @java.lang.Override
+    @Override
     public int hashCode() {
       if (memoizedHashCode != 0) {
         return memoizedHashCode;
@@ -214,74 +1169,78 @@ public final class EventOuterClass {
         hash = (37 * hash) + ACTOR_FIELD_NUMBER;
         hash = (53 * hash) + getActor().hashCode();
       }
+      if (getTagsCount() > 0) {
+        hash = (37 * hash) + TAGS_FIELD_NUMBER;
+        hash = (53 * hash) + getTagsList().hashCode();
+      }
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
     }
 
-    public static lvi.EventOuterClass.BatchEvent parseFrom(
+    public static BatchEvent parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static lvi.EventOuterClass.BatchEvent parseFrom(
+    public static BatchEvent parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static lvi.EventOuterClass.BatchEvent parseFrom(
+    public static BatchEvent parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static lvi.EventOuterClass.BatchEvent parseFrom(
+    public static BatchEvent parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static lvi.EventOuterClass.BatchEvent parseFrom(byte[] data)
+    public static BatchEvent parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static lvi.EventOuterClass.BatchEvent parseFrom(
+    public static BatchEvent parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static lvi.EventOuterClass.BatchEvent parseFrom(java.io.InputStream input)
+    public static BatchEvent parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static lvi.EventOuterClass.BatchEvent parseFrom(
+    public static BatchEvent parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static lvi.EventOuterClass.BatchEvent parseDelimitedFrom(java.io.InputStream input)
+    public static BatchEvent parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static lvi.EventOuterClass.BatchEvent parseDelimitedFrom(
+    public static BatchEvent parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static lvi.EventOuterClass.BatchEvent parseFrom(
+    public static BatchEvent parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static lvi.EventOuterClass.BatchEvent parseFrom(
+    public static BatchEvent parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -289,23 +1248,23 @@ public final class EventOuterClass {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    @java.lang.Override
+    @Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(lvi.EventOuterClass.BatchEvent prototype) {
+    public static Builder newBuilder(BatchEvent prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-    @java.lang.Override
+    @Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
     }
 
-    @java.lang.Override
+    @Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -315,18 +1274,18 @@ public final class EventOuterClass {
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:lvi.BatchEvent)
-        lvi.EventOuterClass.BatchEventOrBuilder {
+        BatchEventOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return lvi.EventOuterClass.internal_static_lvi_BatchEvent_descriptor;
+        return EventOuterClass.internal_static_lvi_BatchEvent_descriptor;
       }
 
-      @java.lang.Override
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      @Override
+      protected FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return lvi.EventOuterClass.internal_static_lvi_BatchEvent_fieldAccessorTable
+        return EventOuterClass.internal_static_lvi_BatchEvent_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                lvi.EventOuterClass.BatchEvent.class, lvi.EventOuterClass.BatchEvent.Builder.class);
+                BatchEvent.class, Builder.class);
       }
 
       // Construct using lvi.EventOuterClass.BatchEvent.newBuilder()
@@ -335,16 +1294,17 @@ public final class EventOuterClass {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
+          getTagsFieldBuilder();
         }
       }
-      @java.lang.Override
+      @Override
       public Builder clear() {
         super.clear();
         if (actorBuilder_ == null) {
@@ -353,108 +1313,150 @@ public final class EventOuterClass {
           actor_ = null;
           actorBuilder_ = null;
         }
+        if (tagsBuilder_ == null) {
+          tags_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+        } else {
+          tagsBuilder_.clear();
+        }
         return this;
       }
 
-      @java.lang.Override
+      @Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return lvi.EventOuterClass.internal_static_lvi_BatchEvent_descriptor;
+        return EventOuterClass.internal_static_lvi_BatchEvent_descriptor;
       }
 
-      @java.lang.Override
-      public lvi.EventOuterClass.BatchEvent getDefaultInstanceForType() {
-        return lvi.EventOuterClass.BatchEvent.getDefaultInstance();
+      @Override
+      public BatchEvent getDefaultInstanceForType() {
+        return BatchEvent.getDefaultInstance();
       }
 
-      @java.lang.Override
-      public lvi.EventOuterClass.BatchEvent build() {
-        lvi.EventOuterClass.BatchEvent result = buildPartial();
+      @Override
+      public BatchEvent build() {
+        BatchEvent result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      @java.lang.Override
-      public lvi.EventOuterClass.BatchEvent buildPartial() {
-        lvi.EventOuterClass.BatchEvent result = new lvi.EventOuterClass.BatchEvent(this);
+      @Override
+      public BatchEvent buildPartial() {
+        BatchEvent result = new BatchEvent(this);
+        int from_bitField0_ = bitField0_;
         if (actorBuilder_ == null) {
           result.actor_ = actor_;
         } else {
           result.actor_ = actorBuilder_.build();
         }
+        if (tagsBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) != 0)) {
+            tags_ = java.util.Collections.unmodifiableList(tags_);
+            bitField0_ = (bitField0_ & ~0x00000001);
+          }
+          result.tags_ = tags_;
+        } else {
+          result.tags_ = tagsBuilder_.build();
+        }
         onBuilt();
         return result;
       }
 
-      @java.lang.Override
+      @Override
       public Builder clone() {
         return super.clone();
       }
-      @java.lang.Override
+      @Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          Object value) {
         return super.setField(field, value);
       }
-      @java.lang.Override
+      @Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
-      @java.lang.Override
+      @Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
-      @java.lang.Override
+      @Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+          int index, Object value) {
         return super.setRepeatedField(field, index, value);
       }
-      @java.lang.Override
+      @Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          Object value) {
         return super.addRepeatedField(field, value);
       }
-      @java.lang.Override
+      @Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof lvi.EventOuterClass.BatchEvent) {
-          return mergeFrom((lvi.EventOuterClass.BatchEvent)other);
+        if (other instanceof BatchEvent) {
+          return mergeFrom((BatchEvent)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(lvi.EventOuterClass.BatchEvent other) {
-        if (other == lvi.EventOuterClass.BatchEvent.getDefaultInstance()) return this;
+      public Builder mergeFrom(BatchEvent other) {
+        if (other == BatchEvent.getDefaultInstance()) return this;
         if (other.hasActor()) {
           mergeActor(other.getActor());
+        }
+        if (tagsBuilder_ == null) {
+          if (!other.tags_.isEmpty()) {
+            if (tags_.isEmpty()) {
+              tags_ = other.tags_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+            } else {
+              ensureTagsIsMutable();
+              tags_.addAll(other.tags_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.tags_.isEmpty()) {
+            if (tagsBuilder_.isEmpty()) {
+              tagsBuilder_.dispose();
+              tagsBuilder_ = null;
+              tags_ = other.tags_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+              tagsBuilder_ = 
+                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
+                   getTagsFieldBuilder() : null;
+            } else {
+              tagsBuilder_.addAllMessages(other.tags_);
+            }
+          }
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
 
-      @java.lang.Override
+      @Override
       public final boolean isInitialized() {
         return true;
       }
 
-      @java.lang.Override
+      @Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        lvi.EventOuterClass.BatchEvent parsedMessage = null;
+        BatchEvent parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (lvi.EventOuterClass.BatchEvent) e.getUnfinishedMessage();
+          parsedMessage = (BatchEvent) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -463,32 +1465,33 @@ public final class EventOuterClass {
         }
         return this;
       }
+      private int bitField0_;
 
-      private lvi.ActorOuterClass.Actor actor_;
+      private ActorOuterClass.Actor actor_;
       private com.google.protobuf.SingleFieldBuilderV3<
-          lvi.ActorOuterClass.Actor, lvi.ActorOuterClass.Actor.Builder, lvi.ActorOuterClass.ActorOrBuilder> actorBuilder_;
+          ActorOuterClass.Actor, ActorOuterClass.Actor.Builder, ActorOuterClass.ActorOrBuilder> actorBuilder_;
       /**
-       * <code>.lvi.Actor actor = 2 [(.lvi.required) = true, (.lvi.description) = "Actor concerned with the event"];</code>
+       * <code>.lvi.Actor actor = 1 [(.lvi.required) = false, (.lvi.description) = "Actor concerned with the event"];</code>
        * @return Whether the actor field is set.
        */
       public boolean hasActor() {
         return actorBuilder_ != null || actor_ != null;
       }
       /**
-       * <code>.lvi.Actor actor = 2 [(.lvi.required) = true, (.lvi.description) = "Actor concerned with the event"];</code>
+       * <code>.lvi.Actor actor = 1 [(.lvi.required) = false, (.lvi.description) = "Actor concerned with the event"];</code>
        * @return The actor.
        */
-      public lvi.ActorOuterClass.Actor getActor() {
+      public ActorOuterClass.Actor getActor() {
         if (actorBuilder_ == null) {
-          return actor_ == null ? lvi.ActorOuterClass.Actor.getDefaultInstance() : actor_;
+          return actor_ == null ? ActorOuterClass.Actor.getDefaultInstance() : actor_;
         } else {
           return actorBuilder_.getMessage();
         }
       }
       /**
-       * <code>.lvi.Actor actor = 2 [(.lvi.required) = true, (.lvi.description) = "Actor concerned with the event"];</code>
+       * <code>.lvi.Actor actor = 1 [(.lvi.required) = false, (.lvi.description) = "Actor concerned with the event"];</code>
        */
-      public Builder setActor(lvi.ActorOuterClass.Actor value) {
+      public Builder setActor(ActorOuterClass.Actor value) {
         if (actorBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -502,10 +1505,10 @@ public final class EventOuterClass {
         return this;
       }
       /**
-       * <code>.lvi.Actor actor = 2 [(.lvi.required) = true, (.lvi.description) = "Actor concerned with the event"];</code>
+       * <code>.lvi.Actor actor = 1 [(.lvi.required) = false, (.lvi.description) = "Actor concerned with the event"];</code>
        */
       public Builder setActor(
-          lvi.ActorOuterClass.Actor.Builder builderForValue) {
+          ActorOuterClass.Actor.Builder builderForValue) {
         if (actorBuilder_ == null) {
           actor_ = builderForValue.build();
           onChanged();
@@ -516,13 +1519,13 @@ public final class EventOuterClass {
         return this;
       }
       /**
-       * <code>.lvi.Actor actor = 2 [(.lvi.required) = true, (.lvi.description) = "Actor concerned with the event"];</code>
+       * <code>.lvi.Actor actor = 1 [(.lvi.required) = false, (.lvi.description) = "Actor concerned with the event"];</code>
        */
-      public Builder mergeActor(lvi.ActorOuterClass.Actor value) {
+      public Builder mergeActor(ActorOuterClass.Actor value) {
         if (actorBuilder_ == null) {
           if (actor_ != null) {
             actor_ =
-              lvi.ActorOuterClass.Actor.newBuilder(actor_).mergeFrom(value).buildPartial();
+              ActorOuterClass.Actor.newBuilder(actor_).mergeFrom(value).buildPartial();
           } else {
             actor_ = value;
           }
@@ -534,7 +1537,7 @@ public final class EventOuterClass {
         return this;
       }
       /**
-       * <code>.lvi.Actor actor = 2 [(.lvi.required) = true, (.lvi.description) = "Actor concerned with the event"];</code>
+       * <code>.lvi.Actor actor = 1 [(.lvi.required) = false, (.lvi.description) = "Actor concerned with the event"];</code>
        */
       public Builder clearActor() {
         if (actorBuilder_ == null) {
@@ -548,33 +1551,33 @@ public final class EventOuterClass {
         return this;
       }
       /**
-       * <code>.lvi.Actor actor = 2 [(.lvi.required) = true, (.lvi.description) = "Actor concerned with the event"];</code>
+       * <code>.lvi.Actor actor = 1 [(.lvi.required) = false, (.lvi.description) = "Actor concerned with the event"];</code>
        */
-      public lvi.ActorOuterClass.Actor.Builder getActorBuilder() {
+      public ActorOuterClass.Actor.Builder getActorBuilder() {
         
         onChanged();
         return getActorFieldBuilder().getBuilder();
       }
       /**
-       * <code>.lvi.Actor actor = 2 [(.lvi.required) = true, (.lvi.description) = "Actor concerned with the event"];</code>
+       * <code>.lvi.Actor actor = 1 [(.lvi.required) = false, (.lvi.description) = "Actor concerned with the event"];</code>
        */
-      public lvi.ActorOuterClass.ActorOrBuilder getActorOrBuilder() {
+      public ActorOuterClass.ActorOrBuilder getActorOrBuilder() {
         if (actorBuilder_ != null) {
           return actorBuilder_.getMessageOrBuilder();
         } else {
           return actor_ == null ?
-              lvi.ActorOuterClass.Actor.getDefaultInstance() : actor_;
+              ActorOuterClass.Actor.getDefaultInstance() : actor_;
         }
       }
       /**
-       * <code>.lvi.Actor actor = 2 [(.lvi.required) = true, (.lvi.description) = "Actor concerned with the event"];</code>
+       * <code>.lvi.Actor actor = 1 [(.lvi.required) = false, (.lvi.description) = "Actor concerned with the event"];</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          lvi.ActorOuterClass.Actor, lvi.ActorOuterClass.Actor.Builder, lvi.ActorOuterClass.ActorOrBuilder> 
+          ActorOuterClass.Actor, ActorOuterClass.Actor.Builder, ActorOuterClass.ActorOrBuilder>
           getActorFieldBuilder() {
         if (actorBuilder_ == null) {
           actorBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-              lvi.ActorOuterClass.Actor, lvi.ActorOuterClass.Actor.Builder, lvi.ActorOuterClass.ActorOrBuilder>(
+              ActorOuterClass.Actor, ActorOuterClass.Actor.Builder, ActorOuterClass.ActorOrBuilder>(
                   getActor(),
                   getParentForChildren(),
                   isClean());
@@ -582,13 +1585,253 @@ public final class EventOuterClass {
         }
         return actorBuilder_;
       }
-      @java.lang.Override
+
+      private java.util.List<Tag> tags_ =
+        java.util.Collections.emptyList();
+      private void ensureTagsIsMutable() {
+        if (!((bitField0_ & 0x00000001) != 0)) {
+          tags_ = new java.util.ArrayList<Tag>(tags_);
+          bitField0_ |= 0x00000001;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          Tag, Tag.Builder, TagOrBuilder> tagsBuilder_;
+
+      /**
+       * <code>repeated .lvi.Tag tags = 2 [(.lvi.description) = "Tags associated with the event"];</code>
+       */
+      public java.util.List<Tag> getTagsList() {
+        if (tagsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(tags_);
+        } else {
+          return tagsBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .lvi.Tag tags = 2 [(.lvi.description) = "Tags associated with the event"];</code>
+       */
+      public int getTagsCount() {
+        if (tagsBuilder_ == null) {
+          return tags_.size();
+        } else {
+          return tagsBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .lvi.Tag tags = 2 [(.lvi.description) = "Tags associated with the event"];</code>
+       */
+      public Tag getTags(int index) {
+        if (tagsBuilder_ == null) {
+          return tags_.get(index);
+        } else {
+          return tagsBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .lvi.Tag tags = 2 [(.lvi.description) = "Tags associated with the event"];</code>
+       */
+      public Builder setTags(
+          int index, Tag value) {
+        if (tagsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureTagsIsMutable();
+          tags_.set(index, value);
+          onChanged();
+        } else {
+          tagsBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .lvi.Tag tags = 2 [(.lvi.description) = "Tags associated with the event"];</code>
+       */
+      public Builder setTags(
+          int index, Tag.Builder builderForValue) {
+        if (tagsBuilder_ == null) {
+          ensureTagsIsMutable();
+          tags_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          tagsBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .lvi.Tag tags = 2 [(.lvi.description) = "Tags associated with the event"];</code>
+       */
+      public Builder addTags(Tag value) {
+        if (tagsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureTagsIsMutable();
+          tags_.add(value);
+          onChanged();
+        } else {
+          tagsBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .lvi.Tag tags = 2 [(.lvi.description) = "Tags associated with the event"];</code>
+       */
+      public Builder addTags(
+          int index, Tag value) {
+        if (tagsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureTagsIsMutable();
+          tags_.add(index, value);
+          onChanged();
+        } else {
+          tagsBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .lvi.Tag tags = 2 [(.lvi.description) = "Tags associated with the event"];</code>
+       */
+      public Builder addTags(
+          Tag.Builder builderForValue) {
+        if (tagsBuilder_ == null) {
+          ensureTagsIsMutable();
+          tags_.add(builderForValue.build());
+          onChanged();
+        } else {
+          tagsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .lvi.Tag tags = 2 [(.lvi.description) = "Tags associated with the event"];</code>
+       */
+      public Builder addTags(
+          int index, Tag.Builder builderForValue) {
+        if (tagsBuilder_ == null) {
+          ensureTagsIsMutable();
+          tags_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          tagsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .lvi.Tag tags = 2 [(.lvi.description) = "Tags associated with the event"];</code>
+       */
+      public Builder addAllTags(
+          Iterable<? extends Tag> values) {
+        if (tagsBuilder_ == null) {
+          ensureTagsIsMutable();
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, tags_);
+          onChanged();
+        } else {
+          tagsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .lvi.Tag tags = 2 [(.lvi.description) = "Tags associated with the event"];</code>
+       */
+      public Builder clearTags() {
+        if (tagsBuilder_ == null) {
+          tags_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+          onChanged();
+        } else {
+          tagsBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .lvi.Tag tags = 2 [(.lvi.description) = "Tags associated with the event"];</code>
+       */
+      public Builder removeTags(int index) {
+        if (tagsBuilder_ == null) {
+          ensureTagsIsMutable();
+          tags_.remove(index);
+          onChanged();
+        } else {
+          tagsBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .lvi.Tag tags = 2 [(.lvi.description) = "Tags associated with the event"];</code>
+       */
+      public Tag.Builder getTagsBuilder(
+          int index) {
+        return getTagsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .lvi.Tag tags = 2 [(.lvi.description) = "Tags associated with the event"];</code>
+       */
+      public TagOrBuilder getTagsOrBuilder(
+          int index) {
+        if (tagsBuilder_ == null) {
+          return tags_.get(index);  } else {
+          return tagsBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .lvi.Tag tags = 2 [(.lvi.description) = "Tags associated with the event"];</code>
+       */
+      public java.util.List<? extends TagOrBuilder>
+           getTagsOrBuilderList() {
+        if (tagsBuilder_ != null) {
+          return tagsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(tags_);
+        }
+      }
+      /**
+       * <code>repeated .lvi.Tag tags = 2 [(.lvi.description) = "Tags associated with the event"];</code>
+       */
+      public Tag.Builder addTagsBuilder() {
+        return getTagsFieldBuilder().addBuilder(
+            Tag.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .lvi.Tag tags = 2 [(.lvi.description) = "Tags associated with the event"];</code>
+       */
+      public Tag.Builder addTagsBuilder(
+          int index) {
+        return getTagsFieldBuilder().addBuilder(
+            index, Tag.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .lvi.Tag tags = 2 [(.lvi.description) = "Tags associated with the event"];</code>
+       */
+      public java.util.List<Tag.Builder>
+           getTagsBuilderList() {
+        return getTagsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          Tag, Tag.Builder, TagOrBuilder>
+          getTagsFieldBuilder() {
+        if (tagsBuilder_ == null) {
+          tagsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+              Tag, Tag.Builder, TagOrBuilder>(
+                  tags_,
+                  ((bitField0_ & 0x00000001) != 0),
+                  getParentForChildren(),
+                  isClean());
+          tags_ = null;
+        }
+        return tagsBuilder_;
+      }
+      @Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFields(unknownFields);
       }
 
-      @java.lang.Override
+      @Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
@@ -599,18 +1842,18 @@ public final class EventOuterClass {
     }
 
     // @@protoc_insertion_point(class_scope:lvi.BatchEvent)
-    private static final lvi.EventOuterClass.BatchEvent DEFAULT_INSTANCE;
+    private static final BatchEvent DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new lvi.EventOuterClass.BatchEvent();
+      DEFAULT_INSTANCE = new BatchEvent();
     }
 
-    public static lvi.EventOuterClass.BatchEvent getDefaultInstance() {
+    public static BatchEvent getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
     private static final com.google.protobuf.Parser<BatchEvent>
         PARSER = new com.google.protobuf.AbstractParser<BatchEvent>() {
-      @java.lang.Override
+      @Override
       public BatchEvent parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -623,13 +1866,13 @@ public final class EventOuterClass {
       return PARSER;
     }
 
-    @java.lang.Override
+    @Override
     public com.google.protobuf.Parser<BatchEvent> getParserForType() {
       return PARSER;
     }
 
-    @java.lang.Override
-    public lvi.EventOuterClass.BatchEvent getDefaultInstanceForType() {
+    @Override
+    public BatchEvent getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -640,54 +1883,42 @@ public final class EventOuterClass {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <pre>
-     * option (batch_field) = "events";
-     * </pre>
-     *
-     * <code>.lvi.Client client = 1 [(.lvi.required) = true, (.lvi.description) = "Owner of the event"];</code>
+     * <code>.lvi.Client client = 1 [(.lvi.required) = false, (.lvi.description) = "Owner of the event"];</code>
      * @return Whether the client field is set.
      */
     boolean hasClient();
     /**
-     * <pre>
-     * option (batch_field) = "events";
-     * </pre>
-     *
-     * <code>.lvi.Client client = 1 [(.lvi.required) = true, (.lvi.description) = "Owner of the event"];</code>
+     * <code>.lvi.Client client = 1 [(.lvi.required) = false, (.lvi.description) = "Owner of the event"];</code>
      * @return The client.
      */
-    lvi.ClientOuterClass.Client getClient();
+    ClientOuterClass.Client getClient();
     /**
-     * <pre>
-     * option (batch_field) = "events";
-     * </pre>
-     *
-     * <code>.lvi.Client client = 1 [(.lvi.required) = true, (.lvi.description) = "Owner of the event"];</code>
+     * <code>.lvi.Client client = 1 [(.lvi.required) = false, (.lvi.description) = "Owner of the event"];</code>
      */
-    lvi.ClientOuterClass.ClientOrBuilder getClientOrBuilder();
+    ClientOuterClass.ClientOrBuilder getClientOrBuilder();
 
     /**
-     * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+     * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.required) = true, (.lvi.batch_attribute) = true];</code>
      */
-    java.util.List<lvi.EventOuterClass.BatchEvent> 
+    java.util.List<BatchEvent>
         getEventsList();
     /**
-     * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+     * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.required) = true, (.lvi.batch_attribute) = true];</code>
      */
-    lvi.EventOuterClass.BatchEvent getEvents(int index);
+    BatchEvent getEvents(int index);
     /**
-     * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+     * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.required) = true, (.lvi.batch_attribute) = true];</code>
      */
     int getEventsCount();
     /**
-     * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+     * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.required) = true, (.lvi.batch_attribute) = true];</code>
      */
-    java.util.List<? extends lvi.EventOuterClass.BatchEventOrBuilder> 
+    java.util.List<? extends BatchEventOrBuilder>
         getEventsOrBuilderList();
     /**
-     * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+     * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.required) = true, (.lvi.batch_attribute) = true];</code>
      */
-    lvi.EventOuterClass.BatchEventOrBuilder getEventsOrBuilder(
+    BatchEventOrBuilder getEventsOrBuilder(
         int index);
   }
   /**
@@ -706,14 +1937,14 @@ public final class EventOuterClass {
       events_ = java.util.Collections.emptyList();
     }
 
-    @java.lang.Override
+    @Override
     @SuppressWarnings({"unused"})
-    protected java.lang.Object newInstance(
+    protected Object newInstance(
         UnusedPrivateParameter unused) {
       return new Event();
     }
 
-    @java.lang.Override
+    @Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
@@ -724,7 +1955,7 @@ public final class EventOuterClass {
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
+        throw new NullPointerException();
       }
       int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
@@ -738,11 +1969,11 @@ public final class EventOuterClass {
               done = true;
               break;
             case 10: {
-              lvi.ClientOuterClass.Client.Builder subBuilder = null;
+              ClientOuterClass.Client.Builder subBuilder = null;
               if (client_ != null) {
                 subBuilder = client_.toBuilder();
               }
-              client_ = input.readMessage(lvi.ClientOuterClass.Client.parser(), extensionRegistry);
+              client_ = input.readMessage(ClientOuterClass.Client.parser(), extensionRegistry);
               if (subBuilder != null) {
                 subBuilder.mergeFrom(client_);
                 client_ = subBuilder.buildPartial();
@@ -752,11 +1983,11 @@ public final class EventOuterClass {
             }
             case 18: {
               if (!((mutable_bitField0_ & 0x00000001) != 0)) {
-                events_ = new java.util.ArrayList<lvi.EventOuterClass.BatchEvent>();
+                events_ = new java.util.ArrayList<BatchEvent>();
                 mutable_bitField0_ |= 0x00000001;
               }
               events_.add(
-                  input.readMessage(lvi.EventOuterClass.BatchEvent.parser(), extensionRegistry));
+                  input.readMessage(BatchEvent.parser(), extensionRegistry));
               break;
             }
             default: {
@@ -783,97 +2014,85 @@ public final class EventOuterClass {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return lvi.EventOuterClass.internal_static_lvi_Event_descriptor;
+      return EventOuterClass.internal_static_lvi_Event_descriptor;
     }
 
-    @java.lang.Override
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    @Override
+    protected FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return lvi.EventOuterClass.internal_static_lvi_Event_fieldAccessorTable
+      return EventOuterClass.internal_static_lvi_Event_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              lvi.EventOuterClass.Event.class, lvi.EventOuterClass.Event.Builder.class);
+              Event.class, Builder.class);
     }
 
     public static final int CLIENT_FIELD_NUMBER = 1;
-    private lvi.ClientOuterClass.Client client_;
+    private ClientOuterClass.Client client_;
     /**
-     * <pre>
-     * option (batch_field) = "events";
-     * </pre>
-     *
-     * <code>.lvi.Client client = 1 [(.lvi.required) = true, (.lvi.description) = "Owner of the event"];</code>
+     * <code>.lvi.Client client = 1 [(.lvi.required) = false, (.lvi.description) = "Owner of the event"];</code>
      * @return Whether the client field is set.
      */
-    @java.lang.Override
+    @Override
     public boolean hasClient() {
       return client_ != null;
     }
     /**
-     * <pre>
-     * option (batch_field) = "events";
-     * </pre>
-     *
-     * <code>.lvi.Client client = 1 [(.lvi.required) = true, (.lvi.description) = "Owner of the event"];</code>
+     * <code>.lvi.Client client = 1 [(.lvi.required) = false, (.lvi.description) = "Owner of the event"];</code>
      * @return The client.
      */
-    @java.lang.Override
-    public lvi.ClientOuterClass.Client getClient() {
-      return client_ == null ? lvi.ClientOuterClass.Client.getDefaultInstance() : client_;
+    @Override
+    public ClientOuterClass.Client getClient() {
+      return client_ == null ? ClientOuterClass.Client.getDefaultInstance() : client_;
     }
     /**
-     * <pre>
-     * option (batch_field) = "events";
-     * </pre>
-     *
-     * <code>.lvi.Client client = 1 [(.lvi.required) = true, (.lvi.description) = "Owner of the event"];</code>
+     * <code>.lvi.Client client = 1 [(.lvi.required) = false, (.lvi.description) = "Owner of the event"];</code>
      */
-    @java.lang.Override
-    public lvi.ClientOuterClass.ClientOrBuilder getClientOrBuilder() {
+    @Override
+    public ClientOuterClass.ClientOrBuilder getClientOrBuilder() {
       return getClient();
     }
 
     public static final int EVENTS_FIELD_NUMBER = 2;
-    private java.util.List<lvi.EventOuterClass.BatchEvent> events_;
+    private java.util.List<BatchEvent> events_;
     /**
-     * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+     * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.required) = true, (.lvi.batch_attribute) = true];</code>
      */
-    @java.lang.Override
-    public java.util.List<lvi.EventOuterClass.BatchEvent> getEventsList() {
+    @Override
+    public java.util.List<BatchEvent> getEventsList() {
       return events_;
     }
     /**
-     * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+     * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.required) = true, (.lvi.batch_attribute) = true];</code>
      */
-    @java.lang.Override
-    public java.util.List<? extends lvi.EventOuterClass.BatchEventOrBuilder> 
+    @Override
+    public java.util.List<? extends BatchEventOrBuilder>
         getEventsOrBuilderList() {
       return events_;
     }
     /**
-     * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+     * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.required) = true, (.lvi.batch_attribute) = true];</code>
      */
-    @java.lang.Override
+    @Override
     public int getEventsCount() {
       return events_.size();
     }
     /**
-     * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+     * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.required) = true, (.lvi.batch_attribute) = true];</code>
      */
-    @java.lang.Override
-    public lvi.EventOuterClass.BatchEvent getEvents(int index) {
+    @Override
+    public BatchEvent getEvents(int index) {
       return events_.get(index);
     }
     /**
-     * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+     * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.required) = true, (.lvi.batch_attribute) = true];</code>
      */
-    @java.lang.Override
-    public lvi.EventOuterClass.BatchEventOrBuilder getEventsOrBuilder(
+    @Override
+    public BatchEventOrBuilder getEventsOrBuilder(
         int index) {
       return events_.get(index);
     }
 
     private byte memoizedIsInitialized = -1;
-    @java.lang.Override
+    @Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -883,7 +2102,7 @@ public final class EventOuterClass {
       return true;
     }
 
-    @java.lang.Override
+    @Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (client_ != null) {
@@ -895,7 +2114,7 @@ public final class EventOuterClass {
       unknownFields.writeTo(output);
     }
 
-    @java.lang.Override
+    @Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
@@ -914,15 +2133,15 @@ public final class EventOuterClass {
       return size;
     }
 
-    @java.lang.Override
-    public boolean equals(final java.lang.Object obj) {
+    @Override
+    public boolean equals(final Object obj) {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof lvi.EventOuterClass.Event)) {
+      if (!(obj instanceof Event)) {
         return super.equals(obj);
       }
-      lvi.EventOuterClass.Event other = (lvi.EventOuterClass.Event) obj;
+      Event other = (Event) obj;
 
       if (hasClient() != other.hasClient()) return false;
       if (hasClient()) {
@@ -935,7 +2154,7 @@ public final class EventOuterClass {
       return true;
     }
 
-    @java.lang.Override
+    @Override
     public int hashCode() {
       if (memoizedHashCode != 0) {
         return memoizedHashCode;
@@ -955,69 +2174,69 @@ public final class EventOuterClass {
       return hash;
     }
 
-    public static lvi.EventOuterClass.Event parseFrom(
+    public static Event parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static lvi.EventOuterClass.Event parseFrom(
+    public static Event parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static lvi.EventOuterClass.Event parseFrom(
+    public static Event parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static lvi.EventOuterClass.Event parseFrom(
+    public static Event parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static lvi.EventOuterClass.Event parseFrom(byte[] data)
+    public static Event parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static lvi.EventOuterClass.Event parseFrom(
+    public static Event parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static lvi.EventOuterClass.Event parseFrom(java.io.InputStream input)
+    public static Event parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static lvi.EventOuterClass.Event parseFrom(
+    public static Event parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static lvi.EventOuterClass.Event parseDelimitedFrom(java.io.InputStream input)
+    public static Event parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static lvi.EventOuterClass.Event parseDelimitedFrom(
+    public static Event parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static lvi.EventOuterClass.Event parseFrom(
+    public static Event parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static lvi.EventOuterClass.Event parseFrom(
+    public static Event parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -1025,23 +2244,23 @@ public final class EventOuterClass {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    @java.lang.Override
+    @Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(lvi.EventOuterClass.Event prototype) {
+    public static Builder newBuilder(Event prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-    @java.lang.Override
+    @Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
     }
 
-    @java.lang.Override
+    @Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -1051,18 +2270,18 @@ public final class EventOuterClass {
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:lvi.Event)
-        lvi.EventOuterClass.EventOrBuilder {
+        EventOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return lvi.EventOuterClass.internal_static_lvi_Event_descriptor;
+        return EventOuterClass.internal_static_lvi_Event_descriptor;
       }
 
-      @java.lang.Override
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      @Override
+      protected FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return lvi.EventOuterClass.internal_static_lvi_Event_fieldAccessorTable
+        return EventOuterClass.internal_static_lvi_Event_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                lvi.EventOuterClass.Event.class, lvi.EventOuterClass.Event.Builder.class);
+                Event.class, Builder.class);
       }
 
       // Construct using lvi.EventOuterClass.Event.newBuilder()
@@ -1071,7 +2290,7 @@ public final class EventOuterClass {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -1081,7 +2300,7 @@ public final class EventOuterClass {
           getEventsFieldBuilder();
         }
       }
-      @java.lang.Override
+      @Override
       public Builder clear() {
         super.clear();
         if (clientBuilder_ == null) {
@@ -1099,29 +2318,29 @@ public final class EventOuterClass {
         return this;
       }
 
-      @java.lang.Override
+      @Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return lvi.EventOuterClass.internal_static_lvi_Event_descriptor;
+        return EventOuterClass.internal_static_lvi_Event_descriptor;
       }
 
-      @java.lang.Override
-      public lvi.EventOuterClass.Event getDefaultInstanceForType() {
-        return lvi.EventOuterClass.Event.getDefaultInstance();
+      @Override
+      public Event getDefaultInstanceForType() {
+        return Event.getDefaultInstance();
       }
 
-      @java.lang.Override
-      public lvi.EventOuterClass.Event build() {
-        lvi.EventOuterClass.Event result = buildPartial();
+      @Override
+      public Event build() {
+        Event result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      @java.lang.Override
-      public lvi.EventOuterClass.Event buildPartial() {
-        lvi.EventOuterClass.Event result = new lvi.EventOuterClass.Event(this);
+      @Override
+      public Event buildPartial() {
+        Event result = new Event(this);
         int from_bitField0_ = bitField0_;
         if (clientBuilder_ == null) {
           result.client_ = client_;
@@ -1141,50 +2360,50 @@ public final class EventOuterClass {
         return result;
       }
 
-      @java.lang.Override
+      @Override
       public Builder clone() {
         return super.clone();
       }
-      @java.lang.Override
+      @Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          Object value) {
         return super.setField(field, value);
       }
-      @java.lang.Override
+      @Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
-      @java.lang.Override
+      @Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
-      @java.lang.Override
+      @Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+          int index, Object value) {
         return super.setRepeatedField(field, index, value);
       }
-      @java.lang.Override
+      @Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          Object value) {
         return super.addRepeatedField(field, value);
       }
-      @java.lang.Override
+      @Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof lvi.EventOuterClass.Event) {
-          return mergeFrom((lvi.EventOuterClass.Event)other);
+        if (other instanceof Event) {
+          return mergeFrom((Event)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(lvi.EventOuterClass.Event other) {
-        if (other == lvi.EventOuterClass.Event.getDefaultInstance()) return this;
+      public Builder mergeFrom(Event other) {
+        if (other == Event.getDefaultInstance()) return this;
         if (other.hasClient()) {
           mergeClient(other.getClient());
         }
@@ -1219,21 +2438,21 @@ public final class EventOuterClass {
         return this;
       }
 
-      @java.lang.Override
+      @Override
       public final boolean isInitialized() {
         return true;
       }
 
-      @java.lang.Override
+      @Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        lvi.EventOuterClass.Event parsedMessage = null;
+        Event parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (lvi.EventOuterClass.Event) e.getUnfinishedMessage();
+          parsedMessage = (Event) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -1244,43 +2463,31 @@ public final class EventOuterClass {
       }
       private int bitField0_;
 
-      private lvi.ClientOuterClass.Client client_;
+      private ClientOuterClass.Client client_;
       private com.google.protobuf.SingleFieldBuilderV3<
-          lvi.ClientOuterClass.Client, lvi.ClientOuterClass.Client.Builder, lvi.ClientOuterClass.ClientOrBuilder> clientBuilder_;
+          ClientOuterClass.Client, ClientOuterClass.Client.Builder, ClientOuterClass.ClientOrBuilder> clientBuilder_;
       /**
-       * <pre>
-       * option (batch_field) = "events";
-       * </pre>
-       *
-       * <code>.lvi.Client client = 1 [(.lvi.required) = true, (.lvi.description) = "Owner of the event"];</code>
+       * <code>.lvi.Client client = 1 [(.lvi.required) = false, (.lvi.description) = "Owner of the event"];</code>
        * @return Whether the client field is set.
        */
       public boolean hasClient() {
         return clientBuilder_ != null || client_ != null;
       }
       /**
-       * <pre>
-       * option (batch_field) = "events";
-       * </pre>
-       *
-       * <code>.lvi.Client client = 1 [(.lvi.required) = true, (.lvi.description) = "Owner of the event"];</code>
+       * <code>.lvi.Client client = 1 [(.lvi.required) = false, (.lvi.description) = "Owner of the event"];</code>
        * @return The client.
        */
-      public lvi.ClientOuterClass.Client getClient() {
+      public ClientOuterClass.Client getClient() {
         if (clientBuilder_ == null) {
-          return client_ == null ? lvi.ClientOuterClass.Client.getDefaultInstance() : client_;
+          return client_ == null ? ClientOuterClass.Client.getDefaultInstance() : client_;
         } else {
           return clientBuilder_.getMessage();
         }
       }
       /**
-       * <pre>
-       * option (batch_field) = "events";
-       * </pre>
-       *
-       * <code>.lvi.Client client = 1 [(.lvi.required) = true, (.lvi.description) = "Owner of the event"];</code>
+       * <code>.lvi.Client client = 1 [(.lvi.required) = false, (.lvi.description) = "Owner of the event"];</code>
        */
-      public Builder setClient(lvi.ClientOuterClass.Client value) {
+      public Builder setClient(ClientOuterClass.Client value) {
         if (clientBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1294,14 +2501,10 @@ public final class EventOuterClass {
         return this;
       }
       /**
-       * <pre>
-       * option (batch_field) = "events";
-       * </pre>
-       *
-       * <code>.lvi.Client client = 1 [(.lvi.required) = true, (.lvi.description) = "Owner of the event"];</code>
+       * <code>.lvi.Client client = 1 [(.lvi.required) = false, (.lvi.description) = "Owner of the event"];</code>
        */
       public Builder setClient(
-          lvi.ClientOuterClass.Client.Builder builderForValue) {
+          ClientOuterClass.Client.Builder builderForValue) {
         if (clientBuilder_ == null) {
           client_ = builderForValue.build();
           onChanged();
@@ -1312,17 +2515,13 @@ public final class EventOuterClass {
         return this;
       }
       /**
-       * <pre>
-       * option (batch_field) = "events";
-       * </pre>
-       *
-       * <code>.lvi.Client client = 1 [(.lvi.required) = true, (.lvi.description) = "Owner of the event"];</code>
+       * <code>.lvi.Client client = 1 [(.lvi.required) = false, (.lvi.description) = "Owner of the event"];</code>
        */
-      public Builder mergeClient(lvi.ClientOuterClass.Client value) {
+      public Builder mergeClient(ClientOuterClass.Client value) {
         if (clientBuilder_ == null) {
           if (client_ != null) {
             client_ =
-              lvi.ClientOuterClass.Client.newBuilder(client_).mergeFrom(value).buildPartial();
+              ClientOuterClass.Client.newBuilder(client_).mergeFrom(value).buildPartial();
           } else {
             client_ = value;
           }
@@ -1334,11 +2533,7 @@ public final class EventOuterClass {
         return this;
       }
       /**
-       * <pre>
-       * option (batch_field) = "events";
-       * </pre>
-       *
-       * <code>.lvi.Client client = 1 [(.lvi.required) = true, (.lvi.description) = "Owner of the event"];</code>
+       * <code>.lvi.Client client = 1 [(.lvi.required) = false, (.lvi.description) = "Owner of the event"];</code>
        */
       public Builder clearClient() {
         if (clientBuilder_ == null) {
@@ -1352,45 +2547,33 @@ public final class EventOuterClass {
         return this;
       }
       /**
-       * <pre>
-       * option (batch_field) = "events";
-       * </pre>
-       *
-       * <code>.lvi.Client client = 1 [(.lvi.required) = true, (.lvi.description) = "Owner of the event"];</code>
+       * <code>.lvi.Client client = 1 [(.lvi.required) = false, (.lvi.description) = "Owner of the event"];</code>
        */
-      public lvi.ClientOuterClass.Client.Builder getClientBuilder() {
+      public ClientOuterClass.Client.Builder getClientBuilder() {
         
         onChanged();
         return getClientFieldBuilder().getBuilder();
       }
       /**
-       * <pre>
-       * option (batch_field) = "events";
-       * </pre>
-       *
-       * <code>.lvi.Client client = 1 [(.lvi.required) = true, (.lvi.description) = "Owner of the event"];</code>
+       * <code>.lvi.Client client = 1 [(.lvi.required) = false, (.lvi.description) = "Owner of the event"];</code>
        */
-      public lvi.ClientOuterClass.ClientOrBuilder getClientOrBuilder() {
+      public ClientOuterClass.ClientOrBuilder getClientOrBuilder() {
         if (clientBuilder_ != null) {
           return clientBuilder_.getMessageOrBuilder();
         } else {
           return client_ == null ?
-              lvi.ClientOuterClass.Client.getDefaultInstance() : client_;
+              ClientOuterClass.Client.getDefaultInstance() : client_;
         }
       }
       /**
-       * <pre>
-       * option (batch_field) = "events";
-       * </pre>
-       *
-       * <code>.lvi.Client client = 1 [(.lvi.required) = true, (.lvi.description) = "Owner of the event"];</code>
+       * <code>.lvi.Client client = 1 [(.lvi.required) = false, (.lvi.description) = "Owner of the event"];</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          lvi.ClientOuterClass.Client, lvi.ClientOuterClass.Client.Builder, lvi.ClientOuterClass.ClientOrBuilder> 
+          ClientOuterClass.Client, ClientOuterClass.Client.Builder, ClientOuterClass.ClientOrBuilder>
           getClientFieldBuilder() {
         if (clientBuilder_ == null) {
           clientBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-              lvi.ClientOuterClass.Client, lvi.ClientOuterClass.Client.Builder, lvi.ClientOuterClass.ClientOrBuilder>(
+              ClientOuterClass.Client, ClientOuterClass.Client.Builder, ClientOuterClass.ClientOrBuilder>(
                   getClient(),
                   getParentForChildren(),
                   isClean());
@@ -1399,22 +2582,22 @@ public final class EventOuterClass {
         return clientBuilder_;
       }
 
-      private java.util.List<lvi.EventOuterClass.BatchEvent> events_ =
+      private java.util.List<BatchEvent> events_ =
         java.util.Collections.emptyList();
       private void ensureEventsIsMutable() {
         if (!((bitField0_ & 0x00000001) != 0)) {
-          events_ = new java.util.ArrayList<lvi.EventOuterClass.BatchEvent>(events_);
+          events_ = new java.util.ArrayList<BatchEvent>(events_);
           bitField0_ |= 0x00000001;
          }
       }
 
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          lvi.EventOuterClass.BatchEvent, lvi.EventOuterClass.BatchEvent.Builder, lvi.EventOuterClass.BatchEventOrBuilder> eventsBuilder_;
+          BatchEvent, BatchEvent.Builder, BatchEventOrBuilder> eventsBuilder_;
 
       /**
-       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.required) = true, (.lvi.batch_attribute) = true];</code>
        */
-      public java.util.List<lvi.EventOuterClass.BatchEvent> getEventsList() {
+      public java.util.List<BatchEvent> getEventsList() {
         if (eventsBuilder_ == null) {
           return java.util.Collections.unmodifiableList(events_);
         } else {
@@ -1422,7 +2605,7 @@ public final class EventOuterClass {
         }
       }
       /**
-       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.required) = true, (.lvi.batch_attribute) = true];</code>
        */
       public int getEventsCount() {
         if (eventsBuilder_ == null) {
@@ -1432,9 +2615,9 @@ public final class EventOuterClass {
         }
       }
       /**
-       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.required) = true, (.lvi.batch_attribute) = true];</code>
        */
-      public lvi.EventOuterClass.BatchEvent getEvents(int index) {
+      public BatchEvent getEvents(int index) {
         if (eventsBuilder_ == null) {
           return events_.get(index);
         } else {
@@ -1442,10 +2625,10 @@ public final class EventOuterClass {
         }
       }
       /**
-       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.required) = true, (.lvi.batch_attribute) = true];</code>
        */
       public Builder setEvents(
-          int index, lvi.EventOuterClass.BatchEvent value) {
+          int index, BatchEvent value) {
         if (eventsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1459,10 +2642,10 @@ public final class EventOuterClass {
         return this;
       }
       /**
-       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.required) = true, (.lvi.batch_attribute) = true];</code>
        */
       public Builder setEvents(
-          int index, lvi.EventOuterClass.BatchEvent.Builder builderForValue) {
+          int index, BatchEvent.Builder builderForValue) {
         if (eventsBuilder_ == null) {
           ensureEventsIsMutable();
           events_.set(index, builderForValue.build());
@@ -1473,9 +2656,9 @@ public final class EventOuterClass {
         return this;
       }
       /**
-       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.required) = true, (.lvi.batch_attribute) = true];</code>
        */
-      public Builder addEvents(lvi.EventOuterClass.BatchEvent value) {
+      public Builder addEvents(BatchEvent value) {
         if (eventsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1489,10 +2672,10 @@ public final class EventOuterClass {
         return this;
       }
       /**
-       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.required) = true, (.lvi.batch_attribute) = true];</code>
        */
       public Builder addEvents(
-          int index, lvi.EventOuterClass.BatchEvent value) {
+          int index, BatchEvent value) {
         if (eventsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1506,10 +2689,10 @@ public final class EventOuterClass {
         return this;
       }
       /**
-       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.required) = true, (.lvi.batch_attribute) = true];</code>
        */
       public Builder addEvents(
-          lvi.EventOuterClass.BatchEvent.Builder builderForValue) {
+          BatchEvent.Builder builderForValue) {
         if (eventsBuilder_ == null) {
           ensureEventsIsMutable();
           events_.add(builderForValue.build());
@@ -1520,10 +2703,10 @@ public final class EventOuterClass {
         return this;
       }
       /**
-       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.required) = true, (.lvi.batch_attribute) = true];</code>
        */
       public Builder addEvents(
-          int index, lvi.EventOuterClass.BatchEvent.Builder builderForValue) {
+          int index, BatchEvent.Builder builderForValue) {
         if (eventsBuilder_ == null) {
           ensureEventsIsMutable();
           events_.add(index, builderForValue.build());
@@ -1534,10 +2717,10 @@ public final class EventOuterClass {
         return this;
       }
       /**
-       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.required) = true, (.lvi.batch_attribute) = true];</code>
        */
       public Builder addAllEvents(
-          java.lang.Iterable<? extends lvi.EventOuterClass.BatchEvent> values) {
+          Iterable<? extends BatchEvent> values) {
         if (eventsBuilder_ == null) {
           ensureEventsIsMutable();
           com.google.protobuf.AbstractMessageLite.Builder.addAll(
@@ -1549,7 +2732,7 @@ public final class EventOuterClass {
         return this;
       }
       /**
-       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.required) = true, (.lvi.batch_attribute) = true];</code>
        */
       public Builder clearEvents() {
         if (eventsBuilder_ == null) {
@@ -1562,7 +2745,7 @@ public final class EventOuterClass {
         return this;
       }
       /**
-       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.required) = true, (.lvi.batch_attribute) = true];</code>
        */
       public Builder removeEvents(int index) {
         if (eventsBuilder_ == null) {
@@ -1575,16 +2758,16 @@ public final class EventOuterClass {
         return this;
       }
       /**
-       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.required) = true, (.lvi.batch_attribute) = true];</code>
        */
-      public lvi.EventOuterClass.BatchEvent.Builder getEventsBuilder(
+      public BatchEvent.Builder getEventsBuilder(
           int index) {
         return getEventsFieldBuilder().getBuilder(index);
       }
       /**
-       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.required) = true, (.lvi.batch_attribute) = true];</code>
        */
-      public lvi.EventOuterClass.BatchEventOrBuilder getEventsOrBuilder(
+      public BatchEventOrBuilder getEventsOrBuilder(
           int index) {
         if (eventsBuilder_ == null) {
           return events_.get(index);  } else {
@@ -1592,9 +2775,9 @@ public final class EventOuterClass {
         }
       }
       /**
-       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.required) = true, (.lvi.batch_attribute) = true];</code>
        */
-      public java.util.List<? extends lvi.EventOuterClass.BatchEventOrBuilder> 
+      public java.util.List<? extends BatchEventOrBuilder>
            getEventsOrBuilderList() {
         if (eventsBuilder_ != null) {
           return eventsBuilder_.getMessageOrBuilderList();
@@ -1603,33 +2786,33 @@ public final class EventOuterClass {
         }
       }
       /**
-       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.required) = true, (.lvi.batch_attribute) = true];</code>
        */
-      public lvi.EventOuterClass.BatchEvent.Builder addEventsBuilder() {
+      public BatchEvent.Builder addEventsBuilder() {
         return getEventsFieldBuilder().addBuilder(
-            lvi.EventOuterClass.BatchEvent.getDefaultInstance());
+            BatchEvent.getDefaultInstance());
       }
       /**
-       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.required) = true, (.lvi.batch_attribute) = true];</code>
        */
-      public lvi.EventOuterClass.BatchEvent.Builder addEventsBuilder(
+      public BatchEvent.Builder addEventsBuilder(
           int index) {
         return getEventsFieldBuilder().addBuilder(
-            index, lvi.EventOuterClass.BatchEvent.getDefaultInstance());
+            index, BatchEvent.getDefaultInstance());
       }
       /**
-       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.batch_attribute) = true];</code>
+       * <code>repeated .lvi.BatchEvent events = 2 [(.lvi.required) = true, (.lvi.batch_attribute) = true];</code>
        */
-      public java.util.List<lvi.EventOuterClass.BatchEvent.Builder> 
+      public java.util.List<BatchEvent.Builder>
            getEventsBuilderList() {
         return getEventsFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          lvi.EventOuterClass.BatchEvent, lvi.EventOuterClass.BatchEvent.Builder, lvi.EventOuterClass.BatchEventOrBuilder> 
+          BatchEvent, BatchEvent.Builder, BatchEventOrBuilder>
           getEventsFieldBuilder() {
         if (eventsBuilder_ == null) {
           eventsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
-              lvi.EventOuterClass.BatchEvent, lvi.EventOuterClass.BatchEvent.Builder, lvi.EventOuterClass.BatchEventOrBuilder>(
+              BatchEvent, BatchEvent.Builder, BatchEventOrBuilder>(
                   events_,
                   ((bitField0_ & 0x00000001) != 0),
                   getParentForChildren(),
@@ -1638,13 +2821,13 @@ public final class EventOuterClass {
         }
         return eventsBuilder_;
       }
-      @java.lang.Override
+      @Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFields(unknownFields);
       }
 
-      @java.lang.Override
+      @Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
@@ -1655,18 +2838,18 @@ public final class EventOuterClass {
     }
 
     // @@protoc_insertion_point(class_scope:lvi.Event)
-    private static final lvi.EventOuterClass.Event DEFAULT_INSTANCE;
+    private static final Event DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new lvi.EventOuterClass.Event();
+      DEFAULT_INSTANCE = new Event();
     }
 
-    public static lvi.EventOuterClass.Event getDefaultInstance() {
+    public static Event getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
     private static final com.google.protobuf.Parser<Event>
         PARSER = new com.google.protobuf.AbstractParser<Event>() {
-      @java.lang.Override
+      @Override
       public Event parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1679,18 +2862,23 @@ public final class EventOuterClass {
       return PARSER;
     }
 
-    @java.lang.Override
+    @Override
     public com.google.protobuf.Parser<Event> getParserForType() {
       return PARSER;
     }
 
-    @java.lang.Override
-    public lvi.EventOuterClass.Event getDefaultInstanceForType() {
+    @Override
+    public Event getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
   }
 
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_lvi_Tag_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_lvi_Tag_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_lvi_BatchEvent_descriptor;
   private static final 
@@ -1709,46 +2897,55 @@ public final class EventOuterClass {
   private static  com.google.protobuf.Descriptors.FileDescriptor
       descriptor;
   static {
-    java.lang.String[] descriptorData = {
+    String[] descriptorData = {
       "\n\022protos/event.proto\022\003lvi\032\035protos/bigque" +
       "ry_options.proto\032\023protos/client.proto\032\022p" +
-      "rotos/actor.proto\"M\n\nBatchEvent\022?\n\005actor" +
-      "\030\002 \001(\0132\n.lvi.ActorB$\220?\001\242?\036Actor concerne" +
-      "d with the event\"j\n\005Event\0225\n\006client\030\001 \001(" +
-      "\0132\013.lvi.ClientB\030\220?\001\242?\022Owner of the event" +
-      "\022$\n\006events\030\002 \003(\0132\017.lvi.BatchEventB\003\250?\001:\004" +
-      "\220\202\031\001b\006proto3"
+      "rotos/actor.proto\"@\n\003Tag\022\020\n\010tag_name\030\001 \001" +
+      "(\t\022\020\n\010tag_code\030\002 \001(\t\022\025\n\rtag_namespace\030\003 " +
+      "\001(\t\"\210\001\n\nBatchEvent\022?\n\005actor\030\001 \001(\0132\n.lvi." +
+      "ActorB$\220?\000\242?\036Actor concerned with the ev" +
+      "ent\0229\n\004tags\030\002 \003(\0132\010.lvi.TagB!\242?\036Tags ass" +
+      "ociated with the event\"m\n\005Event\0225\n\006clien" +
+      "t\030\001 \001(\0132\013.lvi.ClientB\030\220?\000\242?\022Owner of the" +
+      " event\022\'\n\006events\030\002 \003(\0132\017.lvi.BatchEventB" +
+      "\006\220?\001\250?\001:\004\220\202\031\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
-          lvi.BigqueryOptions.getDescriptor(),
-          lvi.ClientOuterClass.getDescriptor(),
-          lvi.ActorOuterClass.getDescriptor(),
+          BigqueryOptions.getDescriptor(),
+          ClientOuterClass.getDescriptor(),
+          ActorOuterClass.getDescriptor(),
         });
-    internal_static_lvi_BatchEvent_descriptor =
+    internal_static_lvi_Tag_descriptor =
       getDescriptor().getMessageTypes().get(0);
+    internal_static_lvi_Tag_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_lvi_Tag_descriptor,
+        new String[] { "TagName", "TagCode", "TagNamespace", });
+    internal_static_lvi_BatchEvent_descriptor =
+      getDescriptor().getMessageTypes().get(1);
     internal_static_lvi_BatchEvent_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_lvi_BatchEvent_descriptor,
-        new java.lang.String[] { "Actor", });
+        new String[] { "Actor", "Tags", });
     internal_static_lvi_Event_descriptor =
-      getDescriptor().getMessageTypes().get(1);
+      getDescriptor().getMessageTypes().get(2);
     internal_static_lvi_Event_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_lvi_Event_descriptor,
-        new java.lang.String[] { "Client", "Events", });
+        new String[] { "Client", "Events", });
     com.google.protobuf.ExtensionRegistry registry =
         com.google.protobuf.ExtensionRegistry.newInstance();
-    registry.add(lvi.BigqueryOptions.batchAttribute);
-    registry.add(lvi.BigqueryOptions.description);
-    registry.add(lvi.BigqueryOptions.required);
-    registry.add(lvi.BigqueryOptions.tableRoot);
+    registry.add(BigqueryOptions.batchAttribute);
+    registry.add(BigqueryOptions.description);
+    registry.add(BigqueryOptions.required);
+    registry.add(BigqueryOptions.tableRoot);
     com.google.protobuf.Descriptors.FileDescriptor
         .internalUpdateFileDescriptor(descriptor, registry);
-    lvi.BigqueryOptions.getDescriptor();
-    lvi.ClientOuterClass.getDescriptor();
-    lvi.ActorOuterClass.getDescriptor();
+    BigqueryOptions.getDescriptor();
+    ClientOuterClass.getDescriptor();
+    ActorOuterClass.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

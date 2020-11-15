@@ -10,47 +10,48 @@ public final class EventParser {
 	public static LinkedList<TableRow> convertToTableRow(EventOuterClass.Event event) throws Exception {
 		LinkedList<TableRow> rows = new LinkedList<TableRow>();
 		TableRow common = new TableRow();
+		
+		// client
+		TableCell client = new TableCell();
 		if(event.hasClient()) {
-			TableCell client = new TableCell();
+			client.set("name", event.getClient().getName());
 			if(event.getClient().hasTenantId()) {
 				client.set("tenantId", event.getClient().getTenantId());
-			} else {
-				throw new Exception();
 			}
-			client.set("name", event.getClient().getName());
-			common.set("client", client);
-		} else {
-			throw new Exception();
 		}
-		for(EventOuterClass.BatchEvent batchEvent: event.getEventsList()) {
+		common.set("client", client);
+		for(EventOuterClass.BatchEvent events: event.getEventsList()) {
 			TableRow row = new TableRow();
-			if(batchEvent.hasEvents()) {
-				TableCell events = new TableCell();
-				if(batchEvent.getEvents().hasActor()) {
-					TableCell actor = new TableCell();
-					if(batchEvent.getEvents().getActor().hasUserId()) {
-						actor.set("userId", batchEvent.getEvents().getActor().getUserId());
-					} else {
-						throw new Exception();
-					}
-					if(batchEvent.getEvents().getActor().hasEmail()) {
-						actor.set("email", batchEvent.getEvents().getActor().getEmail());
-					}
-					if(batchEvent.getEvents().getActor().hasAddress()) {
-						TableCell address = new TableCell();
-						address.set("street", batchEvent.getEvents().getActor().getAddress().getStreet());
-						address.set("number", batchEvent.getEvents().getActor().getAddress().getNumber());
-						address.set("country", batchEvent.getEvents().getActor().getAddress().getCountry());
-						actor.set("address", address);
-					}
-					events.set("actor", actor);
-				} else {
-					throw new Exception();
-				}
-				row.set("events", events);
-			} else {
-				throw new Exception();
+			LinkedList<TableCell> tagsCells = new LinkedList<TableCell>();
+			for(EventOuterClass.Tag tags: events.getTagsList()) {
+				TableCell tagsCell = new TableCell();
+				tagsCell.set("tag_namespace", tags.getTagNamespace());
+				tagsCell.set("tag_code", tags.getTagCode());
+				tagsCell.set("tag_name", tags.getTagName());
+				tagsCells.add(tagsCell);
 			}
+			row.set("tags", tagsCells);
+			
+			// actor
+			TableCell actor = new TableCell();
+			if(events.hasActor()) {
+				
+				// address
+				TableCell address = new TableCell();
+				if(events.getActor().hasAddress()) {
+					address.set("country", events.getActor().getAddress().getCountry());
+					address.set("number", events.getActor().getAddress().getNumber());
+					address.set("street", events.getActor().getAddress().getStreet());
+				}
+				actor.set("address", address);
+				if(events.getActor().hasEmail()) {
+					actor.set("email", events.getActor().getEmail());
+				}
+				if(events.getActor().hasUserId()) {
+					actor.set("userId", events.getActor().getUserId());
+				}
+			}
+			row.set("actor", actor);
 			row.setF(common.getF());
 			rows.add(row);
 		}

@@ -5,6 +5,7 @@ import io
 import sys
 import logging
 from google.cloud import bigquery
+from pathlib import Path
 
 from output.python.protos import bigquery_options_pb2
 from google.protobuf.compiler import plugin_pb2 as plugin
@@ -172,6 +173,13 @@ def _generate_repository(request: plugin.CodeGeneratorRequest):
     # Make sure all types are present
     for proto_file in request.proto_file:
 
+        ambiguous_file_name = False
+
+        # Check whether out class should be deduplicated
+        for item, package in _traverse(proto_file):
+            if isinstance(item, DescriptorProto) or isinstance(item, EnumDescriptorProto):
+                ambiguous_file_name = ambiguous_file_name or Path(proto_file.name).stem.lower() == item.name.lower()
+
         # Parse request
         for item, package in _traverse(proto_file):
 
@@ -182,15 +190,14 @@ def _generate_repository(request: plugin.CodeGeneratorRequest):
                 if isinstance(item, DescriptorProto):
 
                     table_root = item.options.HasExtension(bigquery_options_pb2.table_root)
-                    field_type = MessageFieldType(proto_file.package, proto_file.name, item.name)
-                    field_type.set_table_root(table_root)
+                    field_type = MessageFieldType(proto_file.package, Path(proto_file.name).stem, item.name, ambiguous_file_name)
 
                     if table_root:
                         root_elements.append(field_type)
 
                 elif isinstance(item, EnumDescriptorProto):
 
-                    field_type = EnumFieldType(proto_file.package, proto_file.name, item.name)
+                    field_type = EnumFieldType(proto_file.package, Path(proto_file.name).stem, item.name, ambiguous_file_name)
                     field_type.set_values([EnumFieldValue(v.name, v.number) for v in item.value])
 
                 repository[field_type.get_fq_name()] = field_type

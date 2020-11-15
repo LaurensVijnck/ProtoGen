@@ -116,7 +116,7 @@ class CodeGenFunctionNode(CodeGenImp):
         variable = Variable(Variable.to_variable(self.field_type.name), self.field_type.name)
         rows = ListVariable("rows", "LinkedList", "TableRow")
 
-        file.content += self.indent(f"public static LinkedList<TableRow> convertToTableRow({self.field_type.name} {variable.get()}) throws Exception {{", depth)
+        file.content += self.indent(f"public static LinkedList<TableRow> convertToTableRow({self.field_type.get_class_name()} {variable.get()}) throws Exception {{", depth)
         file.content += self.indent(rows.initialize(), depth + 1)
 
         for child in self._children:
@@ -235,11 +235,11 @@ class CodeGenRepeatedNode(CodeGenNode):
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int, type_map: dict):
         list_var = ListVariable(Variable.to_variable(f"{self._field.field_name}_cells"), "LinkedList", "TableCell")
         var = Variable(Variable.to_variable(f"{self._field.field_name}_cell"), "TableCell")
-        res = Variable(Variable.to_variable(self._field.resolve_type(type_map)), self._field.resolve_type(type_map))
+        res = Variable(Variable.to_variable(self._field.field_name), self._field.resolve_type(type_map))
 
         file.content += self.indent(list_var.initialize(), depth)
 
-        file.content += self.indent(f"for({res.type} {res.get()}: {root_var.get()}.{Variable.underscore_to_camelcase(f'get_{self._field.field_name}_list()')})) {{", depth)  # nopep8
+        file.content += self.indent(f"for({res.type} {res.get()}: {root_var.get()}.{Variable.underscore_to_camelcase(f'get_{self._field.field_name}_list()')}) {{", depth)  # nopep8
         file.content += self.indent(var.initialize(), depth + 1)
 
         for child in self._children:
@@ -260,7 +260,7 @@ class CodeGenGetBatchNode(CodeGenNode):
 
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int, type_map: dict):
         # Batch attribute
-        root = Variable(Variable.to_variable(self._field.resolve_type(type_map)), self._field.resolve_type(type_map))
+        root = Variable(Variable.to_variable(self._field.field_name), self._field.resolve_type(type_map))
         row = Variable("row", "TableRow")
 
         file.content += self.indent(f"for({root.type} {root.get()}: {root_var.get()}.{Variable.underscore_to_camelcase(f'get_{self._field.field_name}_list()')}) {{", depth) # nopep8

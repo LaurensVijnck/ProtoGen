@@ -7,10 +7,10 @@ public final class BigqueryOptions {
   private BigqueryOptions() {}
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistryLite registry) {
-    registry.add(lvi.BigqueryOptions.tableRoot);
-    registry.add(lvi.BigqueryOptions.required);
-    registry.add(lvi.BigqueryOptions.description);
-    registry.add(lvi.BigqueryOptions.batchAttribute);
+    registry.add(BigqueryOptions.tableRoot);
+    registry.add(BigqueryOptions.required);
+    registry.add(BigqueryOptions.description);
+    registry.add(BigqueryOptions.batchAttribute);
   }
 
   public static void registerAllExtensions(
@@ -29,9 +29,9 @@ public final class BigqueryOptions {
   public static final
     com.google.protobuf.GeneratedMessage.GeneratedExtension<
       com.google.protobuf.DescriptorProtos.MessageOptions,
-      java.lang.Boolean> tableRoot = com.google.protobuf.GeneratedMessage
+      Boolean> tableRoot = com.google.protobuf.GeneratedMessage
           .newFileScopedGeneratedExtension(
-        java.lang.Boolean.class,
+        Boolean.class,
         null);
   public static final int REQUIRED_FIELD_NUMBER = 1010;
   /**
@@ -44,9 +44,9 @@ public final class BigqueryOptions {
   public static final
     com.google.protobuf.GeneratedMessage.GeneratedExtension<
       com.google.protobuf.DescriptorProtos.FieldOptions,
-      java.lang.Boolean> required = com.google.protobuf.GeneratedMessage
+      Boolean> required = com.google.protobuf.GeneratedMessage
           .newFileScopedGeneratedExtension(
-        java.lang.Boolean.class,
+        Boolean.class,
         null);
   public static final int DESCRIPTION_FIELD_NUMBER = 1012;
   /**
@@ -55,9 +55,9 @@ public final class BigqueryOptions {
   public static final
     com.google.protobuf.GeneratedMessage.GeneratedExtension<
       com.google.protobuf.DescriptorProtos.FieldOptions,
-      java.lang.String> description = com.google.protobuf.GeneratedMessage
+      String> description = com.google.protobuf.GeneratedMessage
           .newFileScopedGeneratedExtension(
-        java.lang.String.class,
+        String.class,
         null);
   public static final int BATCH_ATTRIBUTE_FIELD_NUMBER = 1013;
   /**
@@ -66,9 +66,9 @@ public final class BigqueryOptions {
   public static final
     com.google.protobuf.GeneratedMessage.GeneratedExtension<
       com.google.protobuf.DescriptorProtos.FieldOptions,
-      java.lang.Boolean> batchAttribute = com.google.protobuf.GeneratedMessage
+      Boolean> batchAttribute = com.google.protobuf.GeneratedMessage
           .newFileScopedGeneratedExtension(
-        java.lang.Boolean.class,
+        Boolean.class,
         null);
 
   public static com.google.protobuf.Descriptors.FileDescriptor
@@ -78,7 +78,7 @@ public final class BigqueryOptions {
   private static  com.google.protobuf.Descriptors.FileDescriptor
       descriptor;
   static {
-    java.lang.String[] descriptorData = {
+    String[] descriptorData = {
       "\n\035protos/bigquery_options.proto\022\003lvi\032 go" +
       "ogle/protobuf/descriptor.proto:5\n\ntable_" +
       "root\022\037.google.protobuf.MessageOptions\030\242\220" +

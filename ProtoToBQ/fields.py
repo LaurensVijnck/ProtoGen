@@ -1,5 +1,6 @@
 import json
 
+from enums import ProtoTypeEnum
 
 class FieldType:
     """
@@ -84,6 +85,7 @@ class Field:
     """
     Representation of a field.
     """
+
     def __init__(self, field_index: int, field_name: str, field_description: str, field_type: str, field_type_value: MessageFieldType, field_required: bool, is_batch_field: bool, is_optional_field: bool, is_repeated_field: bool):
         self.field_index = field_index
         self.field_name = field_name
@@ -94,6 +96,20 @@ class Field:
         self.is_batch_field = is_batch_field
         self.is_optional_field = is_optional_field
         self.is_repeated_field = is_repeated_field
+
+    def resolve_type(self, type_map: dict):
+        """
+        Resolve the type of the field against the given type dictionary.
+
+        :param type_map: mapping from proto enum to primitive types
+        :return:
+        """
+
+        if self.field_type_value is not None:
+            return self.field_type_value.name
+
+        # Primitive types are determined by the type_map
+        return type_map[ProtoTypeEnum._member_map_[self.field_type]]
 
     def to_json(self):
         return {

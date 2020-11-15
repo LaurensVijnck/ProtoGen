@@ -4,11 +4,7 @@ package lvi;
 
 import "protos/bigquery_options.proto";
 
-message Test {
-    string name = 1 [(required) = false];
-}
-
 message Client {
     optional int64 tenantId = 1 [(required) = false, (description) = "Identifier in the client catalog"];
-    repeated string name = 2; // [(required) = true];
+    string name = 2 [(required) = true];
 }

@@ -11,6 +11,7 @@ from google.protobuf.compiler import plugin_pb2 as plugin
 from google.protobuf.descriptor_pb2 import DescriptorProto, EnumDescriptorProto
 
 from codegen import *
+from enums import ProtoTypeEnum
 
 
 # https://cloud.google.com/bigquery/docs/reference/standard-sql/data-types
@@ -28,30 +29,6 @@ class BigQueryTypeEnum(Enum):
     TYPE_ARRAY = 11,
     TYPE_STRUCT = 12,
     TYPE_GEOGRAPHY = 13
-
-
-# https://googleapis.dev/python/protobuf/latest/google/protobuf/descriptor_pb2.html
-# https://github.com/protocolbuffers/protobuf/blob/master/python/google/protobuf/descriptor.py
-class ProtoTypeEnum(Enum):
-    TYPE_DOUBLE = 1
-    TYPE_FLOAT = 2
-    TYPE_INT64 = 3
-    TYPE_UINT64 = 4
-    TYPE_INT32 = 5
-    TYPE_FIXED64 = 6
-    TYPE_FIXED32 = 7
-    TYPE_BOOL = 8
-    TYPE_STRING = 9
-    TYPE_GROUP = 10
-    TYPE_MESSAGE = 11
-    TYPE_BYTES = 12
-    TYPE_UINT32 = 13
-    TYPE_ENUM = 14
-    TYPE_SFIXED32 = 15
-    TYPE_SFIXED64 = 16
-    TYPE_SINT32 = 17
-    TYPE_SINT64 = 18
-    MAX_TYPE = 18
 
 
 _PROTO_TO_BQ_TYPE_MAP = {
@@ -73,6 +50,27 @@ _PROTO_TO_BQ_TYPE_MAP = {
     ProtoTypeEnum.TYPE_BOOL: BigQueryTypeEnum.TYPE_BOOL,
     ProtoTypeEnum.TYPE_MESSAGE: BigQueryTypeEnum.TYPE_STRUCT,
     ProtoTypeEnum.TYPE_GROUP: BigQueryTypeEnum.TYPE_STRUCT
+}
+
+_PROTO_TO_JAVA_TYPE_MAP = {
+    ProtoTypeEnum.TYPE_DOUBLE: "Double",
+    ProtoTypeEnum.TYPE_FLOAT: "Float",
+    ProtoTypeEnum.TYPE_ENUM: "String",  # FUTURE: Map onto int value?
+    ProtoTypeEnum.TYPE_INT64: "Integer",
+    ProtoTypeEnum.TYPE_SINT64: "Long",
+    ProtoTypeEnum.TYPE_SFIXED64: "Long",
+    ProtoTypeEnum.TYPE_UINT64: "Long",
+    ProtoTypeEnum.TYPE_FIXED64: "Long",
+    ProtoTypeEnum.TYPE_INT32: "Integer",
+    ProtoTypeEnum.TYPE_SFIXED32: "Integer",
+    ProtoTypeEnum.TYPE_SINT32: "Integer",
+    ProtoTypeEnum.TYPE_UINT32: "Integer",
+    ProtoTypeEnum.TYPE_FIXED32: "Integer",
+    ProtoTypeEnum.TYPE_BYTES: "Bytes",
+    ProtoTypeEnum.TYPE_STRING: "String",
+    ProtoTypeEnum.TYPE_BOOL: "Boolean",
+    ProtoTypeEnum.TYPE_MESSAGE: None,
+    ProtoTypeEnum.TYPE_GROUP: None
 }
 
 _BQ_TO_TYPE_VALUE = {
@@ -265,7 +263,7 @@ def codegen_rec(field_type: MessageFieldType, root: CodeGenImp, table_root: bool
         proto_type = ProtoTypeEnum._member_map_[field.field_type]
 
         field_root = node
-        field_root = add_codegen_node_conditionally(field_root, CodeGenRepeatedNode(field), field.is_repeated_field and not field.is_batch_field)
+        field_root = add_codegen_node_conditionally(field_root, CodeGenRepeatedNode(field), field.is_repeated_field and not (table_root and field.is_batch_field))
 
         if proto_type == ProtoTypeEnum.TYPE_MESSAGE:
             if table_root and field.is_batch_field:
@@ -281,6 +279,7 @@ def codegen_rec(field_type: MessageFieldType, root: CodeGenImp, table_root: bool
             codegen_rec(field.field_type_value, field_root)
         else:
             field_root = add_codegen_node_conditionally(field_root, CodeGenConditionalNode(field, field.field_required), field.is_optional_field)
+            field_root = add_codegen_node_conditionally(field_root, CodeGenGetFieldNode(field), not field.is_repeated_field)
             field_root.add_child(CodeGenBaseNode(field))
 
     root.add_child(node)
@@ -326,7 +325,7 @@ def generate_code(request: plugin.CodeGeneratorRequest, response: plugin.CodeGen
 
         file = response.file.add()
         file.name = root_element.name + "Parser.java"
-        create_codegen_tree(root_element).gen_code(file, None, None, 0)
+        create_codegen_tree(root_element).gen_code(file, None, None, 0, _PROTO_TO_JAVA_TYPE_MAP)
 
     # Drop new repository
     f = response.file.add()

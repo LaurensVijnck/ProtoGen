@@ -57,7 +57,7 @@ public final class ActorOuterClass {
   /**
    * Protobuf type {@code lvi.Address}
    */
-  public  static final class Address extends
+  public static final class Address extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:lvi.Address)
       AddressOrBuilder {
@@ -158,6 +158,7 @@ public final class ActorOuterClass {
      * <code>string street = 1;</code>
      * @return The street.
      */
+    @Override
     public String getStreet() {
       Object ref = street_;
       if (ref instanceof String) {
@@ -174,6 +175,7 @@ public final class ActorOuterClass {
      * <code>string street = 1;</code>
      * @return The bytes for street.
      */
+    @Override
     public com.google.protobuf.ByteString
         getStreetBytes() {
       Object ref = street_;
@@ -194,6 +196,7 @@ public final class ActorOuterClass {
      * <code>string number = 2;</code>
      * @return The number.
      */
+    @Override
     public String getNumber() {
       Object ref = number_;
       if (ref instanceof String) {
@@ -210,6 +213,7 @@ public final class ActorOuterClass {
      * <code>string number = 2;</code>
      * @return The bytes for number.
      */
+    @Override
     public com.google.protobuf.ByteString
         getNumberBytes() {
       Object ref = number_;
@@ -230,6 +234,7 @@ public final class ActorOuterClass {
      * <code>string country = 3;</code>
      * @return The country.
      */
+    @Override
     public String getCountry() {
       Object ref = country_;
       if (ref instanceof String) {
@@ -246,6 +251,7 @@ public final class ActorOuterClass {
      * <code>string country = 3;</code>
      * @return The bytes for country.
      */
+    @Override
     public com.google.protobuf.ByteString
         getCountryBytes() {
       Object ref = country_;
@@ -881,18 +887,28 @@ public final class ActorOuterClass {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>int64 userId = 1 [(.lvi.required) = true, (.lvi.description) = "Identifier in the master table"];</code>
+     * <code>int64 userId = 1 [(.lvi.required) = false, (.lvi.description) = "Identifier in the master table"];</code>
+     * @return Whether the userId field is set.
+     */
+    boolean hasUserId();
+    /**
+     * <code>int64 userId = 1 [(.lvi.required) = false, (.lvi.description) = "Identifier in the master table"];</code>
      * @return The userId.
      */
     long getUserId();
 
     /**
-     * <code>string email = 2;</code>
+     * <code>string email = 2 [(.lvi.description) = "Email address of the actor"];</code>
+     * @return Whether the email field is set.
+     */
+    boolean hasEmail();
+    /**
+     * <code>string email = 2 [(.lvi.description) = "Email address of the actor"];</code>
      * @return The email.
      */
     String getEmail();
     /**
-     * <code>string email = 2;</code>
+     * <code>string email = 2 [(.lvi.description) = "Email address of the actor"];</code>
      * @return The bytes for email.
      */
     com.google.protobuf.ByteString
@@ -916,7 +932,7 @@ public final class ActorOuterClass {
   /**
    * Protobuf type {@code lvi.Actor}
    */
-  public  static final class Actor extends
+  public static final class Actor extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:lvi.Actor)
       ActorOrBuilder {
@@ -949,6 +965,7 @@ public final class ActorOuterClass {
       if (extensionRegistry == null) {
         throw new NullPointerException();
       }
+      int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
@@ -960,13 +977,13 @@ public final class ActorOuterClass {
               done = true;
               break;
             case 8: {
-
+              bitField0_ |= 0x00000001;
               userId_ = input.readInt64();
               break;
             }
             case 18: {
               String s = input.readStringRequireUtf8();
-
+              bitField0_ |= 0x00000002;
               email_ = s;
               break;
             }
@@ -1015,12 +1032,22 @@ public final class ActorOuterClass {
               Actor.class, Builder.class);
     }
 
+    private int bitField0_;
     public static final int USERID_FIELD_NUMBER = 1;
     private long userId_;
     /**
-     * <code>int64 userId = 1 [(.lvi.required) = true, (.lvi.description) = "Identifier in the master table"];</code>
+     * <code>int64 userId = 1 [(.lvi.required) = false, (.lvi.description) = "Identifier in the master table"];</code>
+     * @return Whether the userId field is set.
+     */
+    @Override
+    public boolean hasUserId() {
+      return ((bitField0_ & 0x00000001) != 0);
+    }
+    /**
+     * <code>int64 userId = 1 [(.lvi.required) = false, (.lvi.description) = "Identifier in the master table"];</code>
      * @return The userId.
      */
+    @Override
     public long getUserId() {
       return userId_;
     }
@@ -1028,9 +1055,18 @@ public final class ActorOuterClass {
     public static final int EMAIL_FIELD_NUMBER = 2;
     private volatile Object email_;
     /**
-     * <code>string email = 2;</code>
+     * <code>string email = 2 [(.lvi.description) = "Email address of the actor"];</code>
+     * @return Whether the email field is set.
+     */
+    @Override
+    public boolean hasEmail() {
+      return ((bitField0_ & 0x00000002) != 0);
+    }
+    /**
+     * <code>string email = 2 [(.lvi.description) = "Email address of the actor"];</code>
      * @return The email.
      */
+    @Override
     public String getEmail() {
       Object ref = email_;
       if (ref instanceof String) {
@@ -1044,9 +1080,10 @@ public final class ActorOuterClass {
       }
     }
     /**
-     * <code>string email = 2;</code>
+     * <code>string email = 2 [(.lvi.description) = "Email address of the actor"];</code>
      * @return The bytes for email.
      */
+    @Override
     public com.google.protobuf.ByteString
         getEmailBytes() {
       Object ref = email_;
@@ -1067,6 +1104,7 @@ public final class ActorOuterClass {
      * <code>.lvi.Address address = 3;</code>
      * @return Whether the address field is set.
      */
+    @Override
     public boolean hasAddress() {
       return address_ != null;
     }
@@ -1074,12 +1112,14 @@ public final class ActorOuterClass {
      * <code>.lvi.Address address = 3;</code>
      * @return The address.
      */
+    @Override
     public Address getAddress() {
       return address_ == null ? Address.getDefaultInstance() : address_;
     }
     /**
      * <code>.lvi.Address address = 3;</code>
      */
+    @Override
     public AddressOrBuilder getAddressOrBuilder() {
       return getAddress();
     }
@@ -1098,10 +1138,10 @@ public final class ActorOuterClass {
     @Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (userId_ != 0L) {
+      if (((bitField0_ & 0x00000001) != 0)) {
         output.writeInt64(1, userId_);
       }
-      if (!getEmailBytes().isEmpty()) {
+      if (((bitField0_ & 0x00000002) != 0)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 2, email_);
       }
       if (address_ != null) {
@@ -1116,11 +1156,11 @@ public final class ActorOuterClass {
       if (size != -1) return size;
 
       size = 0;
-      if (userId_ != 0L) {
+      if (((bitField0_ & 0x00000001) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt64Size(1, userId_);
       }
-      if (!getEmailBytes().isEmpty()) {
+      if (((bitField0_ & 0x00000002) != 0)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, email_);
       }
       if (address_ != null) {
@@ -1142,10 +1182,16 @@ public final class ActorOuterClass {
       }
       Actor other = (Actor) obj;
 
-      if (getUserId()
-          != other.getUserId()) return false;
-      if (!getEmail()
-          .equals(other.getEmail())) return false;
+      if (hasUserId() != other.hasUserId()) return false;
+      if (hasUserId()) {
+        if (getUserId()
+            != other.getUserId()) return false;
+      }
+      if (hasEmail() != other.hasEmail()) return false;
+      if (hasEmail()) {
+        if (!getEmail()
+            .equals(other.getEmail())) return false;
+      }
       if (hasAddress() != other.hasAddress()) return false;
       if (hasAddress()) {
         if (!getAddress()
@@ -1162,11 +1208,15 @@ public final class ActorOuterClass {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + USERID_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-          getUserId());
-      hash = (37 * hash) + EMAIL_FIELD_NUMBER;
-      hash = (53 * hash) + getEmail().hashCode();
+      if (hasUserId()) {
+        hash = (37 * hash) + USERID_FIELD_NUMBER;
+        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+            getUserId());
+      }
+      if (hasEmail()) {
+        hash = (37 * hash) + EMAIL_FIELD_NUMBER;
+        hash = (53 * hash) + getEmail().hashCode();
+      }
       if (hasAddress()) {
         hash = (37 * hash) + ADDRESS_FIELD_NUMBER;
         hash = (53 * hash) + getAddress().hashCode();
@@ -1305,9 +1355,9 @@ public final class ActorOuterClass {
       public Builder clear() {
         super.clear();
         userId_ = 0L;
-
+        bitField0_ = (bitField0_ & ~0x00000001);
         email_ = "";
-
+        bitField0_ = (bitField0_ & ~0x00000002);
         if (addressBuilder_ == null) {
           address_ = null;
         } else {
@@ -1340,13 +1390,22 @@ public final class ActorOuterClass {
       @Override
       public Actor buildPartial() {
         Actor result = new Actor(this);
-        result.userId_ = userId_;
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.userId_ = userId_;
+          to_bitField0_ |= 0x00000001;
+        }
+        if (((from_bitField0_ & 0x00000002) != 0)) {
+          to_bitField0_ |= 0x00000002;
+        }
         result.email_ = email_;
         if (addressBuilder_ == null) {
           result.address_ = address_;
         } else {
           result.address_ = addressBuilder_.build();
         }
+        result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
@@ -1395,10 +1454,11 @@ public final class ActorOuterClass {
 
       public Builder mergeFrom(Actor other) {
         if (other == Actor.getDefaultInstance()) return this;
-        if (other.getUserId() != 0L) {
+        if (other.hasUserId()) {
           setUserId(other.getUserId());
         }
-        if (!other.getEmail().isEmpty()) {
+        if (other.hasEmail()) {
+          bitField0_ |= 0x00000002;
           email_ = other.email_;
           onChanged();
         }
@@ -1433,32 +1493,42 @@ public final class ActorOuterClass {
         }
         return this;
       }
+      private int bitField0_;
 
       private long userId_ ;
       /**
-       * <code>int64 userId = 1 [(.lvi.required) = true, (.lvi.description) = "Identifier in the master table"];</code>
+       * <code>int64 userId = 1 [(.lvi.required) = false, (.lvi.description) = "Identifier in the master table"];</code>
+       * @return Whether the userId field is set.
+       */
+      @Override
+      public boolean hasUserId() {
+        return ((bitField0_ & 0x00000001) != 0);
+      }
+      /**
+       * <code>int64 userId = 1 [(.lvi.required) = false, (.lvi.description) = "Identifier in the master table"];</code>
        * @return The userId.
        */
+      @Override
       public long getUserId() {
         return userId_;
       }
       /**
-       * <code>int64 userId = 1 [(.lvi.required) = true, (.lvi.description) = "Identifier in the master table"];</code>
+       * <code>int64 userId = 1 [(.lvi.required) = false, (.lvi.description) = "Identifier in the master table"];</code>
        * @param value The userId to set.
        * @return This builder for chaining.
        */
       public Builder setUserId(long value) {
-        
+        bitField0_ |= 0x00000001;
         userId_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>int64 userId = 1 [(.lvi.required) = true, (.lvi.description) = "Identifier in the master table"];</code>
+       * <code>int64 userId = 1 [(.lvi.required) = false, (.lvi.description) = "Identifier in the master table"];</code>
        * @return This builder for chaining.
        */
       public Builder clearUserId() {
-        
+        bitField0_ = (bitField0_ & ~0x00000001);
         userId_ = 0L;
         onChanged();
         return this;
@@ -1466,7 +1536,14 @@ public final class ActorOuterClass {
 
       private Object email_ = "";
       /**
-       * <code>string email = 2;</code>
+       * <code>string email = 2 [(.lvi.description) = "Email address of the actor"];</code>
+       * @return Whether the email field is set.
+       */
+      public boolean hasEmail() {
+        return ((bitField0_ & 0x00000002) != 0);
+      }
+      /**
+       * <code>string email = 2 [(.lvi.description) = "Email address of the actor"];</code>
        * @return The email.
        */
       public String getEmail() {
@@ -1482,7 +1559,7 @@ public final class ActorOuterClass {
         }
       }
       /**
-       * <code>string email = 2;</code>
+       * <code>string email = 2 [(.lvi.description) = "Email address of the actor"];</code>
        * @return The bytes for email.
        */
       public com.google.protobuf.ByteString
@@ -1499,7 +1576,7 @@ public final class ActorOuterClass {
         }
       }
       /**
-       * <code>string email = 2;</code>
+       * <code>string email = 2 [(.lvi.description) = "Email address of the actor"];</code>
        * @param value The email to set.
        * @return This builder for chaining.
        */
@@ -1508,23 +1585,23 @@ public final class ActorOuterClass {
         if (value == null) {
     throw new NullPointerException();
   }
-  
+  bitField0_ |= 0x00000002;
         email_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>string email = 2;</code>
+       * <code>string email = 2 [(.lvi.description) = "Email address of the actor"];</code>
        * @return This builder for chaining.
        */
       public Builder clearEmail() {
-        
+        bitField0_ = (bitField0_ & ~0x00000002);
         email_ = getDefaultInstance().getEmail();
         onChanged();
         return this;
       }
       /**
-       * <code>string email = 2;</code>
+       * <code>string email = 2 [(.lvi.description) = "Email address of the actor"];</code>
        * @param value The bytes for email to set.
        * @return This builder for chaining.
        */
@@ -1534,7 +1611,7 @@ public final class ActorOuterClass {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
-        
+        bitField0_ |= 0x00000002;
         email_ = value;
         onChanged();
         return this;
@@ -1732,15 +1809,17 @@ public final class ActorOuterClass {
     String[] descriptorData = {
       "\n\022protos/actor.proto\022\003lvi\032\035protos/bigque" +
       "ry_options.proto\":\n\007Address\022\016\n\006street\030\001 " +
-      "\001(\t\022\016\n\006number\030\002 \001(\t\022\017\n\007country\030\003 \001(\t\"k\n\005" +
-      "Actor\0224\n\006userId\030\001 \001(\003B$\220?\001\242?\036Identifier " +
-      "in the master table\022\r\n\005email\030\002 \001(\t\022\035\n\007ad" +
-      "dress\030\003 \001(\0132\014.lvi.Addressb\006proto3"
+      "\001(\t\022\016\n\006number\030\002 \001(\t\022\017\n\007country\030\003 \001(\t\"\251\001\n" +
+      "\005Actor\0229\n\006userId\030\001 \001(\003B$\220?\000\242?\036Identifier" +
+      " in the master tableH\000\210\001\001\0221\n\005email\030\002 \001(\t" +
+      "B\035\242?\032Email address of the actorH\001\210\001\001\022\035\n\007" +
+      "address\030\003 \001(\0132\014.lvi.AddressB\t\n\007_userIdB\010" +
+      "\n\006_emailb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
-          lvi.BigqueryOptions.getDescriptor(),
+          BigqueryOptions.getDescriptor(),
         });
     internal_static_lvi_Address_descriptor =
       getDescriptor().getMessageTypes().get(0);
@@ -1753,14 +1832,14 @@ public final class ActorOuterClass {
     internal_static_lvi_Actor_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_lvi_Actor_descriptor,
-        new String[] { "UserId", "Email", "Address", });
+        new String[] { "UserId", "Email", "Address", "UserId", "Email", });
     com.google.protobuf.ExtensionRegistry registry =
         com.google.protobuf.ExtensionRegistry.newInstance();
-    registry.add(lvi.BigqueryOptions.description);
-    registry.add(lvi.BigqueryOptions.required);
+    registry.add(BigqueryOptions.description);
+    registry.add(BigqueryOptions.required);
     com.google.protobuf.Descriptors.FileDescriptor
         .internalUpdateFileDescriptor(descriptor, registry);
-    lvi.BigqueryOptions.getDescriptor();
+    BigqueryOptions.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

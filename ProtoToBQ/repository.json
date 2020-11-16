@@ -13,7 +13,8 @@
         "fieldTypeValue": ".google.protobuf.FileDescriptorProto",
         "fieldRequired": false,
         "fieldIndex": 1,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       }
     ]
   },
@@ -31,7 +32,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 1,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "package",
@@ -40,7 +42,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 2,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "dependency",
@@ -49,7 +52,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 3,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "public_dependency",
@@ -58,7 +62,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 10,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "weak_dependency",
@@ -67,7 +72,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 11,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "message_type",
@@ -76,7 +82,8 @@
         "fieldTypeValue": ".google.protobuf.DescriptorProto",
         "fieldRequired": false,
         "fieldIndex": 4,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "enum_type",
@@ -85,7 +92,8 @@
         "fieldTypeValue": ".google.protobuf.EnumDescriptorProto",
         "fieldRequired": false,
         "fieldIndex": 5,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "service",
@@ -94,7 +102,8 @@
         "fieldTypeValue": ".google.protobuf.ServiceDescriptorProto",
         "fieldRequired": false,
         "fieldIndex": 6,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "extension",
@@ -103,7 +112,8 @@
         "fieldTypeValue": ".google.protobuf.FieldDescriptorProto",
         "fieldRequired": false,
         "fieldIndex": 7,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "options",
@@ -112,7 +122,8 @@
         "fieldTypeValue": ".google.protobuf.FileOptions",
         "fieldRequired": false,
         "fieldIndex": 8,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "source_code_info",
@@ -121,7 +132,8 @@
         "fieldTypeValue": ".google.protobuf.SourceCodeInfo",
         "fieldRequired": false,
         "fieldIndex": 9,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "syntax",
@@ -130,7 +142,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 12,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       }
     ]
   },
@@ -148,7 +161,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 1,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "field",
@@ -157,7 +171,8 @@
         "fieldTypeValue": ".google.protobuf.FieldDescriptorProto",
         "fieldRequired": false,
         "fieldIndex": 2,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "extension",
@@ -166,7 +181,8 @@
         "fieldTypeValue": ".google.protobuf.FieldDescriptorProto",
         "fieldRequired": false,
         "fieldIndex": 6,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "nested_type",
@@ -175,7 +191,8 @@
         "fieldTypeValue": ".google.protobuf.DescriptorProto",
         "fieldRequired": false,
         "fieldIndex": 3,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "enum_type",
@@ -184,7 +201,8 @@
         "fieldTypeValue": ".google.protobuf.EnumDescriptorProto",
         "fieldRequired": false,
         "fieldIndex": 4,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "extension_range",
@@ -193,7 +211,8 @@
         "fieldTypeValue": ".google.protobuf.DescriptorProto.ExtensionRange",
         "fieldRequired": false,
         "fieldIndex": 5,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "oneof_decl",
@@ -202,7 +221,8 @@
         "fieldTypeValue": ".google.protobuf.OneofDescriptorProto",
         "fieldRequired": false,
         "fieldIndex": 8,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "options",
@@ -211,7 +231,8 @@
         "fieldTypeValue": ".google.protobuf.MessageOptions",
         "fieldRequired": false,
         "fieldIndex": 7,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "reserved_range",
@@ -220,7 +241,8 @@
         "fieldTypeValue": ".google.protobuf.DescriptorProto.ReservedRange",
         "fieldRequired": false,
         "fieldIndex": 9,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "reserved_name",
@@ -229,7 +251,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 10,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       }
     ]
   },
@@ -247,7 +270,8 @@
         "fieldTypeValue": ".google.protobuf.UninterpretedOption",
         "fieldRequired": false,
         "fieldIndex": 999,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       }
     ]
   },
@@ -265,7 +289,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 1,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "number",
@@ -274,7 +299,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 3,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "label",
@@ -283,7 +309,8 @@
         "fieldTypeValue": ".google.protobuf.FieldDescriptorProto.Label",
         "fieldRequired": false,
         "fieldIndex": 4,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "type",
@@ -292,7 +319,8 @@
         "fieldTypeValue": ".google.protobuf.FieldDescriptorProto.Type",
         "fieldRequired": false,
         "fieldIndex": 5,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "type_name",
@@ -301,7 +329,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 6,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "extendee",
@@ -310,7 +339,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 2,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "default_value",
@@ -319,7 +349,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 7,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "oneof_index",
@@ -328,7 +359,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 9,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "json_name",
@@ -337,7 +369,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 10,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "options",
@@ -346,7 +379,18 @@
         "fieldTypeValue": ".google.protobuf.FieldOptions",
         "fieldRequired": false,
         "fieldIndex": 8,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
+      },
+      {
+        "fieldName": "proto3_optional",
+        "fieldDescription": "",
+        "fieldType": "TYPE_BOOL",
+        "fieldTypeValue": "",
+        "fieldRequired": false,
+        "fieldIndex": 17,
+        "isBatchField": false,
+        "isOptionalField": false
       }
     ]
   },
@@ -464,7 +508,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 1,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "options",
@@ -473,7 +518,8 @@
         "fieldTypeValue": ".google.protobuf.OneofOptions",
         "fieldRequired": false,
         "fieldIndex": 2,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       }
     ]
   },
@@ -491,7 +537,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 1,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "value",
@@ -500,7 +547,8 @@
         "fieldTypeValue": ".google.protobuf.EnumValueDescriptorProto",
         "fieldRequired": false,
         "fieldIndex": 2,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "options",
@@ -509,7 +557,8 @@
         "fieldTypeValue": ".google.protobuf.EnumOptions",
         "fieldRequired": false,
         "fieldIndex": 3,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "reserved_range",
@@ -518,7 +567,8 @@
         "fieldTypeValue": ".google.protobuf.EnumDescriptorProto.EnumReservedRange",
         "fieldRequired": false,
         "fieldIndex": 4,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "reserved_name",
@@ -527,7 +577,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 5,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       }
     ]
   },
@@ -545,7 +596,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 1,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "number",
@@ -554,7 +606,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 2,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "options",
@@ -563,7 +616,8 @@
         "fieldTypeValue": ".google.protobuf.EnumValueOptions",
         "fieldRequired": false,
         "fieldIndex": 3,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       }
     ]
   },
@@ -581,7 +635,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 1,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "method",
@@ -590,7 +645,8 @@
         "fieldTypeValue": ".google.protobuf.MethodDescriptorProto",
         "fieldRequired": false,
         "fieldIndex": 2,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "options",
@@ -599,7 +655,8 @@
         "fieldTypeValue": ".google.protobuf.ServiceOptions",
         "fieldRequired": false,
         "fieldIndex": 3,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       }
     ]
   },
@@ -617,7 +674,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 1,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "input_type",
@@ -626,7 +684,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 2,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "output_type",
@@ -635,7 +694,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 3,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "options",
@@ -644,7 +704,8 @@
         "fieldTypeValue": ".google.protobuf.MethodOptions",
         "fieldRequired": false,
         "fieldIndex": 4,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "client_streaming",
@@ -653,7 +714,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 5,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "server_streaming",
@@ -662,7 +724,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 6,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       }
     ]
   },
@@ -680,7 +743,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 1,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "java_outer_classname",
@@ -689,7 +753,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 8,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "java_multiple_files",
@@ -698,7 +763,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 10,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "java_generate_equals_and_hash",
@@ -707,7 +773,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 20,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "java_string_check_utf8",
@@ -716,7 +783,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 27,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "optimize_for",
@@ -725,7 +793,8 @@
         "fieldTypeValue": ".google.protobuf.FileOptions.OptimizeMode",
         "fieldRequired": false,
         "fieldIndex": 9,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "go_package",
@@ -734,7 +803,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 11,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "cc_generic_services",
@@ -743,7 +813,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 16,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "java_generic_services",
@@ -752,7 +823,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 17,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "py_generic_services",
@@ -761,7 +833,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 18,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "php_generic_services",
@@ -770,7 +843,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 42,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "deprecated",
@@ -779,7 +853,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 23,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "cc_enable_arenas",
@@ -788,7 +863,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 31,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "objc_class_prefix",
@@ -797,7 +873,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 36,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "csharp_namespace",
@@ -806,7 +883,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 37,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "swift_prefix",
@@ -815,7 +893,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 39,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "php_class_prefix",
@@ -824,7 +903,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 40,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "php_namespace",
@@ -833,7 +913,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 41,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "php_metadata_namespace",
@@ -842,7 +923,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 44,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "ruby_package",
@@ -851,7 +933,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 45,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "uninterpreted_option",
@@ -860,7 +943,8 @@
         "fieldTypeValue": ".google.protobuf.UninterpretedOption",
         "fieldRequired": false,
         "fieldIndex": 999,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       }
     ]
   },
@@ -898,7 +982,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 1,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "no_standard_descriptor_accessor",
@@ -907,7 +992,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 2,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "deprecated",
@@ -916,7 +1002,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 3,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "map_entry",
@@ -925,7 +1012,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 7,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "uninterpreted_option",
@@ -934,7 +1022,8 @@
         "fieldTypeValue": ".google.protobuf.UninterpretedOption",
         "fieldRequired": false,
         "fieldIndex": 999,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       }
     ]
   },
@@ -952,7 +1041,8 @@
         "fieldTypeValue": ".google.protobuf.FieldOptions.CType",
         "fieldRequired": false,
         "fieldIndex": 1,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "packed",
@@ -961,7 +1051,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 2,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "jstype",
@@ -970,7 +1061,8 @@
         "fieldTypeValue": ".google.protobuf.FieldOptions.JSType",
         "fieldRequired": false,
         "fieldIndex": 6,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "lazy",
@@ -979,7 +1071,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 5,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "deprecated",
@@ -988,7 +1081,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 3,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "weak",
@@ -997,7 +1091,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 10,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "uninterpreted_option",
@@ -1006,7 +1101,8 @@
         "fieldTypeValue": ".google.protobuf.UninterpretedOption",
         "fieldRequired": false,
         "fieldIndex": 999,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       }
     ]
   },
@@ -1064,7 +1160,8 @@
         "fieldTypeValue": ".google.protobuf.UninterpretedOption",
         "fieldRequired": false,
         "fieldIndex": 999,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       }
     ]
   },
@@ -1082,7 +1179,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 2,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "deprecated",
@@ -1091,7 +1189,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 3,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "uninterpreted_option",
@@ -1100,7 +1199,8 @@
         "fieldTypeValue": ".google.protobuf.UninterpretedOption",
         "fieldRequired": false,
         "fieldIndex": 999,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       }
     ]
   },
@@ -1118,7 +1218,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 1,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "uninterpreted_option",
@@ -1127,7 +1228,8 @@
         "fieldTypeValue": ".google.protobuf.UninterpretedOption",
         "fieldRequired": false,
         "fieldIndex": 999,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       }
     ]
   },
@@ -1145,7 +1247,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 33,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "uninterpreted_option",
@@ -1154,7 +1257,8 @@
         "fieldTypeValue": ".google.protobuf.UninterpretedOption",
         "fieldRequired": false,
         "fieldIndex": 999,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       }
     ]
   },
@@ -1172,7 +1276,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 33,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "idempotency_level",
@@ -1181,7 +1286,8 @@
         "fieldTypeValue": ".google.protobuf.MethodOptions.IdempotencyLevel",
         "fieldRequired": false,
         "fieldIndex": 34,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "uninterpreted_option",
@@ -1190,7 +1296,8 @@
         "fieldTypeValue": ".google.protobuf.UninterpretedOption",
         "fieldRequired": false,
         "fieldIndex": 999,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       }
     ]
   },
@@ -1228,7 +1335,8 @@
         "fieldTypeValue": ".google.protobuf.UninterpretedOption.NamePart",
         "fieldRequired": false,
         "fieldIndex": 2,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "identifier_value",
@@ -1237,7 +1345,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 3,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "positive_int_value",
@@ -1246,7 +1355,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 4,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "negative_int_value",
@@ -1255,7 +1365,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 5,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "double_value",
@@ -1264,7 +1375,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 6,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "string_value",
@@ -1273,7 +1385,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 7,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "aggregate_value",
@@ -1282,7 +1395,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 8,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       }
     ]
   },
@@ -1300,7 +1414,8 @@
         "fieldTypeValue": ".google.protobuf.SourceCodeInfo.Location",
         "fieldRequired": false,
         "fieldIndex": 1,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       }
     ]
   },
@@ -1318,7 +1433,8 @@
         "fieldTypeValue": ".google.protobuf.GeneratedCodeInfo.Annotation",
         "fieldRequired": false,
         "fieldIndex": 1,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       }
     ]
   },
@@ -1336,7 +1452,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 1,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "number",
@@ -1345,7 +1462,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 2,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "country",
@@ -1354,7 +1472,8 @@
         "fieldTypeValue": "",
         "fieldRequired": false,
         "fieldIndex": 3,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       }
     ]
   },
@@ -1372,16 +1491,18 @@
         "fieldTypeValue": "",
         "fieldRequired": true,
         "fieldIndex": 1,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": true
       },
       {
         "fieldName": "email",
-        "fieldDescription": "",
+        "fieldDescription": "Email address of the actor",
         "fieldType": "TYPE_STRING",
         "fieldTypeValue": "",
-        "fieldRequired": false,
+        "fieldRequired": true,
         "fieldIndex": 2,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": true
       },
       {
         "fieldName": "address",
@@ -1390,7 +1511,8 @@
         "fieldTypeValue": ".lvi.Address",
         "fieldRequired": false,
         "fieldIndex": 3,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       }
     ]
   },
@@ -1408,16 +1530,18 @@
         "fieldTypeValue": "",
         "fieldRequired": true,
         "fieldIndex": 1,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": true
       },
       {
         "fieldName": "name",
         "fieldDescription": "",
         "fieldType": "TYPE_STRING",
         "fieldTypeValue": "",
-        "fieldRequired": false,
+        "fieldRequired": true,
         "fieldIndex": 2,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       }
     ]
   },
@@ -1435,14 +1559,15 @@
         "fieldTypeValue": ".lvi.Actor",
         "fieldRequired": true,
         "fieldIndex": 2,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       }
     ]
   },
-  ".lvi.EventBatch": {
+  ".lvi.Event": {
     "package": "lvi",
     "filename": "protos/event.proto",
-    "name": "EventBatch",
+    "name": "Event",
     "root": true,
     "type": "Message",
     "fields": [
@@ -1453,7 +1578,8 @@
         "fieldTypeValue": ".lvi.Client",
         "fieldRequired": true,
         "fieldIndex": 1,
-        "isBatchField": false
+        "isBatchField": false,
+        "isOptionalField": false
       },
       {
         "fieldName": "events",
@@ -1462,7 +1588,8 @@
         "fieldTypeValue": ".lvi.BatchEvent",
         "fieldRequired": false,
         "fieldIndex": 2,
-        "isBatchField": true
+        "isBatchField": false,
+        "isOptionalField": false
       }
     ]
   }

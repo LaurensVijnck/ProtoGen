@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 GCP_PROJECT=geometric-ocean-284614
 GCP_LOCATION=EU
 
@@ -15,4 +17,4 @@ bq mk \
   --table \
   --description "Proto generated table" \
 ${GCP_PROJECT}:${DATASET_ID}.${TABLE_ID} \
-output/bigquery/EventBatch.json
+output/bigquery/Event.json

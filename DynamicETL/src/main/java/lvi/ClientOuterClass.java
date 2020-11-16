@@ -19,18 +19,23 @@ public final class ClientOuterClass {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>int64 tenantId = 1 [(.lvi.required) = true, (.lvi.description) = "Identifier in the client catalog"];</code>
+     * <code>int64 tenantId = 1 [(.lvi.required) = false, (.lvi.description) = "Identifier in the client catalog"];</code>
+     * @return Whether the tenantId field is set.
+     */
+    boolean hasTenantId();
+    /**
+     * <code>int64 tenantId = 1 [(.lvi.required) = false, (.lvi.description) = "Identifier in the client catalog"];</code>
      * @return The tenantId.
      */
     long getTenantId();
 
     /**
-     * <code>string name = 2;</code>
+     * <code>string name = 2 [(.lvi.required) = true];</code>
      * @return The name.
      */
     String getName();
     /**
-     * <code>string name = 2;</code>
+     * <code>string name = 2 [(.lvi.required) = true];</code>
      * @return The bytes for name.
      */
     com.google.protobuf.ByteString
@@ -39,7 +44,7 @@ public final class ClientOuterClass {
   /**
    * Protobuf type {@code lvi.Client}
    */
-  public  static final class Client extends
+  public static final class Client extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:lvi.Client)
       ClientOrBuilder {
@@ -72,6 +77,7 @@ public final class ClientOuterClass {
       if (extensionRegistry == null) {
         throw new NullPointerException();
       }
+      int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
@@ -83,7 +89,7 @@ public final class ClientOuterClass {
               done = true;
               break;
             case 8: {
-
+              bitField0_ |= 0x00000001;
               tenantId_ = input.readInt64();
               break;
             }
@@ -125,12 +131,22 @@ public final class ClientOuterClass {
               Client.class, Builder.class);
     }
 
+    private int bitField0_;
     public static final int TENANTID_FIELD_NUMBER = 1;
     private long tenantId_;
     /**
-     * <code>int64 tenantId = 1 [(.lvi.required) = true, (.lvi.description) = "Identifier in the client catalog"];</code>
+     * <code>int64 tenantId = 1 [(.lvi.required) = false, (.lvi.description) = "Identifier in the client catalog"];</code>
+     * @return Whether the tenantId field is set.
+     */
+    @Override
+    public boolean hasTenantId() {
+      return ((bitField0_ & 0x00000001) != 0);
+    }
+    /**
+     * <code>int64 tenantId = 1 [(.lvi.required) = false, (.lvi.description) = "Identifier in the client catalog"];</code>
      * @return The tenantId.
      */
+    @Override
     public long getTenantId() {
       return tenantId_;
     }
@@ -138,9 +154,10 @@ public final class ClientOuterClass {
     public static final int NAME_FIELD_NUMBER = 2;
     private volatile Object name_;
     /**
-     * <code>string name = 2;</code>
+     * <code>string name = 2 [(.lvi.required) = true];</code>
      * @return The name.
      */
+    @Override
     public String getName() {
       Object ref = name_;
       if (ref instanceof String) {
@@ -154,9 +171,10 @@ public final class ClientOuterClass {
       }
     }
     /**
-     * <code>string name = 2;</code>
+     * <code>string name = 2 [(.lvi.required) = true];</code>
      * @return The bytes for name.
      */
+    @Override
     public com.google.protobuf.ByteString
         getNameBytes() {
       Object ref = name_;
@@ -185,7 +203,7 @@ public final class ClientOuterClass {
     @Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (tenantId_ != 0L) {
+      if (((bitField0_ & 0x00000001) != 0)) {
         output.writeInt64(1, tenantId_);
       }
       if (!getNameBytes().isEmpty()) {
@@ -200,7 +218,7 @@ public final class ClientOuterClass {
       if (size != -1) return size;
 
       size = 0;
-      if (tenantId_ != 0L) {
+      if (((bitField0_ & 0x00000001) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt64Size(1, tenantId_);
       }
@@ -222,8 +240,11 @@ public final class ClientOuterClass {
       }
       Client other = (Client) obj;
 
-      if (getTenantId()
-          != other.getTenantId()) return false;
+      if (hasTenantId() != other.hasTenantId()) return false;
+      if (hasTenantId()) {
+        if (getTenantId()
+            != other.getTenantId()) return false;
+      }
       if (!getName()
           .equals(other.getName())) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
@@ -237,9 +258,11 @@ public final class ClientOuterClass {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + TENANTID_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-          getTenantId());
+      if (hasTenantId()) {
+        hash = (37 * hash) + TENANTID_FIELD_NUMBER;
+        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+            getTenantId());
+      }
       hash = (37 * hash) + NAME_FIELD_NUMBER;
       hash = (53 * hash) + getName().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
@@ -376,7 +399,7 @@ public final class ClientOuterClass {
       public Builder clear() {
         super.clear();
         tenantId_ = 0L;
-
+        bitField0_ = (bitField0_ & ~0x00000001);
         name_ = "";
 
         return this;
@@ -405,8 +428,14 @@ public final class ClientOuterClass {
       @Override
       public Client buildPartial() {
         Client result = new Client(this);
-        result.tenantId_ = tenantId_;
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.tenantId_ = tenantId_;
+          to_bitField0_ |= 0x00000001;
+        }
         result.name_ = name_;
+        result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
@@ -455,7 +484,7 @@ public final class ClientOuterClass {
 
       public Builder mergeFrom(Client other) {
         if (other == Client.getDefaultInstance()) return this;
-        if (other.getTenantId() != 0L) {
+        if (other.hasTenantId()) {
           setTenantId(other.getTenantId());
         }
         if (!other.getName().isEmpty()) {
@@ -490,32 +519,42 @@ public final class ClientOuterClass {
         }
         return this;
       }
+      private int bitField0_;
 
       private long tenantId_ ;
       /**
-       * <code>int64 tenantId = 1 [(.lvi.required) = true, (.lvi.description) = "Identifier in the client catalog"];</code>
+       * <code>int64 tenantId = 1 [(.lvi.required) = false, (.lvi.description) = "Identifier in the client catalog"];</code>
+       * @return Whether the tenantId field is set.
+       */
+      @Override
+      public boolean hasTenantId() {
+        return ((bitField0_ & 0x00000001) != 0);
+      }
+      /**
+       * <code>int64 tenantId = 1 [(.lvi.required) = false, (.lvi.description) = "Identifier in the client catalog"];</code>
        * @return The tenantId.
        */
+      @Override
       public long getTenantId() {
         return tenantId_;
       }
       /**
-       * <code>int64 tenantId = 1 [(.lvi.required) = true, (.lvi.description) = "Identifier in the client catalog"];</code>
+       * <code>int64 tenantId = 1 [(.lvi.required) = false, (.lvi.description) = "Identifier in the client catalog"];</code>
        * @param value The tenantId to set.
        * @return This builder for chaining.
        */
       public Builder setTenantId(long value) {
-        
+        bitField0_ |= 0x00000001;
         tenantId_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>int64 tenantId = 1 [(.lvi.required) = true, (.lvi.description) = "Identifier in the client catalog"];</code>
+       * <code>int64 tenantId = 1 [(.lvi.required) = false, (.lvi.description) = "Identifier in the client catalog"];</code>
        * @return This builder for chaining.
        */
       public Builder clearTenantId() {
-        
+        bitField0_ = (bitField0_ & ~0x00000001);
         tenantId_ = 0L;
         onChanged();
         return this;
@@ -523,7 +562,7 @@ public final class ClientOuterClass {
 
       private Object name_ = "";
       /**
-       * <code>string name = 2;</code>
+       * <code>string name = 2 [(.lvi.required) = true];</code>
        * @return The name.
        */
       public String getName() {
@@ -539,7 +578,7 @@ public final class ClientOuterClass {
         }
       }
       /**
-       * <code>string name = 2;</code>
+       * <code>string name = 2 [(.lvi.required) = true];</code>
        * @return The bytes for name.
        */
       public com.google.protobuf.ByteString
@@ -556,7 +595,7 @@ public final class ClientOuterClass {
         }
       }
       /**
-       * <code>string name = 2;</code>
+       * <code>string name = 2 [(.lvi.required) = true];</code>
        * @param value The name to set.
        * @return This builder for chaining.
        */
@@ -571,7 +610,7 @@ public final class ClientOuterClass {
         return this;
       }
       /**
-       * <code>string name = 2;</code>
+       * <code>string name = 2 [(.lvi.required) = true];</code>
        * @return This builder for chaining.
        */
       public Builder clearName() {
@@ -581,7 +620,7 @@ public final class ClientOuterClass {
         return this;
       }
       /**
-       * <code>string name = 2;</code>
+       * <code>string name = 2 [(.lvi.required) = true];</code>
        * @param value The bytes for name to set.
        * @return This builder for chaining.
        */
@@ -664,9 +703,10 @@ public final class ClientOuterClass {
   static {
     String[] descriptorData = {
       "\n\023protos/client.proto\022\003lvi\032\035protos/bigqu" +
-      "ery_options.proto\"P\n\006Client\0228\n\010tenantId\030" +
-      "\001 \001(\003B&\220?\001\242? Identifier in the client ca" +
-      "talog\022\014\n\004name\030\002 \001(\tb\006proto3"
+      "ery_options.proto\"g\n\006Client\022=\n\010tenantId\030" +
+      "\001 \001(\003B&\220?\000\242? Identifier in the client ca" +
+      "talogH\000\210\001\001\022\021\n\004name\030\002 \001(\tB\003\220?\001B\013\n\t_tenant" +
+      "Idb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -678,7 +718,7 @@ public final class ClientOuterClass {
     internal_static_lvi_Client_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_lvi_Client_descriptor,
-        new String[] { "TenantId", "Name", });
+        new String[] { "TenantId", "Name", "TenantId", });
     com.google.protobuf.ExtensionRegistry registry =
         com.google.protobuf.ExtensionRegistry.newInstance();
     registry.add(BigqueryOptions.description);

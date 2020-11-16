@@ -1,7 +1,7 @@
 import time
 
 from google.cloud import pubsub_v1
-from output.python.protos import event_pb2, actor_pb2, client_pb2
+from protos import event_pb2, client_pb2, actor_pb2
 from google.protobuf.json_format import MessageToJson
 
 project_id = "geometric-ocean-284614"
@@ -23,12 +23,13 @@ def get_callback(f, data):
 
     return callback
 
+tags = ["hi", "there"]
 
 # Construct event
-event = event_pb2.EventBatch()
+event = event_pb2.Event()
 
 client = client_pb2.Client()
-client.tenantId = 1337
+# client.tenantId = 1337
 client.name = "LVI"
 event.client.MergeFrom(client)
 
@@ -47,6 +48,13 @@ for i in range(6):
     actor.address.MergeFrom(address)
     batch_event.actor.MergeFrom(actor)
     start = start + 1
+
+    for tag in tags:
+        etag = event_pb2.Tag()
+        etag.tag_code = tag
+        etag.tag_namespace = "default"
+        etag.tag_name = tag
+        batch_event.tags.append(etag)
 
 
 print(MessageToJson(event))

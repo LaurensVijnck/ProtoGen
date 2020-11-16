@@ -11,8 +11,7 @@ message Address {
 }
 
 message Actor {
-  int64 userId = 1 [(required) = true, (description) = "Identifier in the master table"];
-  string email = 2;
+  optional int64 userId = 1 [(required) = false, (description) = "Identifier in the master table"];
+  optional string email = 2 [(description) = "Email address of the actor"];
   Address address = 3;
 }
-

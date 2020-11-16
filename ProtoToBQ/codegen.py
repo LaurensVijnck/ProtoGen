@@ -259,7 +259,6 @@ class CodeGenGetBatchNode(CodeGenNode):
         self._neighbour = neighbour
 
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int, type_map: dict):
-        # Batch attribute
         root = Variable(Variable.to_variable(self._field.field_name), self._field.resolve_type(type_map))
         row = Variable("row", "TableRow")
 
@@ -271,7 +270,8 @@ class CodeGenGetBatchNode(CodeGenNode):
 
         variable = self._neighbour.get_variable()
         if variable is not None:
-            # file.content += self.indent(f"{row.get()}.setF({variable.get()}.getF());", depth + 1)  # Thanks, useless BigQuery API
+            # Merge contents of the batch row with the contents
+            # of the shared row, if it exists.
             file.content += self.indent(f"for (String key: {variable.get()}.keySet()) {{", depth + 1)
             file.content += self.indent(f"{row.get()}.set(key, {variable.get()}.get(key));", depth + 2)
             file.content += self.indent("}", depth + 1)

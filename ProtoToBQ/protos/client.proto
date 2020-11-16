@@ -5,6 +5,6 @@ package lvi;
 import "protos/bigquery_options.proto";
 
 message Client {
-    optional int64 tenantId = 1 [(required) = false, (description) = "Identifier in the client catalog"];
-    string name = 2 [(required) = true];
+    optional int64 tenantId = 1 [(required) = true, (description) = "Identifier in the client catalog"];
+    string name = 2 [(required) = false];
 }

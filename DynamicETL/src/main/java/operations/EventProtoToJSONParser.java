@@ -1,6 +1,7 @@
 package operations;
 
 
+import com.google.api.services.bigquery.model.TableCell;
 import com.google.api.services.bigquery.model.TableRow;
 import lvi.EventOuterClass;
 import lvi.EventParser;
@@ -40,7 +41,8 @@ public class EventProtoToJSONParser<OriginalT> extends PTransform<PCollection<Fa
         public void processElement(@Element FailSafeElement<OriginalT, byte[]> input, ProcessContext c) {
 
             try {
-                for(TableRow row: EventParser.convertToTableRow(EventOuterClass.Event.parseFrom(input.getPayload()))) {
+                EventOuterClass.Event ev = EventOuterClass.Event.parseFrom(input.getPayload());
+                for(TableRow row: EventParser.convertToTableRow(ev)) {
                     c.output(new FailSafeElement<>(input.getOriginalPayload(), row));
                 }
 
@@ -56,9 +58,12 @@ public class EventProtoToJSONParser<OriginalT> extends PTransform<PCollection<Fa
         tr.set("F", "F");
 
         TableRow tr2 = new TableRow();
-        tr.set("E", "E");
+        tr2.set("E", "E");
 
-        System.out.println(tr.setF(tr2.getF()));
-        System.out.println(tr.toString());
+        for(String key: tr.keySet()) {
+            tr2.set(key, tr.get(key));
+        }
+
+        System.out.println(tr2.toString());
     }
 }

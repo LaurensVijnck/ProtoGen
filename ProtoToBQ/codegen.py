@@ -271,7 +271,10 @@ class CodeGenGetBatchNode(CodeGenNode):
 
         variable = self._neighbour.get_variable()
         if variable is not None:
-            file.content += self.indent(f"{row.get()}.setF({variable.get()}.getF());", depth + 1)  # TODO Move to variable class?
+            # file.content += self.indent(f"{row.get()}.setF({variable.get()}.getF());", depth + 1)  # Thanks, useless BigQuery API
+            file.content += self.indent(f"for (String key: {variable.get()}.keySet()) {{", depth + 1)
+            file.content += self.indent(f"{row.get()}.set(key, {variable.get()}.get(key));", depth + 2)
+            file.content += self.indent("}", depth + 1)
 
         file.content += self.indent(element.add(row), depth + 1)
         file.content += self.indent("}", depth)

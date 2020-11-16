@@ -17,6 +17,8 @@ public final class EventParser {
 			client.set("name", event.getClient().getName());
 			if(event.getClient().hasTenantId()) {
 				client.set("tenantId", event.getClient().getTenantId());
+			} else {
+				throw new Exception();
 			}
 		}
 		common.set("client", client);
@@ -52,7 +54,9 @@ public final class EventParser {
 				}
 			}
 			row.set("actor", actor);
-			row.setF(common.getF());
+			for (String key: common.keySet()) {
+				row.set(key, common.get(key));
+			}
 			rows.add(row);
 		}
 		return rows;

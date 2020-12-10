@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package lvi;
+
+import "protos/bigquery_options.proto";
+
+message Address {
+  string street = 1;
+  string number = 2;
+  string country = 3;
+}
+
+message Actor {
+  int64 userId = 1 [(required) = false, (description) = "Identifier in the master table"];
+  optional string email = 2 [(description) = "Email address of the actor"];
+  Address address = 3;
+}

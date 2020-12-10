@@ -29,7 +29,7 @@ tags = ["hi", "there"]
 event = event_pb2.Event()
 
 client = client_pb2.Client()
-# client.tenantId = 1337
+#client.tenantId = 1337
 client.name = "LVI"
 event.client.MergeFrom(client)
 

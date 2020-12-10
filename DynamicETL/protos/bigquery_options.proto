@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package lvi;
+
+import "google/protobuf/descriptor.proto";
+
+extend google.protobuf.MessageOptions {
+  bool table_root = 51234; // Which number to pick anyway?
+}
+
+extend google.protobuf.FieldOptions {
+  bool required = 1010; // Which number to pick anyway?
+  string description = 1012;
+  bool batch_attribute = 1013;
+}

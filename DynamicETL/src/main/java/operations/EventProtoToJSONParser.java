@@ -1,10 +1,7 @@
 package operations;
 
 
-import com.google.api.services.bigquery.model.TableCell;
 import com.google.api.services.bigquery.model.TableRow;
-import lvi.EventOuterClass;
-import lvi.EventParser;
 import models.FailSafeElement;
 import org.apache.beam.sdk.transforms.DoFn;
 import org.apache.beam.sdk.transforms.PTransform;
@@ -41,10 +38,10 @@ public class EventProtoToJSONParser<OriginalT> extends PTransform<PCollection<Fa
         public void processElement(@Element FailSafeElement<OriginalT, byte[]> input, ProcessContext c) {
 
             try {
-                EventOuterClass.Event ev = EventOuterClass.Event.parseFrom(input.getPayload());
+                /*EventOuterClass.Event ev = EventOuterClass.Event.parseFrom(input.getPayload());
                 for(TableRow row: EventParser.convertToTableRow(ev)) {
                     c.output(new FailSafeElement<>(input.getOriginalPayload(), row));
-                }
+                }*/
 
             } catch (Exception e) {
                 LOG.info(e.getMessage());

@@ -8,6 +8,14 @@
     <artifactId>DynamicETL</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+
+    <properties>
+        <beam.version>2.24.0</beam.version>
+        <com.google.cloud.version>1.93.9</com.google.cloud.version>
+        <slf4j.version>1.7.25</slf4j.version>
+        <proto.version>3.11.4</proto.version>
+    </properties>
+
     <build>
         <plugins>
             <plugin>
@@ -18,14 +26,25 @@
                     <target>11</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <artifactId>exec-maven-plugin</artifactId>
+                <groupId>org.codehaus.mojo</groupId>
+                <executions>
+                    <execution>
+                        <id>Stuff I want done</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>/bin/bash</executable>
+                            <executable>scripts/001_run.sh</executable>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
-
-    <properties>
-        <beam.version>2.24.0</beam.version>
-        <com.google.cloud.version>1.93.9</com.google.cloud.version>
-        <slf4j.version>1.7.25</slf4j.version>
-    </properties>
 
     <profiles>
         <profile>
@@ -101,6 +120,13 @@
             <artifactId>lombok</artifactId>
             <version>1.18.16</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.xolstice.maven.plugins/protobuf-maven-plugin -->
+        <dependency>
+            <groupId>org.xolstice.maven.plugins</groupId>
+            <artifactId>protobuf-maven-plugin</artifactId>
+            <version>0.6.1</version>
         </dependency>
 
     </dependencies>

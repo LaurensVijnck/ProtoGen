@@ -129,7 +129,7 @@ class CodeGenInterfaceNode(CodeGenImp):
             file.content += self.indent(f'return new {parser}();', depth + 4)
 
         file.content += self.indent(f'default:', depth + 3)
-        file.content += self.indent(f'throw new Exception("Parser for type" + {proto_type.get()} + " not registered.");',depth + 4)
+        file.content += self.indent(f'throw new Exception("Parser for type \'" + {proto_type.get()} + "\' not registered.");',depth + 4)
         file.content += self.indent("}", depth + 2)
         file.content += self.indent("}", depth + 1)
 

@@ -119,16 +119,17 @@ class CodeGenInterfaceNode(CodeGenImp):
         file.content += self.indent(f"public abstract LinkedList<TableRow> {Variable.to_variable(self.function_name)}({obj.type} {obj.get()}) throws Exception;", depth + 1)
 
         # Generate repository function
+        # FUTURE: By far not the most elegant approach.
         file.content += self.indent("", depth)
         proto_type = Variable(Variable.to_variable("proto_type"), "String")
-        file.content += self.indent(f"public static {Variable.to_variable(self.function_name)} getParserForType({proto_type.type} {proto_type.get()}) throws Exception {{", depth + 1)
+        file.content += self.indent(f"public static {Variable.to_upper_camelcase(self.class_name)} getParserForType({proto_type.type} {proto_type.get()}) throws Exception {{", depth + 1)
         file.content += self.indent(f"switch({proto_type.get()}) {{", depth + 2)
         for type, parser in self.parsers.items():
             file.content += self.indent(f'case "{type}":', depth + 3)
             file.content += self.indent(f'return new {parser}();', depth + 4)
 
         file.content += self.indent(f'default:', depth + 3)
-        file.content += self.indent(f'throw new Exception("Parser for type {proto_type.get()} not registered.");',depth + 4)
+        file.content += self.indent(f'throw new Exception("Parser for type" + {proto_type.get()} + " not registered.");',depth + 4)
         file.content += self.indent("}", depth + 2)
         file.content += self.indent("}", depth + 1)
 
@@ -159,7 +160,7 @@ class CodeGenClassNode(CodeGenImp):
         file.content += self.indent(f"import java.util.LinkedList;", depth)
         file.content += self.indent("", depth)
 
-        file.content += self.indent(f"public final class {Variable.to_upper_camelcase(self.class_name)} extends {Variable.to_upper_camelcase(self.base_class)} {{", depth)
+        file.content += self.indent(f"public final class {Variable.to_upper_camelcase(self.class_name)} extends {self.base_class} {{", depth)
 
         for child in self._children:
             child.gen_code(file, element, root_var, depth + 1, type_map)
@@ -184,7 +185,7 @@ class CodeGenFunctionNode(CodeGenImp):
 
         # Future: extend capabilities of getter function to accept parameters
         file.content += self.indent(f"// Parse bytes according to Protobuf def", depth + 1)
-        file.content += self.indent(f"{self.field_type.get_class_name()} {variable.get()} = {self.field_type.get_class_name()}.parseFrom({obj.get()})", depth + 1)
+        file.content += self.indent(f"{self.field_type.get_class_name()} {variable.get()} = {self.field_type.get_class_name()}.parseFrom({obj.get()});", depth + 1)
 
         file.content += self.indent("", depth + 1)
         file.content += self.indent(f"// Initialize result variable", depth + 1)

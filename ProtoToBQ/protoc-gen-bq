@@ -293,7 +293,7 @@ def codegen_rec(field_type: MessageFieldType, root: CodeGenImp, table_root: bool
     return root
 
 
-def create_codegen_tree(class_name: str, root: MessageFieldType, function_name: str):
+def create_codegen_tree(class_name: str, interface_name: str, root: MessageFieldType, function_name: str):
     """
     Create the code generation tee for the given MessageField.
 
@@ -302,9 +302,9 @@ def create_codegen_tree(class_name: str, root: MessageFieldType, function_name: 
     :param interfaces:
     :return:
     """
-    class_node = CodeGenClassNode(class_name, root)
+    class_node = CodeGenClassNode(class_name, interface_name, root)
 
-    function_node = CodeGenFunctionNode("convertToTableRow", root)
+    function_node = CodeGenFunctionNode(function_name, root)
     class_node.add_child(function_node)
 
     codegen_rec(root, function_node, table_root=True)
@@ -320,16 +320,11 @@ def generate_code(request: plugin.CodeGeneratorRequest, response: plugin.CodeGen
     """
 
     client = bigquery.Client() # JSON Serializing the schema requires the BigQuery client :(
-
     repo, root_elements = _generate_repository(request)
 
-    # Generate the ProtoToBQParser
-    file = response.file.add()
     interface_name = "BQParserImp"
-    file.name = interface_name + ".java"
     function_name = "convertToTableRow"
-    interface_node = CodeGenInterfaceNode("lvi", "BQParserImp", function_name)
-    interface_node.gen_code(file, None, None, 0, _PROTO_TO_JAVA_TYPE_MAP)
+    parsers = {}
 
     for root_element in root_elements:
         schema_fields = []
@@ -346,7 +341,16 @@ def generate_code(request: plugin.CodeGeneratorRequest, response: plugin.CodeGen
         file = response.file.add()
         class_name = root_element.name + "BQParser"
         file.name = class_name + ".java"
-        create_codegen_tree(class_name, root_element, function_name).gen_code(file, None, None, 0, _PROTO_TO_JAVA_TYPE_MAP)
+        create_codegen_tree(class_name, interface_name, root_element, function_name).gen_code(file, None, None, 0, _PROTO_TO_JAVA_TYPE_MAP)
+
+        # Add to parsers
+        parsers[root_element.get_fq_name()] = class_name
+
+    # Generate base class
+    file = response.file.add()
+    file.name = interface_name + ".java"
+    interface_node = CodeGenInterfaceNode("lvi", "BQParserImp", function_name, parsers)  # TODO Where to fetch the package from?
+    interface_node.gen_code(file, None, None, 0, _PROTO_TO_JAVA_TYPE_MAP)
 
     # Drop new repository
     f = response.file.add()

@@ -72,7 +72,7 @@ class CodeGenInterfaceNode(CodeGenImp):
         file.content += self.indent('public abstract TableSchema getBigQueryTableSchema();', depth + 1)
 
         # Generate repository function
-        # FUTURE: By far not the most elegant approach.
+        # FUTURE: By far not the most elegant approach, but I required a way to fetch parsers given their name.
         file.content += self.indent("", depth)
         proto_type = Variable(Variable.to_variable("proto_type"), "String")
         file.content += self.indent(f"public static {Variable.to_upper_camelcase(self.class_name)} getParserForType({proto_type.type} {proto_type.get()}) throws Exception {{", depth + 1)

@@ -32,6 +32,8 @@ public class WriteJSONToBigQuery<InputT> extends PTransform<PCollection<InputT>,
     private final String outputTable;
     private final String deadLetterTable;
 
+    // FUTURE: Equip parser with counters of each proto type.
+
     public WriteJSONToBigQuery(SimpleFunction<InputT, TableRow> bqFormatFn, String outputTable, String deadLetterTable) {
         this.bqFormatFn = bqFormatFn;
         this.outputTable = outputTable;

@@ -33,6 +33,15 @@ public class ProtoToBQParser<InputT> extends PTransform<PCollection<InputT>, PDo
 
         // Apply ParDo
         input
+                // The cool thing about this technique, is that the pipeline is able to process
+                // different sources simultaneously. If they, for example, originate from different
+                // topics, one could union the streams from these topics and alter the protoTypeExtractor
+                // of the ProtoBQParser. e.g.,
+                //
+                // 1. Consume stream A, map onto KV<PubSubMessage, String ("A")>
+                // 2. Consume stream B, map onto KV<PubSubMessage, String ("B")>
+                // 3. Union streams above
+                // 4. Pass function that extracts the value from the KVs constructed above.
                 .apply("MapToJSON", ParDo.of(new ProtoToBQ()))
                 .apply(BigQueryIO.<KV<KV<TableDestination, String>, TableRow>>write()
                         .to(new ProtoToBQDynamicDestinations())

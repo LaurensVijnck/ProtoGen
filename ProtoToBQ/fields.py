@@ -98,7 +98,6 @@ class Field:
     """
     Representation of a field.
     """
-
     def __init__(self, field_index: int, field_name: str, field_description: str, field_type: str, field_type_value: MessageFieldType, field_required: bool, is_batch_field: bool, is_optional_field: bool, is_repeated_field: bool):
         self.field_index = field_index
         self.field_name = field_name

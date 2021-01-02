@@ -33,6 +33,9 @@
                     <execution>
                         <id>Stuff I want done</id>
                         <phase>generate-sources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
                         <configuration>
                             <executable>/bin/bash</executable>
                             <executable>scripts/001_run.sh</executable>

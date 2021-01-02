@@ -5,7 +5,7 @@ package lvi;
 import "protos/bigquery_options.proto";
 
 message Client {
-    option (table_root) = true;
+    option (root_options).table_name = "client_table";
     optional int64 tenantId = 1 [(required) = true, (description) = "Identifier in the client catalog"];
     optional string name = 2 [(required) = false];
 }

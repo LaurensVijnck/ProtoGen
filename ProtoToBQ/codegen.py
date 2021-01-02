@@ -103,8 +103,9 @@ class CodeGenInterfaceNode(CodeGenImp):
 
         # BigQuery imports
         file.content += self.indent("", depth)
-        file.content += self.indent(f"import com.google.api.services.bigquery.model.TableRow;", depth)
         file.content += self.indent(f"import com.google.api.services.bigquery.model.TableCell;", depth)
+        file.content += self.indent(f"import com.google.api.services.bigquery.model.TableRow;", depth)
+        file.content += self.indent(f"import com.google.api.services.bigquery.model.TableSchema;", depth)
 
         # Java imports
         file.content += self.indent("", depth)
@@ -118,12 +119,21 @@ class CodeGenInterfaceNode(CodeGenImp):
         file.content += self.indent("", depth)
         file.content += self.indent(f"public abstract LinkedList<TableRow> {Variable.to_variable(self.function_name)}({obj.type} {obj.get()}) throws Exception;", depth + 1)
 
+        # Generate table name extractor function
+        file.content += self.indent("", depth)
+        file.content += self.indent('public abstract String getBigQueryTableName();', depth + 1)
+
+        # Schema extractor function
+        file.content += self.indent("", depth)
+        file.content += self.indent('public abstract TableSchema getBigQueryTableSchema();', depth + 1)
+
         # Generate repository function
         # FUTURE: By far not the most elegant approach.
         file.content += self.indent("", depth)
         proto_type = Variable(Variable.to_variable("proto_type"), "String")
         file.content += self.indent(f"public static {Variable.to_upper_camelcase(self.class_name)} getParserForType({proto_type.type} {proto_type.get()}) throws Exception {{", depth + 1)
         file.content += self.indent(f"switch({proto_type.get()}) {{", depth + 2)
+
         for type, parser in self.parsers.items():
             file.content += self.indent(f'case "{type}":', depth + 3)
             file.content += self.indent(f'return new {parser}();', depth + 4)
@@ -152,12 +162,15 @@ class CodeGenClassNode(CodeGenImp):
 
         # BigQuery imports
         file.content += self.indent("", depth)
-        file.content += self.indent(f"import com.google.api.services.bigquery.model.TableRow;", depth)
         file.content += self.indent(f"import com.google.api.services.bigquery.model.TableCell;", depth)
+        file.content += self.indent(f"import com.google.api.services.bigquery.model.TableRow;", depth)
+        file.content += self.indent(f"import com.google.api.services.bigquery.model.TableSchema;", depth)
+        file.content += self.indent(f"import com.google.api.services.bigquery.model.TableFieldSchema;", depth)
 
         # Java imports
         file.content += self.indent("", depth)
         file.content += self.indent(f"import java.util.LinkedList;", depth)
+        file.content += self.indent(f"import java.util.Arrays;", depth)
         file.content += self.indent("", depth)
 
         file.content += self.indent(f"public final class {Variable.to_upper_camelcase(self.class_name)} extends {self.base_class} {{", depth)
@@ -165,7 +178,59 @@ class CodeGenClassNode(CodeGenImp):
         for child in self._children:
             child.gen_code(file, element, root_var, depth + 1, type_map)
 
+        # Generate table name extractor function
+        file.content += self.indent(f"public String getBigQueryTableName() {{", depth + 1)
+        file.content += self.indent(f'return "{self.field_type.table_name}";', depth + 2)
+        file.content += self.indent("}", depth + 1)
+
         file.content += self.indent("}", depth)
+
+
+class CodeGenSchemaFunctionNode(CodeGenImp):
+    """
+    Code generation for schema extraction
+
+    FUTURE: Node currently does not adhere the code generation node approach. Might need conversion in the future.
+    """
+    def __init__(self, field_type: MessageFieldType, bq_type_map: dict):
+        super().__init__()
+        self.field_type = field_type
+        self.bq_type_map = bq_type_map
+
+    def gen_code(self, file, element: Variable, root_var: Variable, depth: int, type_map: dict):
+
+        file.content += self.indent(f"public TableSchema getBigQueryTableSchema() {{", depth)
+
+        # Generate return
+        file.content += self.indent(f'return new TableSchema().setFields(Arrays.asList(', depth + 1)
+        self._codegen_schema(file, self.field_type, depth + 2)
+        file.content += self.indent('));', depth + 1)
+
+        file.content += self.indent("}", depth)
+
+    def _codegen_schema_field(self, file, field: Field, depth: int):
+        if field.is_batch_field:
+            # Batch fields should be skipped, by immediately fetching the next level
+            return self._codegen_schema(file, field.field_type_value, depth)
+
+        file.content += self.indent(f'new TableFieldSchema()', depth)
+        file.content += self.indent(f'.setName("{field.field_name}")', depth + 1)
+        file.content += self.indent(f'.setType("{self.bq_type_map[field.field_type]}")', depth + 1)
+        file.content += self.indent(f'.setMode("{"REPEATED" if field.is_repeated_field else "REQUIRED" if field.field_required else "NULLABLE"}")', depth + 1)
+        file.content += self.indent(f'.setDescription("{field.field_description}")', depth + 1)
+
+        if field.field_type_value is not None:
+            file.content += self.indent(f'.setFields(Arrays.asList(', depth + 1)
+            self._codegen_schema(file, field.field_type_value, depth + 2)
+            file.content += self.indent(f'))', depth + 1)
+
+    def _codegen_schema(self, file, field_type: MessageFieldType, depth: int):
+
+        for idx, field in enumerate(field_type.fields):
+            self._codegen_schema_field(file, field, depth)
+
+            if idx < len(field_type.fields) - 1:
+                file.content += self.indent(f',', depth)
 
 
 class CodeGenFunctionNode(CodeGenImp):

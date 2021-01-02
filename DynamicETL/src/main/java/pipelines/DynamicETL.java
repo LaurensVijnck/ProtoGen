@@ -2,17 +2,15 @@ package pipelines;
 
 import com.google.api.services.bigquery.model.TableRow;
 import common.operations.GenericPrinter;
+import models.FailSafeElement;
 import operations.ProtoToBQParser;
 import operations.WriteJSONToBigQuery;
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.io.gcp.pubsub.PubsubIO;
 import org.apache.beam.sdk.io.gcp.pubsub.PubsubMessage;
-import org.apache.beam.sdk.io.gcp.pubsub.PubsubMessageWithAttributesCoder;
 import org.apache.beam.sdk.options.PipelineOptionsFactory;
-import org.apache.beam.sdk.transforms.MapElements;
 import org.apache.beam.sdk.transforms.ParDo;
 import org.apache.beam.sdk.transforms.SerializableFunction;
-import org.apache.beam.sdk.transforms.SimpleFunction;
 import org.apache.beam.sdk.values.PCollectionTuple;
 import org.apache.beam.sdk.values.TupleTag;
 import org.slf4j.Logger;
@@ -22,9 +20,6 @@ import pipelines.config.DynamicETLPipelineOptions;
 public class DynamicETL {
 
     private static final Logger LOG = LoggerFactory.getLogger(DynamicETL.class);
-
-    private static final TupleTag<PubsubMessage> PROTO_DLQ = new TupleTag<>() {};
-    private static final TupleTag<TableRow> PROTO_MAIN = new TupleTag<>() {};
 
     public static void main(String[] args) {
 
@@ -42,14 +37,11 @@ public class DynamicETL {
         Pipeline p = Pipeline.create(options);
 
         // Read input
-        PCollectionTuple rows = p
+        p
                 .apply("ReadInput", PubsubIO
                     .readMessagesWithAttributes()
                     .fromSubscription(options.getPubSubInputSubscription()))
-                .apply(new ProtoToBQParser<>(PROTO_MAIN, PROTO_DLQ, new PubSubAttributeExtractor("proto_type"), new PubSubBytesConverter()));
-
-        rows.get(PROTO_MAIN).apply(ParDo.of(new GenericPrinter<>()));
-        rows.get(PROTO_DLQ).apply(ParDo.of(new GenericPrinter<>()));
+                .apply(new ProtoToBQParser<>(new PubSubAttributeExtractor("proto_type"), new PubSubAttributeExtractor("tenant_id"), new PubSubBytesConverter()));
 
 
 //        // Write success events

@@ -40,12 +40,14 @@ class MessageFieldType(FieldType):
         self.fields = None
         self.table_root = False
         self.batch_table = False
+        self.table_name =  None
 
     def set_fields(self, fields: list):
         self.fields = fields
 
-    def set_table_root(self, table_root: bool):
+    def set_table_root(self, table_root: bool, table_name: str):
         self.table_root = table_root
+        self.table_name = table_name
 
     def set_batch_table(self, batch_table: bool):
         self.batch_table = batch_table
@@ -58,6 +60,7 @@ class MessageFieldType(FieldType):
             "name": self.name,
             "table_root": self.table_root,
             "batch_table": self.batch_table,
+            "table_name": self.table_name,
             "fields": [f.to_json() for f in self.fields]
         }
 
@@ -126,7 +129,7 @@ class Field:
             "index": self.field_index,
             "name": self.field_name,
             "description": self.field_description,
-            "type": self.field_type,
+            "type": self.field_type.name,
             "type_value": self.field_type_value.get_fq_name() if self.field_type_value is not None else None,
             "required": self.field_required,
             "batch_field": self.is_batch_field,

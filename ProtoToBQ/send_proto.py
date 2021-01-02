@@ -29,7 +29,7 @@ tags = ["hi", "there"]
 event = event_pb2.Event()
 
 client = client_pb2.Client()
-#client.tenantId = 1337
+client.tenantId = 1337
 client.name = "LVI"
 event.client.MergeFrom(client)
 
@@ -60,14 +60,25 @@ for i in range(6):
 print(MessageToJson(event))
 raw_bytes = event.SerializeToString()
 
+c_bytes = client.SerializeToString()
+
 
 for i in range(2):
     futures.update({i: None})
     # When you publish a message, the client returns a future.
-    future = publisher.publish(topic_path, raw_bytes)
+    future = publisher.publish(topic_path, raw_bytes, proto_type="lvi.Event", tenant_id="lvi")
     futures[i] = future
     # Publish failures shall be handled in the callback function.
     future.add_done_callback(get_callback(future, i))
+
+
+# for i in range(2):
+#     futures.update({i: None})
+#     # When you publish a message, the client returns a future.
+#     future = publisher.publish(topic_path, c_bytes, proto_type="lvi.Client", tenant_id="lvi")
+#     futures[i] = future
+#     # Publish failures shall be handled in the callback function.
+#     future.add_done_callback(get_callback(future, i))
 
 # Wait for all the publish futures to resolve before exiting.
 while futures:

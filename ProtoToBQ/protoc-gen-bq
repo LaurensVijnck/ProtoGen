@@ -32,27 +32,6 @@ class BigQueryTypeEnum(Enum):
     TYPE_GEOGRAPHY = 13
 
 
-_PROTO_TO_BQ_TYPE_MAP = {
-    ProtoTypeEnum.TYPE_DOUBLE: BigQueryTypeEnum.TYPE_NUMERIC,
-    ProtoTypeEnum.TYPE_FLOAT: BigQueryTypeEnum.TYPE_FLOAT64,
-    ProtoTypeEnum.TYPE_ENUM: BigQueryTypeEnum.TYPE_STRING,  # FUTURE: Map onto int value?
-    ProtoTypeEnum.TYPE_INT64: BigQueryTypeEnum.TYPE_INT64,
-    ProtoTypeEnum.TYPE_SINT64: BigQueryTypeEnum.TYPE_INT64,
-    ProtoTypeEnum.TYPE_SFIXED64: BigQueryTypeEnum.TYPE_INT64,
-    ProtoTypeEnum.TYPE_UINT64: BigQueryTypeEnum.TYPE_INT64,
-    ProtoTypeEnum.TYPE_FIXED64: BigQueryTypeEnum.TYPE_INT64,
-    ProtoTypeEnum.TYPE_INT32: BigQueryTypeEnum.TYPE_INT64,
-    ProtoTypeEnum.TYPE_SFIXED32: BigQueryTypeEnum.TYPE_INT64,
-    ProtoTypeEnum.TYPE_SINT32: BigQueryTypeEnum.TYPE_INT64,
-    ProtoTypeEnum.TYPE_UINT32: BigQueryTypeEnum.TYPE_INT64,
-    ProtoTypeEnum.TYPE_FIXED32: BigQueryTypeEnum.TYPE_INT64,
-    ProtoTypeEnum.TYPE_BYTES: BigQueryTypeEnum.TYPE_BYTES,
-    ProtoTypeEnum.TYPE_STRING: BigQueryTypeEnum.TYPE_STRING,
-    ProtoTypeEnum.TYPE_BOOL: BigQueryTypeEnum.TYPE_BOOL,
-    ProtoTypeEnum.TYPE_MESSAGE: BigQueryTypeEnum.TYPE_STRUCT,
-    ProtoTypeEnum.TYPE_GROUP: BigQueryTypeEnum.TYPE_STRUCT
-}
-
 _PROTO_TO_JAVA_TYPE_MAP = {
     ProtoTypeEnum.TYPE_DOUBLE: "Double",
     ProtoTypeEnum.TYPE_FLOAT: "Float",
@@ -74,20 +53,25 @@ _PROTO_TO_JAVA_TYPE_MAP = {
     ProtoTypeEnum.TYPE_GROUP: None
 }
 
-_BQ_TO_TYPE_VALUE = {
-    BigQueryTypeEnum.TYPE_INT64: "INTEGER",
-    BigQueryTypeEnum.TYPE_NUMERIC: "NUMERIC",
-    BigQueryTypeEnum.TYPE_FLOAT64: "FLOAT64",
-    BigQueryTypeEnum.TYPE_BOOL: "BOOL",
-    BigQueryTypeEnum.TYPE_STRING: "STRING",
-    BigQueryTypeEnum.TYPE_BYTES: "BYTES",
-    BigQueryTypeEnum.TYPE_DATE: "DATE",
-    BigQueryTypeEnum.TYPE_DATETIME: "DATETIME",
-    BigQueryTypeEnum.TYPE_TIME: "TIME",
-    BigQueryTypeEnum.TYPE_TIMESTAMP: "TIMESTAMP",
-    BigQueryTypeEnum.TYPE_ARRAY: "ARRAY",
-    BigQueryTypeEnum.TYPE_STRUCT: "RECORD",
-    BigQueryTypeEnum.TYPE_GEOGRAPHY: "GEOGRAPHY"
+_PROTO_TO_BQ_TYPE_MAP = {
+    ProtoTypeEnum.TYPE_DOUBLE: "NUMERIC",
+    ProtoTypeEnum.TYPE_FLOAT: "FLOAT64",
+    ProtoTypeEnum.TYPE_ENUM: "STRING",  # FUTURE: Map onto int value?
+    ProtoTypeEnum.TYPE_INT64: "INTEGER",
+    ProtoTypeEnum.TYPE_SINT64: "INTEGER",
+    ProtoTypeEnum.TYPE_SFIXED64: "INTEGER",
+    ProtoTypeEnum.TYPE_UINT64: "INTEGER",
+    ProtoTypeEnum.TYPE_FIXED64: "INTEGER",
+    ProtoTypeEnum.TYPE_INT32: "INTEGER",
+    ProtoTypeEnum.TYPE_SFIXED32: "INTEGER",
+    ProtoTypeEnum.TYPE_SINT32: "INTEGER",
+    ProtoTypeEnum.TYPE_UINT32: "INTEGER",
+    ProtoTypeEnum.TYPE_FIXED32: "INTEGER",
+    ProtoTypeEnum.TYPE_BYTES: "BYTES",
+    ProtoTypeEnum.TYPE_STRING: "STRING",
+    ProtoTypeEnum.TYPE_BOOL: "BOOL",
+    ProtoTypeEnum.TYPE_MESSAGE: "RECORD",
+    ProtoTypeEnum.TYPE_GROUP: "RECORD"
 }
 
 
@@ -144,7 +128,7 @@ def _resolve_repository_fields(request: plugin.CodeGeneratorRequest, repository)
                             field_index=f.number,
                             field_name=f.name,
                             field_description=f.options.Extensions[bigquery_options_pb2.description],
-                            field_type=ProtoTypeEnum(f.type).name,
+                            field_type=ProtoTypeEnum._member_map_[ProtoTypeEnum(f.type).name],
                             field_type_value=repository.get(f.type_name, None),
                             field_required=f.options.Extensions[bigquery_options_pb2.required],
                             is_batch_field=f.options.Extensions[bigquery_options_pb2.batch_attribute],
@@ -189,10 +173,11 @@ def _generate_repository(request: plugin.CodeGeneratorRequest):
 
                 if isinstance(item, DescriptorProto):
 
-                    table_root = item.options.HasExtension(bigquery_options_pb2.table_root)
+                    table_root = item.options.HasExtension(bigquery_options_pb2.root_options)
                     field_type = MessageFieldType(proto_file.package, Path(proto_file.name).stem, item.name, ambiguous_file_name)
 
                     if table_root:
+                        field_type.set_table_root(True, item.options.Extensions[bigquery_options_pb2.root_options].table_name)
                         root_elements.append(field_type)
 
                 elif isinstance(item, EnumDescriptorProto):
@@ -224,13 +209,12 @@ def _contruct_bigquery_schema_rec(field: MessageFieldType, schema_fields: list):
             schema_fields.extend(_contruct_bigquery_schema_rec(field.field_type_value, []))
 
         else:
-            proto_type = ProtoTypeEnum._member_map_[field.field_type] # FUTURE: Resolve this in the repository
             schema_fields.append(
                 bigquery.SchemaField(
                     name=field.field_name,
                     description=field.field_description,
                     mode="REPEATED" if field.is_repeated_field else "REQUIRED" if field.field_required else "NULLABLE",
-                    field_type=_BQ_TO_TYPE_VALUE[_PROTO_TO_BQ_TYPE_MAP[proto_type]],
+                    field_type=_PROTO_TO_BQ_TYPE_MAP[field.field_type],
                     fields=_contruct_bigquery_schema_rec(field.field_type_value, [])
                 )
             )
@@ -266,13 +250,10 @@ def codegen_rec(field_type: MessageFieldType, root: CodeGenImp, table_root: bool
     node = CodeNopNode(table_root, field_type.batch_table)
     for field in field_type.fields:
 
-        # FUTURE: Resolve this in the repository
-        proto_type = ProtoTypeEnum._member_map_[field.field_type]
-
         field_root = node
         field_root = add_codegen_node_conditionally(field_root, CodeGenRepeatedNode(field), field.is_repeated_field and not (table_root and field.is_batch_field))
 
-        if proto_type == ProtoTypeEnum.TYPE_MESSAGE:
+        if field.field_type == ProtoTypeEnum.TYPE_MESSAGE:
             if table_root and field.is_batch_field:
                 # Batch field attached directly to the root, as to allow
                 # grouping of the batch and non-batch nodes.
@@ -305,6 +286,8 @@ def create_codegen_tree(class_name: str, interface_name: str, root: MessageField
     class_node = CodeGenClassNode(class_name, interface_name, root)
 
     function_node = CodeGenFunctionNode(function_name, root)
+    schema_node = CodeGenSchemaFunctionNode(root, _PROTO_TO_BQ_TYPE_MAP)
+    class_node.add_child(schema_node)
     class_node.add_child(function_node)
 
     codegen_rec(root, function_node, table_root=True)

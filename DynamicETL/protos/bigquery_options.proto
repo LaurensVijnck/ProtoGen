@@ -4,8 +4,13 @@ package lvi;
 
 import "google/protobuf/descriptor.proto";
 
+message RootOptions {
+  string table_name = 2;
+}
+
 extend google.protobuf.MessageOptions {
-  bool table_root = 51234; // Which number to pick anyway?
+  // bool table_root = 51234;
+  RootOptions root_options = 51235; // Which number to pick anyway?
 }
 
 extend google.protobuf.FieldOptions {

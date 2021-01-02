@@ -269,8 +269,8 @@ class CodeGenConditionalNode(CodeGenNode):
         if self._throw_exception:
             file.content += self.indent("} else {", depth)
 
-            # FUTURE: Expand exception to include path to the attribute.
-            file.content += self.indent(f'throw new Exception("Required attribute \'{self._field.field_name}\' not found on input.");', depth + 1)
+            field_path = [x.field_name for x in root_var.getters] + [self._field.field_name]
+            file.content += self.indent(f'throw new Exception("Required attribute \'{".".join(field_path)}\' not found on input.");', depth + 1)
 
         file.content += self.indent("}", depth)
 

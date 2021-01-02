@@ -1,18 +1,11 @@
 package pipelines;
 
-import com.google.api.services.bigquery.model.TableRow;
-import common.operations.GenericPrinter;
-import models.FailSafeElement;
 import operations.ProtoToBQParser;
-import operations.WriteJSONToBigQuery;
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.io.gcp.pubsub.PubsubIO;
 import org.apache.beam.sdk.io.gcp.pubsub.PubsubMessage;
 import org.apache.beam.sdk.options.PipelineOptionsFactory;
-import org.apache.beam.sdk.transforms.ParDo;
 import org.apache.beam.sdk.transforms.SerializableFunction;
-import org.apache.beam.sdk.values.PCollectionTuple;
-import org.apache.beam.sdk.values.TupleTag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pipelines.config.DynamicETLPipelineOptions;
@@ -41,7 +34,10 @@ public class DynamicETL {
                 .apply("ReadInput", PubsubIO
                     .readMessagesWithAttributes()
                     .fromSubscription(options.getPubSubInputSubscription()))
-                .apply(new ProtoToBQParser<>(new PubSubAttributeExtractor("proto_type"), new PubSubAttributeExtractor("tenant_id"), new PubSubBytesConverter()));
+                .apply(new ProtoToBQParser<>(
+                        new PubSubAttributeExtractor("proto_type"),
+                        new PubSubAttributeExtractor("tenant_id"),
+                        new PubSubBytesExtractor()));
 
 
 //        // Write success events
@@ -72,7 +68,7 @@ public class DynamicETL {
         }
     }
 
-    private static class PubSubBytesConverter implements SerializableFunction<PubsubMessage, byte[]> {
+    private static class PubSubBytesExtractor implements SerializableFunction<PubsubMessage, byte[]> {
 
         @Override
         public byte[] apply(PubsubMessage input) {

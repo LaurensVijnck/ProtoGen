@@ -302,6 +302,8 @@ def generate_code(request: plugin.CodeGeneratorRequest, response: plugin.CodeGen
     :return: None
     """
 
+    # FUTURE: Add validation to old and new repository to detect conflicting changes.
+
     client = bigquery.Client() # JSON Serializing the schema requires the BigQuery client :(
     repo, root_elements = _generate_repository(request)
 

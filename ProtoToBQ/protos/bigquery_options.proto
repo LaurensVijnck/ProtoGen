@@ -6,6 +6,7 @@ import "google/protobuf/descriptor.proto";
 
 message RootOptions {
   string table_name = 2; // Name of resulting BigQuery table
+
   // FUTURE: Extend with advanced options, such as partitioning and clustering.
 }
 
@@ -18,4 +19,6 @@ extend google.protobuf.FieldOptions {
   bool required = 1010; // Specifies that the field is repeated
   string description = 1012; // Description of the field, added to the BigQuery table schema
   bool batch_attribute = 1013; // Indicates whether the attribute is used to support batching
+
+  // FUTURE: Extend with advanced options, such as regex validation and defaults.
 }

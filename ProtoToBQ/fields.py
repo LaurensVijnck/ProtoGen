@@ -33,7 +33,7 @@ class FieldType:
 
 class MessageFieldType(FieldType):
     """
-    Representation of a message field type, i.e., a field containing one or more fields.
+    Representation of a message field type, i.e., a proto message containing one or more fields.
     """
     def __init__(self, package, file_name, name, ambiguous_file_name):
         FieldType.__init__(self, package, file_name, name, ambiguous_file_name)
@@ -96,7 +96,7 @@ class EnumFieldValue:
 
 class Field:
     """
-    Representation of a field.
+    Representation of a field, i.e., an entry in a proto message.
     """
     def __init__(self, field_index: int, field_name: str, field_description: str, field_type: str, field_type_value: MessageFieldType, field_required: bool, is_batch_field: bool, is_optional_field: bool, is_repeated_field: bool):
         self.field_index = field_index

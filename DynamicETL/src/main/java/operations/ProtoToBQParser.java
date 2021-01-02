@@ -74,6 +74,8 @@ public class ProtoToBQParser<InputT> extends PTransform<PCollection<InputT>, PDo
                 }
             } catch (Exception e) {
                 LOG.info("Error " + e.getMessage());
+
+                // FUTURE: Add DLQ path to pipeline
                 // c.output(DLQTag, new FailSafeElement<>(input, e.getMessage()));
             }
         }

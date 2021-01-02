@@ -17,14 +17,14 @@ public class ProtoToBQParser<InputT> extends PTransform<PCollection<InputT>, PDo
 
     private final SerializableFunction<InputT, String> protoTypeExtractor;
     private final SerializableFunction<InputT, byte[]> protoPayloadExtractor;
-    private final SerializableFunction<InputT, String> destinationExtractor;
+    private final SerializableFunction<InputT, String> datasetExtractor;
 
     public ProtoToBQParser(SerializableFunction<InputT, String> protoTypeExtractor,
-                           SerializableFunction<InputT, String> destinationExtractor,
+                           SerializableFunction<InputT, String> datasetExtractor,
                            SerializableFunction<InputT, byte[]> protoPayloadExtractor) {
 
         this.protoTypeExtractor = protoTypeExtractor;
-        this.destinationExtractor = destinationExtractor;
+        this.datasetExtractor = datasetExtractor;
         this.protoPayloadExtractor = protoPayloadExtractor;
     }
 
@@ -67,7 +67,7 @@ public class ProtoToBQParser<InputT> extends PTransform<PCollection<InputT>, PDo
                     c.output(KV.of(
                             KV.of(new TableDestination(
                                     new TableReference()
-                                            .setDatasetId(destinationExtractor.apply(input))
+                                            .setDatasetId(datasetExtractor.apply(input))
                                             .setTableId(parser.getBigQueryTableName()), null),
                                     protoType),
                             row));
@@ -96,7 +96,7 @@ public class ProtoToBQParser<InputT> extends PTransform<PCollection<InputT>, PDo
         @Override
         public TableSchema getSchema(KV<TableDestination, String> destination) {
             try {
-                // TableSchemas are not serializable by default, hence we obtain it here.
+                // TableSchemas are not serializable by default, hence we obtain it here
                 return BQParserImp.getParserForType(destination.getValue()).getBigQueryTableSchema();
             } catch (Exception e) {
                 throw new RuntimeException();

@@ -36,12 +36,9 @@ public class ProtoToBQParser<InputT> extends PTransform<PCollection<InputT>, PDo
                 .apply("MapToJSON", ParDo.of(new ProtoToBQ()))
                 .apply(BigQueryIO.<KV<KV<TableDestination, String>, TableRow>>write()
                         .to(new ProtoToBQDynamicDestinations())
-                        .withFormatFunction(new SerializableFunction<KV<KV<TableDestination, String>, TableRow>, TableRow>() {
-                            @Override
-                            public TableRow apply(KV<KV<TableDestination, String>, TableRow> input) {
-                                // FUTURE: A shame this function can't be used to return multiple TableRows
-                                return input.getValue();
-                            }
+                        .withFormatFunction((SerializableFunction<KV<KV<TableDestination, String>, TableRow>, TableRow>) el -> {
+                            // FUTURE: A shame this function can't be used to return multiple TableRows
+                            return el.getValue();
                         })
                         .withFailedInsertRetryPolicy(InsertRetryPolicy.retryTransientErrors())
                         .withWriteDisposition(BigQueryIO.Write.WriteDisposition.WRITE_EMPTY)

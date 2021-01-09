@@ -190,7 +190,7 @@ class CodeGenFunctionNode(CodeGenImp):
         obj = Variable("obj", "byte[]")
         variable = Variable(Variable.to_variable(self.field_type.name), self.field_type.name)
         rows = ListVariable("rows", "LinkedList", "TableRow")
-        file.content += self.indent(f"public LinkedList<TableRow> {Variable.to_variable(self.function_name)}({obj.type} {obj.get()}) throws Exception {{", depth)
+        file.content += self.indent(f"public {rows.type} {Variable.to_variable(self.function_name)}({obj.type} {obj.get()}) throws Exception {{", depth)
 
         # Future: extend capabilities of getter function to accept parameters
         file.content += self.indent(f"// Parse bytes according to Protobuf def", depth + 1)

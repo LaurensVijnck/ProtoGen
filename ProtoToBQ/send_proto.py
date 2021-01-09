@@ -34,6 +34,7 @@ client.name = "LVI"
 event.client.MergeFrom(client)
 
 start = 80080
+
 for i in range(6):
     batch_event = event.events.add()
 
@@ -63,22 +64,33 @@ raw_bytes = event.SerializeToString()
 c_bytes = client.SerializeToString()
 
 
-for i in range(2):
-    futures.update({i: None})
-    # When you publish a message, the client returns a future.
-    future = publisher.publish(topic_path, raw_bytes, proto_type="lvi.Event", tenant_id="jda")
-    futures[i] = future
-    # Publish failures shall be handled in the callback function.
-    future.add_done_callback(get_callback(future, i))
-
-
 # for i in range(2):
 #     futures.update({i: None})
 #     # When you publish a message, the client returns a future.
-#     future = publisher.publish(topic_path, c_bytes, proto_type="lvi.Client", tenant_id="lvi")
+#     future = publisher.publish(topic_path, raw_bytes, proto_type="lvi.Event", tenant_id="jda")
 #     futures[i] = future
 #     # Publish failures shall be handled in the callback function.
 #     future.add_done_callback(get_callback(future, i))
+
+
+actor = actor_pb2.Actor()
+actor.userId = start
+actor.email = "laurens@hotmail.com"
+
+address = actor_pb2.Address()
+address.street = "Maastrichterpoort"
+address.number = "2"
+address.country = "Belgium"
+actor.address.MergeFrom(address)
+a_bytes = actor.SerializeToString()
+
+for i in range(2):
+    futures.update({i: None})
+    # When you publish a message, the client returns a future.
+    future = publisher.publish(topic_path, a_bytes, proto_type="lvi.Actor", tenant_id="lvi")
+    futures[i] = future
+    # Publish failures shall be handled in the callback function.
+    future.add_done_callback(get_callback(future, i))
 
 # Wait for all the publish futures to resolve before exiting.
 while futures:

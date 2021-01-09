@@ -9,7 +9,7 @@ mvn compile exec:java \
     -Dexec.mainClass="pipelines.DynamicETL" \
     -Dexec.args="\
     --runner=DataflowRunner \
-    --jobName=dynamic-ETL-v1 \
+    --jobName=dynamic-ETL-v2 \
     --update=false \
     --project=${GCP_PROJECT} \
     --region=europe-west1 \

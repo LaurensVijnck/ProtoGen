@@ -38,11 +38,12 @@ public class ProtoToBQParser<InputT> extends PTransform<PCollection<InputT>, PDo
                 // topics, one could union the streams from these topics and alter the protoTypeExtractor
                 // of the ProtoBQParser. e.g.,
                 //
-                // 1. Consume stream A, map onto KV<PubSubMessage, String ("A")>
-                // 2. Consume stream B, map onto KV<PubSubMessage, String ("B")>
-                // 3. Union streams above
-                // 4. Pass function that extracts the value from the KVs constructed above as the ProtoTypeExtractor of ProtoBQParser
-                .apply("MapToJSON", ParDo.of(new ProtoToBQ()))
+                //  1. Consume stream A, map onto KV<PubSubMessage, String ("A")>
+                //  2. Consume stream B, map onto KV<PubSubMessage, String ("B")>
+                //  3. Union streams above
+                //  4. Pass function that extracts the value from the KVs constructed above as the ProtoTypeExtractor of ProtoBQParser
+                //
+                .apply("ProtoToBQ", ParDo.of(new ProtoToBQ()))
                 .apply(BigQueryIO.<KV<KV<TableDestination, String>, TableRow>>write()
                         .to(new ProtoToBQDynamicDestinations())
                         .withFormatFunction((SerializableFunction<KV<KV<TableDestination, String>, TableRow>, TableRow>) el -> {

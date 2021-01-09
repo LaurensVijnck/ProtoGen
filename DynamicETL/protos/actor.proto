@@ -11,6 +11,7 @@ message Address {
 }
 
 message Actor {
+  option (root_options).table_name = "actor_table";
   optional int64 userId = 1 [(required) = true, (description) = "Identifier in the master table"];
   optional string email = 2 [(description) = "Email address of the actor"];
   Address address = 3;

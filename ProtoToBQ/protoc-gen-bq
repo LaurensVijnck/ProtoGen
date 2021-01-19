@@ -121,6 +121,8 @@ def _resolve_repository_fields(request: plugin.CodeGeneratorRequest, repository)
                 field_type = repository.get(FieldType.to_fq_name(proto_file.package, item.name))
                 fields = []
                 batch_table = False
+                partitioned_table = False
+                clustered_table = False
 
                 for f in item.field:
 
@@ -148,9 +150,13 @@ def _resolve_repository_fields(request: plugin.CodeGeneratorRequest, repository)
                     )
 
                     batch_table = batch_table or f.options.Extensions[bigquery_options_pb2.batch_attribute]
+                    partitioned_table = partitioned_table or f.options.Extensions[bigquery_options_pb2.partitioning_attribute]
+                    clustered_table = clustered_table or f.options.Extensions[bigquery_options_pb2.clustering_attribute]
 
-                field_type.set_batch_table(batch_table) # FUTURE: Maybe not the ideal position to set this.
-
+                # FUTURE: Maybe not the ideal position to set this.
+                field_type.set_batch_table(batch_table)
+                field_type.set_clustered_table(clustered_table)
+                field_type.set_partitioned_table(partitioned_table)
                 field_type.set_fields(fields)
 
 
@@ -329,9 +335,14 @@ def generate_code(request: plugin.CodeGeneratorRequest, response: plugin.CodeGen
         # Generate the BigQuery schema
         f = io.StringIO("")
         client.schema_to_json(schema_fields, f)
+        full_schema = {}
+        full_schema["schema_fields"] = json.loads(f.getvalue())
+        full_schema["clustering_field"] = root_element.clustered_table
+        full_schema["partitioning_field"] = root_element.partitioned_table
+
         file = response.file.add()
         file.name = root_element.name + ".json"
-        file.content = f.getvalue()
+        file.content = json.dumps(full_schema, indent=2)
 
         # Generate the ProtoToBQParser
         file = response.file.add()

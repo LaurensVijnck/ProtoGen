@@ -22,5 +22,5 @@ message Event {
     option (root_options).table_name = "event_table";
     Client client = 1  [(required) = false, (description) = "Owner of the event"];
     repeated BatchEvent events = 2 [(required) = true, (batch_attribute) = true];
-    int64 event_time = 3 [(required) = true, (clustering_attribute) = true];
+    int64 event_time = 3 [(required) = true, (partitioning_attribute) = true];
 }

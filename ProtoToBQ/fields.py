@@ -41,6 +41,8 @@ class MessageFieldType(FieldType):
         self.table_root = False
         self.batch_table = False
         self.table_name =  None
+        self.clustered_table = False
+        self.partitioned_table = False
 
     def set_fields(self, fields: list):
         self.fields = fields
@@ -52,6 +54,12 @@ class MessageFieldType(FieldType):
     def set_batch_table(self, batch_table: bool):
         self.batch_table = batch_table
 
+    def set_clustered_table(self, clustered_table: bool):
+        self.clustered_table = clustered_table
+
+    def set_partitioned_table(self, partitioned_table: bool):
+        self.partitioned_table = partitioned_table
+
     def to_json(self):
         return {
             "package": self.package,
@@ -60,6 +68,8 @@ class MessageFieldType(FieldType):
             "name": self.name,
             "table_root": self.table_root,
             "batch_table": self.batch_table,
+            "clustered_table": self.clustered_table,
+            "partitioned_table": self.partitioned_table,
             "table_name": self.table_name,
             "fields": [f.to_json() for f in self.fields]
         }

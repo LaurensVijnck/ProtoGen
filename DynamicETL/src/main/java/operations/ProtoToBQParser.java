@@ -80,9 +80,9 @@ public class ProtoToBQParser<InputT> extends PTransform<PCollection<InputT>, PDo
                                     new TableReference()
                                             .setDatasetId(datasetExtractor.apply(input))
                                             .setTableId(parser.getBigQueryTableName()).toString(),
-                                            "description",
-                                            new TimePartitioning().setField("field"),
-                                            new Clustering().setFields(Arrays.asList("f"))),
+                                            parser.getBigQueryTableDescription(),
+                                            new TimePartitioning().setField(parser.getPartitionField()),
+                                            new Clustering().setFields(parser.getClusterFields())),
                                     protoType),
                             row));
                 }

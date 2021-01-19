@@ -54,6 +54,7 @@ class CodeGenInterfaceNode(CodeGenImp):
         # Java imports
         file.content += self.indent("", depth)
         file.content += self.indent(f"import java.util.LinkedList;", depth)
+        file.content += self.indent(f"import java.util.List;", depth)
         file.content += self.indent("", depth)
 
         obj = Variable("obj", "byte[]")
@@ -66,6 +67,19 @@ class CodeGenInterfaceNode(CodeGenImp):
         # Generate table name extractor function
         file.content += self.indent("", depth)
         file.content += self.indent('public abstract String getBigQueryTableName();', depth + 1)
+
+        # Generate table description extractor function
+        file.content += self.indent("", depth)
+        file.content += self.indent('public abstract String getBigQueryTableDescription();', depth + 1)
+
+        # Generate partition field extractor function
+        file.content += self.indent("", depth)
+        file.content += self.indent('public abstract String getPartitionField();', depth + 1)
+
+        # Generate cluster fields extractor function
+        rows = ListVariable("fields", "List", "String")
+        file.content += self.indent("", depth)
+        file.content += self.indent(f'public abstract {rows.type} getClusterFields();', depth + 1)
 
         # Schema extractor function
         file.content += self.indent("", depth)
@@ -114,6 +128,7 @@ class CodeGenClassNode(CodeGenImp):
         # Java imports
         file.content += self.indent("", depth)
         file.content += self.indent(f"import java.util.LinkedList;", depth)
+        file.content += self.indent(f"import java.util.List;", depth)
         file.content += self.indent(f"import java.util.Arrays;", depth)
         file.content += self.indent("", depth)
 
@@ -123,8 +138,28 @@ class CodeGenClassNode(CodeGenImp):
             child.gen_code(file, element, root_var, depth + 1, type_map)
 
         # Generate table name extractor function
+        file.content += self.indent("", depth)
         file.content += self.indent(f"public String getBigQueryTableName() {{", depth + 1)
-        file.content += self.indent(f'return "{self.field_type.table_name}";', depth + 2)
+        file.content += self.indent(f'return {Variable.format_constant_value(self.field_type.table_name)};', depth + 2)
+        file.content += self.indent("}", depth + 1)
+
+        # Generate table description extractor function
+        file.content += self.indent("", depth)
+        file.content += self.indent(f"public String getBigQueryTableDescription() {{", depth + 1)
+        file.content += self.indent(f'return {Variable.format_constant_value(self.field_type.table_description)};', depth + 2)
+        file.content += self.indent("}", depth + 1)
+
+        # Generate partition field extractor function
+        file.content += self.indent("", depth)
+        file.content += self.indent(f"public String getPartitionField() {{", depth + 1)
+        file.content += self.indent(f'return {Variable.format_constant_value(self.field_type.partition_field)};', depth + 2)
+        file.content += self.indent("}", depth + 1)
+
+        # Generate cluster fields extractor function
+        file.content += self.indent("", depth)
+        rows = ListVariable("fields", "List", "String")
+        file.content += self.indent(f"public {rows.type} getClusterFields() {{", depth + 1)
+        file.content += self.indent(f'return Arrays.asList({", ".join([Variable.format_constant_value(field) for field in self.field_type.cluster_fields])});', depth + 2)
         file.content += self.indent("}", depth + 1)
 
         file.content += self.indent("}", depth)
@@ -158,8 +193,8 @@ class CodeGenSchemaFunctionNode(CodeGenImp):
             return self._codegen_schema(file, field.field_type_value, depth)
 
         file.content += self.indent(f'new TableFieldSchema()', depth)
-        file.content += self.indent(f'.setName("{field.field_name}")', depth + 1)
-        file.content += self.indent(f'.setType("{self.bq_type_map[field.field_type]}")', depth + 1)
+        file.content += self.indent(f'.setName({Variable.format_constant_value(field.field_name)})', depth + 1)
+        file.content += self.indent(f'.setType({Variable.format_constant_value(self.bq_type_map[field.field_type])})', depth + 1)
         file.content += self.indent(f'.setMode("{"REPEATED" if field.is_repeated_field else "REQUIRED" if field.field_required else "NULLABLE"}")', depth + 1)
         file.content += self.indent(f'.setDescription("{field.field_description}")', depth + 1)
 

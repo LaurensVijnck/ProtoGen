@@ -47,6 +47,10 @@ class Variable:
 
     @staticmethod
     def format_constant_value(val):
+
+        if val is None:
+            return "null"
+
         if isinstance(val, str):
             return f'"{val}"'
 

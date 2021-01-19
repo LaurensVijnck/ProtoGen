@@ -41,7 +41,7 @@ class MessageFieldType(FieldType):
         self.table_root = False
         self.batch_table = False
         self.table_name =  None
-        self.cluster_field = None
+        self.cluster_fields = []
         self.partition_field = None
         self.table_description = None
 
@@ -56,8 +56,8 @@ class MessageFieldType(FieldType):
     def set_batch_table(self, batch_table: bool):
         self.batch_table = batch_table
 
-    def set_cluster_field(self, cluster_field: str):
-        self.cluster_field = cluster_field
+    def add_cluster_field(self, cluster_field: str):
+        self.cluster_fields.append(cluster_field)
 
     def set_partition_field(self, partition_field: str):
         self.partition_field = partition_field
@@ -70,7 +70,7 @@ class MessageFieldType(FieldType):
             "name": self.name,
             "table_root": self.table_root,
             "batch_table": self.batch_table,
-            "cluster_field": self.cluster_field,
+            "cluster_fields": self.cluster_fields,
             "partition_field": self.partition_field,
             "table_name": self.table_name,
             "table_description": self.table_description,

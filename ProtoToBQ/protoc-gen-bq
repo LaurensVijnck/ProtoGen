@@ -150,13 +150,19 @@ def _resolve_repository_fields(request: plugin.CodeGeneratorRequest, repository)
                     )
 
                     batch_table = batch_table or f.options.Extensions[bigquery_options_pb2.batch_attribute]
-                    partitioned_table = partitioned_table or f.options.Extensions[bigquery_options_pb2.partitioning_attribute]
-                    clustered_table = clustered_table or f.options.Extensions[bigquery_options_pb2.clustering_attribute]
+
+                    # FUTURE: Check that there is solely a single partition attribute
+                    # FUTURE: Check that the partition field is defined at top-level
+                    if f.options.Extensions[bigquery_options_pb2.partitioning_attribute]:
+                        field_type.set_partition_field(f.name)
+
+                    # FUTURE: Check that there is solely a single cluster attribute
+                    # FUTURE: Check that the cluster field is defined at top-level
+                    if f.options.Extensions[bigquery_options_pb2.clustering_attribute]:
+                        field_type.set_cluster_field(f.name)
 
                 # FUTURE: Maybe not the ideal position to set this.
                 field_type.set_batch_table(batch_table)
-                field_type.set_clustered_table(clustered_table)
-                field_type.set_partitioned_table(partitioned_table)
                 field_type.set_fields(fields)
 
 
@@ -193,7 +199,9 @@ def _generate_repository(request: plugin.CodeGeneratorRequest):
                     field_type = MessageFieldType(proto_file.package, Path(proto_file.name).stem, item.name, ambiguous_file_name)
 
                     if table_root:
-                        field_type.set_table_root(True, item.options.Extensions[bigquery_options_pb2.root_options].table_name)
+                        # Extract root options
+                        root_options = item.options.Extensions[bigquery_options_pb2.root_options]
+                        field_type.set_table_root(True, root_options.table_name, root_options.table_description)
                         root_elements.append(field_type)
 
                 elif isinstance(item, EnumDescriptorProto):
@@ -337,8 +345,8 @@ def generate_code(request: plugin.CodeGeneratorRequest, response: plugin.CodeGen
         client.schema_to_json(schema_fields, f)
         full_schema = {}
         full_schema["schema_fields"] = json.loads(f.getvalue())
-        full_schema["clustering_field"] = root_element.clustered_table
-        full_schema["partitioning_field"] = root_element.partitioned_table
+        full_schema["clustering_field"] = root_element.cluster_field
+        full_schema["partitioning_field"] = root_element.partition_field
 
         file = response.file.add()
         file.name = root_element.name + ".json"

@@ -1,14 +1,15 @@
 package operations;
 
-import com.google.api.services.bigquery.model.TableReference;
-import com.google.api.services.bigquery.model.TableRow;
-import com.google.api.services.bigquery.model.TableSchema;
+import com.google.api.services.bigquery.model.*;
+import com.google.common.collect.ImmutableList;
 import lvi.BQParserImp;
 import org.apache.beam.sdk.io.gcp.bigquery.*;
 import org.apache.beam.sdk.transforms.*;
 import org.apache.beam.sdk.values.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
 
 
 public class ProtoToBQParser<InputT> extends PTransform<PCollection<InputT>, PDone> {
@@ -78,7 +79,10 @@ public class ProtoToBQParser<InputT> extends PTransform<PCollection<InputT>, PDo
                             KV.of(new TableDestination(
                                     new TableReference()
                                             .setDatasetId(datasetExtractor.apply(input))
-                                            .setTableId(parser.getBigQueryTableName()), null),
+                                            .setTableId(parser.getBigQueryTableName()).toString(),
+                                            "description",
+                                            new TimePartitioning().setField("field"),
+                                            new Clustering().setFields(Arrays.asList("f"))),
                                     protoType),
                             row));
                 }

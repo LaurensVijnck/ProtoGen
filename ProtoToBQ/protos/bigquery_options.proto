@@ -7,9 +7,10 @@ import "google/protobuf/descriptor.proto";
 // FUTURE: Support for enriching fields?
 
 message RootOptions {
-  string table_name = 2; // Name of resulting BigQuery table
+  string table_name = 1; // Name of resulting BigQuery table
+  string table_description = 2; // Description of the resulting table.
 
-  // FUTURE: Extend with advanced options, such as partitioning and clustering.
+  // FUTURE: Extend with advanced options, such as table expiration time.
 }
 
 message DefaultValue {

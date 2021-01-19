@@ -1,16 +1,12 @@
 package operations;
 
 import com.google.api.services.bigquery.model.*;
-import com.google.common.collect.ImmutableList;
 import lvi.BQParserImp;
 import org.apache.beam.sdk.io.gcp.bigquery.*;
 import org.apache.beam.sdk.transforms.*;
 import org.apache.beam.sdk.values.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Arrays;
-
 
 public class ProtoToBQParser<InputT> extends PTransform<PCollection<InputT>, PDone> {
 

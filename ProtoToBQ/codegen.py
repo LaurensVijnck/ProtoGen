@@ -249,24 +249,30 @@ class CodeGenBaseNode(CodeGenNode):
     Code generation for atomic fields.
     """
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int, type_map: dict):
-        file.content += self.indent(element.set(self._field.field_name, root_var), depth)
+        file.content += self.indent(element.set(self._field.field_name, root_var.get()), depth)
 
 
 class CodeGenConditionalNode(CodeGenNode):
     """
     Conditional code generation for a given field, i.e., node checks whether field value is available.
     """
-    def __init__(self, field: Field, throw_exception = False):
+    def __init__(self, field: Field, throw_exception = False, default_value=None):
         super().__init__(field)
         self._throw_exception = throw_exception
+        self._default_value = default_value
 
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int, type_map: dict):
         file.content += self.indent(f"if({root_var.has(self._field)}) {{", depth)
 
         for child in self._children:
-            child.gen_code(file, element, root_var, depth + 1, type_map)
+             child.gen_code(file, element, root_var, depth + 1, type_map)
 
-        if self._throw_exception:
+        # FUTURE: Move default value to another node? Though, it is somewhat related to required fields.
+        if self._default_value is not None:
+            file.content += self.indent("} else {", depth)
+            file.content += self.indent(element.set(self._field.field_name, Variable.format_constant_value(self._default_value)), depth + 1)
+
+        if self._throw_exception :
             file.content += self.indent("} else {", depth)
 
             field_path = [x.field_name for x in root_var.getters] + [self._field.field_name]
@@ -310,7 +316,7 @@ class CodeGenNestedNode(CodeGenNode):
         for child in self._children:
             child.gen_code(file, var, root_var, depth, type_map)
 
-        file.content += self.indent(element.set(self._field.field_name, var), depth)
+        file.content += self.indent(element.set(self._field.field_name, var.get()), depth)
 
 
 class CodeGenRepeatedNode(CodeGenNode):
@@ -332,7 +338,7 @@ class CodeGenRepeatedNode(CodeGenNode):
 
         file.content += self.indent(list_var.add(var), depth + 1)
         file.content += self.indent("}", depth)
-        file.content += self.indent(element.set(self._field.field_name, list_var), depth)
+        file.content += self.indent(element.set(self._field.field_name, list_var.get()), depth)
 
 
 class CodeGenGetBatchNode(CodeGenNode):

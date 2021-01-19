@@ -23,8 +23,8 @@ class Variable:
     def get(self):
         return self.name + "".join([self.underscore_to_camelcase(f".get_{getter.field_name}()") for getter in self.getters])
 
-    def set(self, attribute: str, variable):
-        return f'{self.get()}.set("{attribute}", {variable.get()});'
+    def set(self, attribute: str, value):
+        return f'{self.get()}.set("{attribute}", {value});'
 
     def initialize(self):
         return f'{self.type} {self.name} = new {self.type}();'
@@ -45,6 +45,15 @@ class Variable:
             return s[0].upper() + Variable.underscore_to_camelcase(s[1:])
         return s
 
+    @staticmethod
+    def format_constant_value(val):
+        if isinstance(val, str):
+            return f'"{val}"'
+
+        if isinstance(val, float):
+            return f'{val}f'
+
+        return val
 
 class ListVariable(Variable):
     """

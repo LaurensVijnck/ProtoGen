@@ -67,7 +67,7 @@ c_bytes = client.SerializeToString()
 # for i in range(2):
 #     futures.update({i: None})
 #     # When you publish a message, the client returns a future.
-#     future = publisher.publish(topic_path, raw_bytes, proto_type="lvi.Event", tenant_id="jda")
+#     future = publisher.publish(topic_path, raw_bytes, proto_type="lvi.Event", tenant_id="lvi")
 #     futures[i] = future
 #     # Publish failures shall be handled in the callback function.
 #     future.add_done_callback(get_callback(future, i))
@@ -87,7 +87,7 @@ a_bytes = actor.SerializeToString()
 for i in range(2):
     futures.update({i: None})
     # When you publish a message, the client returns a future.
-    future = publisher.publish(topic_path, a_bytes, proto_type="lvi.Actor", tenant_id="lvi")
+    future = publisher.publish(topic_path, a_bytes, proto_type="lvi.Actor", tenant_id="jda")
     futures[i] = future
     # Publish failures shall be handled in the callback function.
     future.add_done_callback(get_callback(future, i))

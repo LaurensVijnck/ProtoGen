@@ -4,21 +4,36 @@ package lvi;
 
 import "google/protobuf/descriptor.proto";
 
+// FUTURE: Support for enriching fields?
+
 message RootOptions {
   string table_name = 2; // Name of resulting BigQuery table
 
   // FUTURE: Extend with advanced options, such as partitioning and clustering.
 }
 
+message DefaultValue {
+  oneof value_oneof {
+    bool bool = 1;
+    int64 int = 2;
+    string string = 3;
+    float float = 4;
+  }
+}
+
 extend google.protobuf.MessageOptions {
-  // bool table_root = 51234;
   RootOptions root_options = 51235; // Which number to pick anyway?
 }
 
 extend google.protobuf.FieldOptions {
-  bool required = 1010; // Specifies that the field is repeated
-  string description = 1012; // Description of the field, added to the BigQuery table schema
-  bool batch_attribute = 1013; // Indicates whether the attribute is used to support batching
+
+  bool required = 1010;               // Specifies that the field is repeated
+  string description = 1012;          // Description of the field, added to the BigQuery table schema
+  DefaultValue default_value = 1013;  // Default value used when attribute value is empty
+
+  bool batch_attribute = 1014;        // Indicates whether the attribute is used to support batching
+  bool clustering_attribute = 1015;   // Indicates that attribute should be used to cluster the table
+  bool partitioning_attribute = 1016; // Indicates that attribute should be used to partition the table
 
   // FUTURE: Extend with advanced options, such as regex validation and defaults.
 }

@@ -98,7 +98,19 @@ class Field:
     """
     Representation of a field, i.e., an entry in a proto message.
     """
-    def __init__(self, field_index: int, field_name: str, field_description: str, field_type: str, field_type_value: MessageFieldType, field_required: bool, is_batch_field: bool, is_optional_field: bool, is_repeated_field: bool):
+    def __init__(self, field_index: int,
+                 field_name: str,
+                 field_description: str,
+                 field_type: str,
+                 field_type_value: MessageFieldType,
+                 field_required: bool,
+                 is_batch_field: bool,
+                 is_partitioning_field: bool,
+                 is_clustering_field: bool,
+                 is_optional_field: bool,
+                 is_repeated_field: bool,
+                 default_value = None):
+
         self.field_index = field_index
         self.field_name = field_name
         self.field_description = field_description
@@ -106,8 +118,11 @@ class Field:
         self.field_type_value = field_type_value
         self.field_required = field_required
         self.is_batch_field = is_batch_field
+        self.is_partitioning_field = is_partitioning_field
+        self.is_clustering_field = is_clustering_field
         self.is_optional_field = is_optional_field
         self.is_repeated_field = is_repeated_field
+        self.default_value = default_value
 
     def resolve_type(self, type_map: dict):
         """
@@ -132,6 +147,9 @@ class Field:
             "type_value": self.field_type_value.get_fq_name() if self.field_type_value is not None else None,
             "required": self.field_required,
             "batch_field": self.is_batch_field,
+            "clustering_field": self.is_clustering_field,
+            "partitioning_field": self.is_partitioning_field,
             "optional_field": self.is_optional_field,
-            "repeated_field": self.is_repeated_field
+            "repeated_field": self.is_repeated_field,
+            "default_value": self.default_value
         }

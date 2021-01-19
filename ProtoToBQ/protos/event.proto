@@ -14,6 +14,7 @@ message Tag {
 
 message BatchEvent {
     Actor actor = 1  [(required) = false, (description) = "Actor concerned with the event"];
+    string example = 3 [(required) = true, (description) = "example"];
     repeated Tag tags = 2 [(description) = "Tags associated with the event"];
 }
 
@@ -21,4 +22,5 @@ message Event {
     option (root_options).table_name = "event_table";
     Client client = 1  [(required) = false, (description) = "Owner of the event"];
     repeated BatchEvent events = 2 [(required) = true, (batch_attribute) = true];
+    int64 event_time = 3 [(required) = true, (clustering_attribute) = true];
 }

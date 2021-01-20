@@ -8,6 +8,8 @@ import org.apache.beam.sdk.values.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 public class ProtoToBQParser<InputT> extends PTransform<PCollection<InputT>, PDone> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProtoToBQParser.class);
@@ -70,15 +72,14 @@ public class ProtoToBQParser<InputT> extends PTransform<PCollection<InputT>, PDo
 
                     LOG.info(row.toPrettyString());
 
+                    String tableRef = "geometric-ocean-284614:" + datasetExtractor.apply(input) + "." + parser.getBigQueryTableName();
+
                     // Generate output object
                     c.output(KV.of(
-                            KV.of(new TableDestination(
-                                    new TableReference()
-                                            .setDatasetId(datasetExtractor.apply(input))
-                                            .setTableId(parser.getBigQueryTableName()).toString(),
+                            KV.of(new TableDestination(tableRef,
                                             parser.getBigQueryTableDescription(),
-                                            new TimePartitioning().setField(parser.getPartitionField()),
-                                            new Clustering().setFields(parser.getClusterFields())),
+                                            parser.getPartitioning(),
+                                            parser.getClustering()),
                                     protoType),
                             row));
                 }

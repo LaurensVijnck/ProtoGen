@@ -7,9 +7,10 @@ import "google/protobuf/descriptor.proto";
 // FUTURE: Support for enriching fields?
 
 message RootOptions {
-  string table_name = 2; // Name of resulting BigQuery table
+  string table_name = 1; // Name of resulting BigQuery table
+  string table_description = 2; // Description of the resulting table.
 
-  // FUTURE: Extend with advanced options, such as partitioning and clustering.
+  // FUTURE: Extend with advanced options, such as table expiration time.
 }
 
 message DefaultValue {
@@ -34,6 +35,7 @@ extend google.protobuf.FieldOptions {
   bool batch_attribute = 1014;        // Indicates whether the attribute is used to support batching
   bool clustering_attribute = 1015;   // Indicates that attribute should be used to cluster the table
   bool partitioning_attribute = 1016; // Indicates that attribute should be used to partition the table
+  bool timestamp_attribute = 1017;    // Bool indicating that the attribute represents a timestamp
 
   // FUTURE: Extend with advanced options, such as regex validation and defaults.
 }

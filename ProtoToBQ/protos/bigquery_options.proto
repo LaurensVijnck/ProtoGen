@@ -28,6 +28,8 @@ extend google.protobuf.MessageOptions {
 
 extend google.protobuf.FieldOptions {
 
+  // Support field aliases?
+
   bool required = 1010;               // Specifies that the field is repeated
   string description = 1012;          // Description of the field, added to the BigQuery table schema
   DefaultValue default_value = 1013;  // Default value used when attribute value is empty
@@ -35,6 +37,5 @@ extend google.protobuf.FieldOptions {
   bool batch_attribute = 1014;        // Indicates whether the attribute is used to support batching
   bool clustering_attribute = 1015;   // Indicates that attribute should be used to cluster the table
   bool partitioning_attribute = 1016; // Indicates that attribute should be used to partition the table
-
-  // FUTURE: Extend with advanced options, such as regex validation and defaults.
+  bool timestamp_attribute = 1017;    // Bool indicating that the attribute represents a timestamp
 }

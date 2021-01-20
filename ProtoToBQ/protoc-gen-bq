@@ -142,6 +142,7 @@ def _resolve_repository_fields(request: plugin.CodeGeneratorRequest, repository)
                             field_required=f.options.Extensions[bigquery_options_pb2.required],
                             is_batch_field=f.options.Extensions[bigquery_options_pb2.batch_attribute],
                             is_clustering_field=f.options.Extensions[bigquery_options_pb2.clustering_attribute],
+                            is_timestamp=f.options.Extensions[bigquery_options_pb2.timestamp_attribute],
                             is_partitioning_field=f.options.Extensions[bigquery_options_pb2.partitioning_attribute],
                             is_optional_field=f.proto3_optional,
                             is_repeated_field=f.label == f.LABEL_REPEATED,
@@ -238,7 +239,7 @@ def _contruct_bigquery_schema_rec(field: MessageFieldType, schema_fields: list):
                     name=field.field_name,
                     description=field.field_description,
                     mode="REPEATED" if field.is_repeated_field else "REQUIRED" if field.field_required else "NULLABLE",
-                    field_type=_PROTO_TO_BQ_TYPE_MAP[field.field_type],
+                    field_type=_PROTO_TO_BQ_TYPE_MAP[field.field_type] if not field.is_timestamp else "TIMESTAMP",
                     fields=_contruct_bigquery_schema_rec(field.field_type_value, [])
                 )
             )
@@ -327,6 +328,7 @@ def generate_code(request: plugin.CodeGeneratorRequest, response: plugin.CodeGen
     """
 
     # FUTURE: Add validation to old and new repository to detect conflicting changes.
+    # FUTURE: Enforce that required and fields with defaults are marked optional.
 
     client = bigquery.Client() # JSON Serializing the schema requires the BigQuery client :(
     repo, root_elements = _generate_repository(request)
@@ -345,8 +347,10 @@ def generate_code(request: plugin.CodeGeneratorRequest, response: plugin.CodeGen
         client.schema_to_json(schema_fields, f)
         full_schema = {}
         full_schema["schema_fields"] = json.loads(f.getvalue())
-        full_schema["clustering_field"] = root_element.cluster_fields
+        full_schema["clustering_fields"] = root_element.cluster_fields
         full_schema["partitioning_field"] = root_element.partition_field
+        full_schema["table_description"] = root_element.table_description
+        full_schema["table_name"] = root_element.table_name
 
         file = response.file.add()
         file.name = root_element.name + ".json"

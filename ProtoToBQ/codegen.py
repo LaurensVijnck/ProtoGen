@@ -47,14 +47,11 @@ class CodeGenInterfaceNode(CodeGenImp):
 
         # BigQuery imports
         file.content += self.indent("", depth)
-        file.content += self.indent(f"import com.google.api.services.bigquery.model.TableCell;", depth)
-        file.content += self.indent(f"import com.google.api.services.bigquery.model.TableRow;", depth)
-        file.content += self.indent(f"import com.google.api.services.bigquery.model.TableSchema;", depth)
+        file.content += self.indent(f"import com.google.api.services.bigquery.model.*;", depth)
 
         # Java imports
         file.content += self.indent("", depth)
         file.content += self.indent(f"import java.util.LinkedList;", depth)
-        file.content += self.indent(f"import java.util.List;", depth)
         file.content += self.indent("", depth)
 
         obj = Variable("obj", "byte[]")
@@ -74,12 +71,11 @@ class CodeGenInterfaceNode(CodeGenImp):
 
         # Generate partition field extractor function
         file.content += self.indent("", depth)
-        file.content += self.indent('public abstract String getPartitionField();', depth + 1)
+        file.content += self.indent('public abstract TimePartitioning getPartitioning();', depth + 1)
 
         # Generate cluster fields extractor function
-        rows = ListVariable("fields", "List", "String")
         file.content += self.indent("", depth)
-        file.content += self.indent(f'public abstract {rows.type} getClusterFields();', depth + 1)
+        file.content += self.indent(f'public abstract Clustering getClustering();', depth + 1)
 
         # Schema extractor function
         file.content += self.indent("", depth)
@@ -120,16 +116,14 @@ class CodeGenClassNode(CodeGenImp):
 
         # BigQuery imports
         file.content += self.indent("", depth)
-        file.content += self.indent(f"import com.google.api.services.bigquery.model.TableCell;", depth)
-        file.content += self.indent(f"import com.google.api.services.bigquery.model.TableRow;", depth)
-        file.content += self.indent(f"import com.google.api.services.bigquery.model.TableSchema;", depth)
-        file.content += self.indent(f"import com.google.api.services.bigquery.model.TableFieldSchema;", depth)
+        file.content += self.indent(f"import com.google.api.services.bigquery.model.*;", depth)
 
         # Java imports
         file.content += self.indent("", depth)
         file.content += self.indent(f"import java.util.LinkedList;", depth)
         file.content += self.indent(f"import java.util.List;", depth)
         file.content += self.indent(f"import java.util.Arrays;", depth)
+        file.content += self.indent(f"import org.joda.time.Instant;", depth) # Requires a custom Maven dependency
         file.content += self.indent("", depth)
 
         file.content += self.indent(f"public final class {Variable.to_upper_camelcase(self.class_name)} extends {self.base_class} {{", depth)
@@ -151,15 +145,23 @@ class CodeGenClassNode(CodeGenImp):
 
         # Generate partition field extractor function
         file.content += self.indent("", depth)
-        file.content += self.indent(f"public String getPartitionField() {{", depth + 1)
-        file.content += self.indent(f'return {Variable.format_constant_value(self.field_type.partition_field)};', depth + 2)
+        file.content += self.indent(f"public TimePartitioning getPartitioning() {{", depth + 1)
+
+        if self.field_type.partition_field is None:
+            file.content += self.indent(f'return {Variable.format_constant_value(None)};', depth + 2)
+        else:
+            file.content += self.indent(f'return new TimePartitioning().setField({Variable.format_constant_value(self.field_type.partition_field)});', depth + 2)
         file.content += self.indent("}", depth + 1)
 
         # Generate cluster fields extractor function
         file.content += self.indent("", depth)
-        rows = ListVariable("fields", "List", "String")
-        file.content += self.indent(f"public {rows.type} getClusterFields() {{", depth + 1)
-        file.content += self.indent(f'return Arrays.asList({", ".join([Variable.format_constant_value(field) for field in self.field_type.cluster_fields])});', depth + 2)
+        file.content += self.indent(f"public Clustering getClustering() {{", depth + 1)
+
+        if len(self.field_type.cluster_fields) == 0:
+            file.content += self.indent(f'return {Variable.format_constant_value(None)};', depth + 2)
+        else:
+            file.content += self.indent(f'return new Clustering()',depth + 2)
+            file.content += self.indent(f'.setFields(Arrays.asList({", ".join([Variable.format_constant_value(field) for field in self.field_type.cluster_fields])}));',depth + 3)
         file.content += self.indent("}", depth + 1)
 
         file.content += self.indent("}", depth)
@@ -194,7 +196,9 @@ class CodeGenSchemaFunctionNode(CodeGenImp):
 
         file.content += self.indent(f'new TableFieldSchema()', depth)
         file.content += self.indent(f'.setName({Variable.format_constant_value(field.field_name)})', depth + 1)
-        file.content += self.indent(f'.setType({Variable.format_constant_value(self.bq_type_map[field.field_type])})', depth + 1)
+
+        # FUTURE: Enhance logic to represent timestamps
+        file.content += self.indent(f'.setType({Variable.format_constant_value(self.bq_type_map[field.field_type] if not field.is_timestamp else "TIMESTAMP")})', depth + 1)
         file.content += self.indent(f'.setMode("{"REPEATED" if field.is_repeated_field else "REQUIRED" if field.field_required else "NULLABLE"}")', depth + 1)
         file.content += self.indent(f'.setDescription("{field.field_description}")', depth + 1)
 
@@ -284,7 +288,10 @@ class CodeGenBaseNode(CodeGenNode):
     Code generation for atomic fields.
     """
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int, type_map: dict):
-        file.content += self.indent(element.set(self._field.field_name, root_var.get()), depth)
+        # FUTURE: Enhance logic to represent timestamps
+        # This can be done by using a 'general' mapper function
+        # for each field, prior to extracting them.
+        file.content += self.indent(element.set(self._field.field_name, root_var.get() if not self._field.is_timestamp else f"Instant.ofEpochMilli({root_var.get()}).toString()"), depth)
 
 
 class CodeGenConditionalNode(CodeGenNode):
@@ -302,16 +309,18 @@ class CodeGenConditionalNode(CodeGenNode):
         for child in self._children:
              child.gen_code(file, element, root_var, depth + 1, type_map)
 
-        # FUTURE: Move default value to another node? Though, it is somewhat related to required fields.
-        if self._default_value is not None:
-            file.content += self.indent("} else {", depth)
-            file.content += self.indent(element.set(self._field.field_name, Variable.format_constant_value(self._default_value)), depth + 1)
+        if self._default_value is not None or self._throw_exception:
 
-        if self._throw_exception :
             file.content += self.indent("} else {", depth)
 
-            field_path = [x.field_name for x in root_var.getters] + [self._field.field_name]
-            file.content += self.indent(f'throw new Exception("Required attribute \'{".".join(field_path)}\' not found on input.");', depth + 1)
+            # Fall back onto the fault value
+            if self._default_value is not None:
+                file.content += self.indent(element.set(self._field.field_name, Variable.format_constant_value(self._default_value)), depth + 1)
+
+            # Otherwise throw exception
+            else:
+                field_path = [x.field_name for x in root_var.getters] + [self._field.field_name]
+                file.content += self.indent(f'throw new Exception("Required attribute \'{".".join(field_path)}\' not found on input.");', depth + 1)
 
         file.content += self.indent("}", depth)
 

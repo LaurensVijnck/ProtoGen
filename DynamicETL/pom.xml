@@ -14,6 +14,7 @@
         <com.google.cloud.version>1.93.9</com.google.cloud.version>
         <slf4j.version>1.7.25</slf4j.version>
         <proto.version>3.11.4</proto.version>
+        <joda-time.version>2.10.8</joda-time.version>
     </properties>
 
     <build>
@@ -127,6 +128,12 @@
             <groupId>org.xolstice.maven.plugins</groupId>
             <artifactId>protobuf-maven-plugin</artifactId>
             <version>0.6.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>${joda-time.version}</version>
         </dependency>
 
     </dependencies>

@@ -120,6 +120,7 @@ class Field:
                  is_batch_field: bool,
                  is_partitioning_field: bool,
                  is_clustering_field: bool,
+                 is_timestamp: bool,
                  is_optional_field: bool,
                  is_repeated_field: bool,
                  default_value = None):
@@ -133,6 +134,7 @@ class Field:
         self.is_batch_field = is_batch_field
         self.is_partitioning_field = is_partitioning_field
         self.is_clustering_field = is_clustering_field
+        self.is_timestamp = is_timestamp
         self.is_optional_field = is_optional_field
         self.is_repeated_field = is_repeated_field
         self.default_value = default_value
@@ -162,6 +164,7 @@ class Field:
             "batch_field": self.is_batch_field,
             "clustering_field": self.is_clustering_field,
             "partitioning_field": self.is_partitioning_field,
+            "timestamp": self.is_timestamp,
             "optional_field": self.is_optional_field,
             "repeated_field": self.is_repeated_field,
             "default_value": self.default_value

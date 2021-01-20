@@ -39,8 +39,8 @@ extend google.protobuf.MessageOptions {
 
 extend google.protobuf.FieldOptions {
 
-  // Alias of the field, name of the column
-  // used in BigQuery.
+  // Option to specify the alias of the field, alias is
+  // used to customize the BigQuery column name.
   string alias = 1010;
 
   // Description of the field. The description is
@@ -72,17 +72,18 @@ extend google.protobuf.FieldOptions {
 
   // Indicates that attribute should be used to cluster
   // the table. Currently, the order in which clustering
-  // attributes are specified is important. This can be
-  // resolved by allowing the clustering options to specify
+  // attributes are specified is important.
+  //
+  // FUTURE: resolve by allowing the clustering options to specify
   // a clustering index.
   bool clustering_attribute = 1015;
 
   // Indicates that attribute should be used to partition
   // the table. Currently, only time based partition on a
-  // specific field is supported. To simultaneously
-  // support range based partitioning, a complex
-  // partitioning option containing a oneof
-  // should be added.
+  // specific field is supported.
+  //
+  // FUTURE: to support range based partitioning, a complex
+  // partitioning option containing a oneof should be added.
   bool partitioning_attribute = 1016;
 
   // The following attribute declares that the field

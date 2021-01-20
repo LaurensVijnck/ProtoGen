@@ -24,6 +24,9 @@ message RootOptions {
   // a specific partitioning attribute will result
   // in ingestion time partitioning.
   //
+  // Note: if the 'partitioning_attribute' option is
+  // used, this flag will automatically be inferred.
+  //
   // FUTURE: Current implementation solely supports
   // time based partitioning.
   bool partitioned = 3;

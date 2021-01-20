@@ -7,10 +7,18 @@ import "google/protobuf/descriptor.proto";
 // FUTURE: Support for enriching fields?
 
 message RootOptions {
-  string table_name = 1; // Name of resulting BigQuery table
-  string table_description = 2; // Description of the resulting table.
 
-  // TODO Option to indicate that the table is clustered
+  // Name of resulting BigQuery table.
+  string table_name = 1;
+
+  // Description of the table. The description is
+  // used to fill the BigQuery table description.
+  string table_description = 2;
+
+  // Currently solely time partitioning is
+  // supported. The flag below allows for expressing
+  // ingestion time partitioning. If a partitioning
+  // attribute is specified, this flag is inferred.
   bool partitioned_table = 3;
 
   // FUTURE: Extend with advanced options, such as table expiration time.
@@ -31,16 +39,54 @@ extend google.protobuf.MessageOptions {
 
 extend google.protobuf.FieldOptions {
 
-  // Support field aliases?
+  // Future support field aliases?
 
-  bool required = 1010;               // Specifies that the field is repeated
-  string description = 1012;          // Description of the field, added to the BigQuery table schema
-  DefaultValue default_value = 1013;  // Default value used when attribute value is empty
+  // Description of the field. The description is
+  // used to fill the BigQuery column description.
+  string description = 1012;
 
-  bool batch_attribute = 1014;        // Indicates whether the attribute is used to support batching
+  // Flag to indicate that the field is required.
+  // If the field is unspecified in the proto message
+  // the parser will throw an exception during
+  // parsing.
+  //
+  // Note: can only be used in conjunction with
+  // the proto optional flag to work as expected.
+  bool required = 1010;
 
-  // TODO Use attribute to specify clustering index instead
-  bool clustering_attribute = 1015;   // Indicates that attribute should be used to cluster the table
-  bool partitioning_attribute = 1016; // Indicates that attribute should be used to partition the table
-  bool timestamp_attribute = 1017;    // Bool indicating that the attribute represents a timestamp
+  // Flag is used to define a default value
+  // for the attribute in-case the value is unspecified.
+  //
+  // Note: can only be used in conjunction with
+  // the proto optional flag to work as expected.
+  DefaultValue default_value = 1013;
+
+  // The flag below allows for indicating
+  // that the event contains a batch of attributes.
+  // the resulting parser will automatically
+  // un-batch the attributes and replicate
+  // any common fields if they exist.
+  bool batch_attribute = 1014;
+
+  // Indicates that attribute should be used to cluster
+  // the table. Currently, the order in which clustering
+  // attributes are specified is important. This can be
+  // resolved by allowing the clustering options to specify
+  // a clustering index.
+  bool clustering_attribute = 1015;
+
+  // Indicates that attribute should be used to partition
+  // the table. Currently, only time based partition on a
+  // specific field is supported. To simultaneously
+  // support range based partitioning, a complex
+  // partitioning option containing a oneof
+  // should be added.
+  bool partitioning_attribute = 1016;
+
+  // The following attribute declares that the field
+  // represents a timestamp, due to Proto not supporting
+  // timestamp fields out of the box. The flag
+  // assumes that the value is specified as a long
+  // representing a unix millis timestamp.
+  bool timestamp_attribute = 1017;
 }

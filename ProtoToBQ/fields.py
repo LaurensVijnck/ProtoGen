@@ -113,6 +113,7 @@ class Field:
     """
     def __init__(self, field_index: int,
                  field_name: str,
+                 field_alias: str,
                  field_description: str,
                  field_type: str,
                  field_type_value: MessageFieldType,
@@ -127,6 +128,7 @@ class Field:
 
         self.field_index = field_index
         self.field_name = field_name
+        self.field_alias = field_alias
         self.field_description = field_description
         self.field_type = field_type
         self.field_type_value = field_type_value
@@ -138,6 +140,12 @@ class Field:
         self.is_optional_field = is_optional_field
         self.is_repeated_field = is_repeated_field
         self.default_value = default_value
+
+    def get_field_name(self):
+        if self.field_alias is not None:
+            return self.field_alias
+
+        return self.field_name
 
     def resolve_type(self, type_map: dict):
         """
@@ -157,6 +165,7 @@ class Field:
         return {
             "index": self.field_index,
             "name": self.field_name,
+            "alias": self.field_alias,
             "description": self.field_description,
             "type": self.field_type.name,
             "type_value": self.field_type_value.get_fq_name() if self.field_type_value is not None else None,

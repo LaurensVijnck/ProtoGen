@@ -121,8 +121,6 @@ def _resolve_repository_fields(request: plugin.CodeGeneratorRequest, repository)
                 field_type = repository.get(FieldType.to_fq_name(proto_file.package, item.name))
                 fields = []
                 batch_table = False
-                partitioned_table = False
-                clustered_table = False
 
                 for f in item.field:
 
@@ -136,6 +134,7 @@ def _resolve_repository_fields(request: plugin.CodeGeneratorRequest, repository)
                         Field(
                             field_index=f.number,
                             field_name=f.name,
+                            field_alias=f.options.Extensions[bigquery_options_pb2.alias] if f.options.HasExtension(bigquery_options_pb2.alias) else None,
                             field_description=f.options.Extensions[bigquery_options_pb2.description],
                             field_type=ProtoTypeEnum._member_map_[ProtoTypeEnum(f.type).name],
                             field_type_value=repository.get(f.type_name, None),
@@ -154,13 +153,15 @@ def _resolve_repository_fields(request: plugin.CodeGeneratorRequest, repository)
 
                     # FUTURE: Check that there is solely a single partition attribute
                     # FUTURE: Check that the partition field is defined at top-level
+                    # FUTURE: Refactor alias handling
                     if f.options.Extensions[bigquery_options_pb2.partitioning_attribute]:
-                        field_type.set_partition_field(f.name)
+                        field_type.set_partition_field(f.options.Extensions[bigquery_options_pb2.alias] if f.options.HasExtension(bigquery_options_pb2.alias) else f.name)
 
                     # FUTURE: Check that there is solely a single cluster attribute
                     # FUTURE: Check that the cluster field is defined at top-level
+                    # FUTURE: Refactor alias handling
                     if f.options.Extensions[bigquery_options_pb2.clustering_attribute]:
-                        field_type.add_cluster_field(f.name)
+                        field_type.add_cluster_field(f.options.Extensions[bigquery_options_pb2.alias] if f.options.HasExtension(bigquery_options_pb2.alias) else f.name)
 
                 # FUTURE: Maybe not the ideal position to set this.
                 field_type.set_batch_table(batch_table)
@@ -236,7 +237,7 @@ def _contruct_bigquery_schema_rec(field: MessageFieldType, schema_fields: list):
         else:
             schema_fields.append(
                 bigquery.SchemaField(
-                    name=field.field_name,
+                    name=field.get_field_name(),
                     description=field.field_description,
                     mode="REPEATED" if field.is_repeated_field else "REQUIRED" if field.field_required else "NULLABLE",
                     field_type=_PROTO_TO_BQ_TYPE_MAP[field.field_type] if not field.is_timestamp else "TIMESTAMP",

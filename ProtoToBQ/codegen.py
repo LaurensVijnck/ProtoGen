@@ -291,7 +291,7 @@ class CodeGenBaseNode(CodeGenNode):
         # FUTURE: Enhance logic to represent timestamps
         # This can be done by using a 'general' mapper function
         # for each field, prior to extracting them.
-        file.content += self.indent(element.set(self._field.field_name, root_var.get() if not self._field.is_timestamp else f"Instant.ofEpochMilli({root_var.get()}).toString()"), depth)
+        file.content += self.indent(element.set(self._field.get_field_name(), root_var.get() if not self._field.is_timestamp else f"Instant.ofEpochMilli({root_var.get()}).toString()"), depth)
 
 
 class CodeGenConditionalNode(CodeGenNode):
@@ -315,11 +315,11 @@ class CodeGenConditionalNode(CodeGenNode):
 
             # Fall back onto the fault value
             if self._default_value is not None:
-                file.content += self.indent(element.set(self._field.field_name, Variable.format_constant_value(self._default_value)), depth + 1)
+                file.content += self.indent(element.set(self._field.get_field_name(), Variable.format_constant_value(self._default_value)), depth + 1)
 
             # Otherwise throw exception
             else:
-                field_path = [x.field_name for x in root_var.getters] + [self._field.field_name]
+                field_path = [x.field_name for x in root_var.getters] + [self._field.get_field_name()]
                 file.content += self.indent(f'throw new Exception("Required attribute \'{".".join(field_path)}\' not found on input.");', depth + 1)
 
         file.content += self.indent("}", depth)
@@ -360,7 +360,7 @@ class CodeGenNestedNode(CodeGenNode):
         for child in self._children:
             child.gen_code(file, var, root_var, depth, type_map)
 
-        file.content += self.indent(element.set(self._field.field_name, var.get()), depth)
+        file.content += self.indent(element.set(self._field.get_field_name(), var.get()), depth)
 
 
 class CodeGenRepeatedNode(CodeGenNode):
@@ -382,7 +382,7 @@ class CodeGenRepeatedNode(CodeGenNode):
 
         file.content += self.indent(list_var.add(var), depth + 1)
         file.content += self.indent("}", depth)
-        file.content += self.indent(element.set(self._field.field_name, list_var.get()), depth)
+        file.content += self.indent(element.set(self._field.get_field_name(), list_var.get()), depth)
 
 
 class CodeGenGetBatchNode(CodeGenNode):

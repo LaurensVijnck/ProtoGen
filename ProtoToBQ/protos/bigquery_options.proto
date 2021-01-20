@@ -39,11 +39,13 @@ extend google.protobuf.MessageOptions {
 
 extend google.protobuf.FieldOptions {
 
-  // Future support field aliases?
+  // Alias of the field, name of the column
+  // used in BigQuery.
+  string alias = 1010;
 
   // Description of the field. The description is
   // used to fill the BigQuery column description.
-  string description = 1012;
+  string description = 1011;
 
   // Flag to indicate that the field is required.
   // If the field is unspecified in the proto message
@@ -52,7 +54,7 @@ extend google.protobuf.FieldOptions {
   //
   // Note: can only be used in conjunction with
   // the proto optional flag to work as expected.
-  bool required = 1010;
+  bool required = 1012;
 
   // Flag is used to define a default value
   // for the attribute in-case the value is unspecified.

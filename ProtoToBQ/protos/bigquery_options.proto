@@ -15,11 +15,18 @@ message RootOptions {
   // used to fill the BigQuery table description.
   string table_description = 2;
 
-  // Currently solely time partitioning is
-  // supported. The flag below allows for expressing
-  // ingestion time partitioning. If a partitioning
-  // attribute is specified, this flag is inferred.
-  bool partitioned_table = 3;
+  // The flag below is used to indicate whether
+  // the table is partitioned. Can be used in conjunction
+  // with the 'partitioning_attribute' field options to
+  // indicate a specific partitioning attribute.
+  //
+  // Note: setting the partitioned flag without specifying
+  // a specific partitioning attribute will result
+  // in ingestion time partitioning.
+  //
+  // FUTURE: Current implementation solely supports
+  // time based partitioning.
+  bool partitioned = 3;
 
   // FUTURE: Extend with advanced options, such as table expiration time.
 }
@@ -52,14 +59,14 @@ extend google.protobuf.FieldOptions {
   // the parser will throw an exception during
   // parsing.
   //
-  // Note: can only be used in conjunction with
+  // Note: should be used in conjunction with
   // the proto optional flag to work as expected.
   bool required = 1012;
 
   // Flag is used to define a default value
   // for the attribute in-case the value is unspecified.
   //
-  // Note: can only be used in conjunction with
+  // Note: should used in conjunction with
   // the proto optional flag to work as expected.
   DefaultValue default_value = 1013;
 

@@ -203,7 +203,7 @@ def _generate_repository(request: plugin.CodeGeneratorRequest):
                     if table_root:
                         # Extract root options
                         root_options = item.options.Extensions[bigquery_options_pb2.root_options]
-                        field_type.set_table_root(True, root_options.table_name, root_options.table_description)
+                        field_type.set_table_root(True, root_options.table_name, root_options.table_description, root_options.partitioned)
                         root_elements.append(field_type)
 
                 elif isinstance(item, EnumDescriptorProto):

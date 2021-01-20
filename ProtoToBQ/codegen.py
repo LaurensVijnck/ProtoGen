@@ -147,10 +147,10 @@ class CodeGenClassNode(CodeGenImp):
         file.content += self.indent("", depth)
         file.content += self.indent(f"public TimePartitioning getPartitioning() {{", depth + 1)
 
-        if self.field_type.partition_field is None:
-            file.content += self.indent(f'return {Variable.format_constant_value(None)};', depth + 2)
-        else:
+        if self.field_type.partitioned:
             file.content += self.indent(f'return new TimePartitioning().setField({Variable.format_constant_value(self.field_type.partition_field)});', depth + 2)
+        else:
+            file.content += self.indent(f'return {Variable.format_constant_value(None)};', depth + 2)
         file.content += self.indent("}", depth + 1)
 
         # Generate cluster fields extractor function

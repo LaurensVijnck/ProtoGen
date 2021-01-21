@@ -142,7 +142,7 @@ def _resolve_repository_fields(request: plugin.CodeGeneratorRequest, repository)
                             is_batch_field=f.options.Extensions[bigquery_options_pb2.batch_attribute],
                             is_clustering_field=f.options.Extensions[bigquery_options_pb2.clustering_attribute],
                             is_timestamp=f.options.Extensions[bigquery_options_pb2.timestamp_attribute],
-                            is_partitioning_field=f.options.Extensions[bigquery_options_pb2.partitioning_attribute],
+                            is_partitioning_field=f.options.Extensions[bigquery_options_pb2.timestamp_attribute],
                             is_optional_field=f.proto3_optional,
                             is_repeated_field=f.label == f.LABEL_REPEATED,
                             default_value=default_value
@@ -154,7 +154,7 @@ def _resolve_repository_fields(request: plugin.CodeGeneratorRequest, repository)
                     # FUTURE: Check that there is solely a single partition attribute
                     # FUTURE: Check that the partition field is defined at top-level
                     # FUTURE: Refactor alias handling
-                    if f.options.Extensions[bigquery_options_pb2.partitioning_attribute]:
+                    if f.options.Extensions[bigquery_options_pb2.time_partitioning_attribute]:
                         field_type.set_partition_field(f.options.Extensions[bigquery_options_pb2.alias] if f.options.HasExtension(bigquery_options_pb2.alias) else f.name)
 
                     # FUTURE: Check that there is solely a single cluster attribute
@@ -203,7 +203,7 @@ def _generate_repository(request: plugin.CodeGeneratorRequest):
                     if table_root:
                         # Extract root options
                         root_options = item.options.Extensions[bigquery_options_pb2.root_options]
-                        field_type.set_table_root(True, root_options.table_name, root_options.table_description, root_options.partitioned)
+                        field_type.set_table_root(True, root_options.table_name, root_options.table_description, root_options.time_partitioning, root_options.time_partitioning_expiration_ms)
                         root_elements.append(field_type)
 
                 elif isinstance(item, EnumDescriptorProto):
@@ -237,7 +237,7 @@ def _contruct_bigquery_schema_rec(field: MessageFieldType, schema_fields: list):
         else:
             schema_fields.append(
                 bigquery.SchemaField(
-                    name=field.get_field_name(),
+                    name=field.get_bigquery_field_name(),
                     description=field.field_description,
                     mode="REPEATED" if field.is_repeated_field else "REQUIRED" if field.field_required else "NULLABLE",
                     field_type=_PROTO_TO_BQ_TYPE_MAP[field.field_type] if not field.is_timestamp else "TIMESTAMP",

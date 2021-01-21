@@ -29,7 +29,14 @@ message RootOptions {
   //
   // FUTURE: Current implementation solely supports
   // time based partitioning.
-  bool partitioned = 3;
+  bool time_partitioning = 3;
+
+  // Provide an expiration window for partitions. Leave
+  // the value empty to retain partitions forever.
+  //
+  // FUTURE: Introduce a nested option for partitioning
+  // that bundles all options w.r.t. patitioning.
+  int64 time_partitioning_expiration_ms = 4;
 
   // FUTURE: Extend with advanced options, such as table expiration time.
 }
@@ -73,11 +80,14 @@ extend google.protobuf.FieldOptions {
   // the proto optional flag to work as expected.
   DefaultValue default_value = 1013;
 
-  // The flag below allows for indicating
-  // that the event contains a batch of attributes.
-  // the resulting parser will automatically
-  // un-batch the attributes and replicate
-  // any common fields if they exist.
+  // The flag below allows for indicating that the
+  // event contains a batch of attributes. the resulting
+  // parser will automatically un-batch the attributes
+  // and replicate any common fields if they exist.
+  //
+  // NOTE: This attribute is only supported for top-level
+  // attributes, i.e., it should be added to an attribute
+  // that is marked with the 'table_root' option.
   bool batch_attribute = 1014;
 
   // Indicates that attribute should be used to cluster
@@ -94,7 +104,7 @@ extend google.protobuf.FieldOptions {
   //
   // FUTURE: to support range based partitioning, a complex
   // partitioning option containing a oneof should be added.
-  bool partitioning_attribute = 1016;
+  bool time_partitioning_attribute = 1016;
 
   // The following attribute declares that the field
   // represents a timestamp, due to Proto not supporting

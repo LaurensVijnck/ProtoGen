@@ -27,7 +27,7 @@ tags = ["hi", "there"]
 
 # Construct event
 event = event_pb2.Event()
-event.event_time_millis = int(round(time.time() * 1000))
+event.epoch_timestamp_millis = int(round(time.time() * 1000))
 event.tenant_id = "lvi"
 
 client = client_pb2.Client()

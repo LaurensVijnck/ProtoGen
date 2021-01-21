@@ -5,7 +5,7 @@ package lvi;
 import "protos/bigquery_options.proto";
 
 message Address {
-  string street = 1;
+  optional string street = 1 [(required) = true];
   string number = 2;
   string country = 3;
 }

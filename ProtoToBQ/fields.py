@@ -42,18 +42,20 @@ class MessageFieldType(FieldType):
         self.batch_table = False
         self.table_name = None
         self.cluster_fields = []
-        self.partitioned = False
+        self.time_partitioning = False
+        self.partitioning_expiration = 0
         self.partition_field = None
         self.table_description = None
 
     def set_fields(self, fields: list):
         self.fields = fields
 
-    def set_table_root(self, table_root: bool, table_name: str, table_description: str, partitioned: bool = False):
+    def set_table_root(self, table_root: bool, table_name: str, table_description: str, time_partitioning: bool = False, partitioning_expiration: int = 0):
         self.table_root = table_root
         self.table_name = table_name
         self.table_description = table_description
-        self.partitioned = partitioned
+        self.time_partitioning = time_partitioning
+        self.partitioning_expiration = partitioning_expiration
 
     def set_batch_table(self, batch_table: bool):
         self.batch_table = batch_table
@@ -62,7 +64,7 @@ class MessageFieldType(FieldType):
         self.cluster_fields.append(cluster_field)
 
     def set_partition_field(self, partition_field: str):
-        self.partitioned = True
+        self.time_partitioning = True
         self.partition_field = partition_field
 
     def to_json(self):
@@ -74,7 +76,8 @@ class MessageFieldType(FieldType):
             "table_root": self.table_root,
             "batch_table": self.batch_table,
             "cluster_fields": self.cluster_fields,
-            "partitioned": self.partitioned,
+            "time_partitioning": self.time_partitioning,
+            "partitioning_expiration": self.partitioning_expiration,
             "partition_field": self.partition_field,
             "table_name": self.table_name,
             "table_description": self.table_description,
@@ -145,7 +148,7 @@ class Field:
         self.is_repeated_field = is_repeated_field
         self.default_value = default_value
 
-    def get_field_name(self):
+    def get_bigquery_field_name(self):
         if self.field_alias is not None:
             return self.field_alias
 

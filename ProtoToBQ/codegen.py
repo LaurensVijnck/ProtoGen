@@ -147,8 +147,13 @@ class CodeGenClassNode(CodeGenImp):
         file.content += self.indent("", depth)
         file.content += self.indent(f"public TimePartitioning getPartitioning() {{", depth + 1)
 
-        if self.field_type.partitioned:
-            file.content += self.indent(f'return new TimePartitioning().setField({Variable.format_constant_value(self.field_type.partition_field)});', depth + 2)
+        if self.field_type.time_partitioning:
+            # https://www.javadoc.io/doc/com.google.apis/google-api-services-bigquery/v2-rev20181221-1.28.0/com/google/api/services/bigquery/model/TimePartitioning.html
+            file.content += self.indent(f'return new TimePartitioning()', depth + 2)
+            file.content += self.indent(f'.setField({Variable.format_constant_value(self.field_type.partition_field)})', depth + 3)
+
+            # Includes a rather nasty fix as python does _not_ explicitly fix long values
+            file.content += self.indent(f'.setExpirationMs({Variable.format_constant_value(self.field_type.partitioning_expiration)}L);', depth + 3)
         else:
             file.content += self.indent(f'return {Variable.format_constant_value(None)};', depth + 2)
         file.content += self.indent("}", depth + 1)
@@ -160,6 +165,7 @@ class CodeGenClassNode(CodeGenImp):
         if len(self.field_type.cluster_fields) == 0:
             file.content += self.indent(f'return {Variable.format_constant_value(None)};', depth + 2)
         else:
+            # https://www.javadoc.io/doc/com.google.apis/google-api-services-bigquery/v2-rev20181221-1.28.0/com/google/api/services/bigquery/model/Clustering.html
             file.content += self.indent(f'return new Clustering()',depth + 2)
             file.content += self.indent(f'.setFields(Arrays.asList({", ".join([Variable.format_constant_value(field) for field in self.field_type.cluster_fields])}));',depth + 3)
         file.content += self.indent("}", depth + 1)
@@ -195,10 +201,12 @@ class CodeGenSchemaFunctionNode(CodeGenImp):
             return self._codegen_schema(file, field.field_type_value, depth)
 
         file.content += self.indent(f'new TableFieldSchema()', depth)
-        file.content += self.indent(f'.setName({Variable.format_constant_value(field.field_name)})', depth + 1)
+        file.content += self.indent(f'.setName({Variable.format_constant_value(field.get_bigquery_field_name())})', depth + 1)
 
         # FUTURE: Enhance logic to represent timestamps
         file.content += self.indent(f'.setType({Variable.format_constant_value(self.bq_type_map[field.field_type] if not field.is_timestamp else "TIMESTAMP")})', depth + 1)
+
+        # FUTURE: Design utility to extract the mode
         file.content += self.indent(f'.setMode("{"REPEATED" if field.is_repeated_field else "REQUIRED" if field.field_required else "NULLABLE"}")', depth + 1)
         file.content += self.indent(f'.setDescription("{field.field_description}")', depth + 1)
 
@@ -291,7 +299,7 @@ class CodeGenBaseNode(CodeGenNode):
         # FUTURE: Enhance logic to represent timestamps
         # This can be done by using a 'general' mapper function
         # for each field, prior to extracting them.
-        file.content += self.indent(element.set(self._field.get_field_name(), root_var.get() if not self._field.is_timestamp else f"Instant.ofEpochMilli({root_var.get()}).toString()"), depth)
+        file.content += self.indent(element.set(self._field.get_bigquery_field_name(), root_var.get() if not self._field.is_timestamp else f"Instant.ofEpochMilli({root_var.get()}).toString()"), depth)
 
 
 class CodeGenConditionalNode(CodeGenNode):
@@ -315,11 +323,11 @@ class CodeGenConditionalNode(CodeGenNode):
 
             # Fall back onto the fault value
             if self._default_value is not None:
-                file.content += self.indent(element.set(self._field.get_field_name(), Variable.format_constant_value(self._default_value)), depth + 1)
+                file.content += self.indent(element.set(self._field.get_bigquery_field_name(), Variable.format_constant_value(self._default_value)), depth + 1)
 
             # Otherwise throw exception
             else:
-                field_path = [x.field_name for x in root_var.getters] + [self._field.get_field_name()]
+                field_path = [x.field_name for x in root_var.getters] + [self._field.get_bigquery_field_name()]
                 file.content += self.indent(f'throw new Exception("Required attribute \'{".".join(field_path)}\' not found on input.");', depth + 1)
 
         file.content += self.indent("}", depth)
@@ -360,7 +368,7 @@ class CodeGenNestedNode(CodeGenNode):
         for child in self._children:
             child.gen_code(file, var, root_var, depth, type_map)
 
-        file.content += self.indent(element.set(self._field.get_field_name(), var.get()), depth)
+        file.content += self.indent(element.set(self._field.get_bigquery_field_name(), var.get()), depth)
 
 
 class CodeGenRepeatedNode(CodeGenNode):
@@ -382,7 +390,7 @@ class CodeGenRepeatedNode(CodeGenNode):
 
         file.content += self.indent(list_var.add(var), depth + 1)
         file.content += self.indent("}", depth)
-        file.content += self.indent(element.set(self._field.get_field_name(), list_var.get()), depth)
+        file.content += self.indent(element.set(self._field.get_bigquery_field_name(), list_var.get()), depth)
 
 
 class CodeGenGetBatchNode(CodeGenNode):

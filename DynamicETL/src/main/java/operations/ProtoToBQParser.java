@@ -8,8 +8,6 @@ import org.apache.beam.sdk.values.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-
 public class ProtoToBQParser<InputT> extends PTransform<PCollection<InputT>, PDone> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProtoToBQParser.class);

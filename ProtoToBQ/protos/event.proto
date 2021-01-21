@@ -22,11 +22,12 @@ message Event {
     // Bigquery meta data
     option (root_options).table_name = "event_table";
     option (root_options).table_description = "ProtoToBQ generated table for events";
-    option (root_options).partitioned = true;
+    option (root_options).time_partitioning = true;
+    // option (root_options).time_partitioning_expiration_ms = 6000;
 
     // Fields
     Client client = 1  [(required) = false, (description) = "Owner of the event"];
     repeated BatchEvent events = 2 [(required) = true, (batch_attribute) = true];
-    // optional int64 epoch_timestamp_millis = 3 [(required) = true, (partitioning_attribute) = true, (timestamp_attribute) = true, (alias) = "event_time"];
+    optional int64 epoch_timestamp_millis = 3 [(required) = true, (time_partitioning_attribute) = true, (timestamp_attribute) = true, (alias) = "event_time"];
     optional string tenant_id = 4 [(required) = true, (clustering_attribute) = true];
 }

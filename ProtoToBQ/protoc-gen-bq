@@ -197,12 +197,12 @@ def _generate_repository(request: plugin.CodeGeneratorRequest):
 
                 if isinstance(item, DescriptorProto):
 
-                    table_root = item.options.HasExtension(bigquery_options_pb2.root_options)
+                    table_root = item.options.HasExtension(bigquery_options_pb2.bq_root_options)
                     field_type = MessageFieldType(proto_file.package, Path(proto_file.name).stem, item.name, ambiguous_file_name)
 
                     if table_root:
                         # Extract root options
-                        root_options = item.options.Extensions[bigquery_options_pb2.root_options]
+                        root_options = item.options.Extensions[bigquery_options_pb2.bq_root_options]
                         field_type.set_table_root(True, root_options.table_name, root_options.table_description, root_options.time_partitioning, root_options.time_partitioning_expiration_ms)
                         root_elements.append(field_type)
 

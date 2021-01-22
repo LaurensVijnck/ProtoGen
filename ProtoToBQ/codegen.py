@@ -152,7 +152,7 @@ class CodeGenClassNode(CodeGenImp):
             file.content += self.indent(f'return new TimePartitioning()', depth + 2)
             file.content += self.indent(f'.setField({Variable.format_constant_value(self.field_type.partition_field)})', depth + 3)
 
-            # Includes a rather nasty fix as python does _not_ explicitly fix long values
+            # Includes a rather nasty fix as python does _not_ explicitly support long values
             file.content += self.indent(f'.setExpirationMs({Variable.format_constant_value(self.field_type.partitioning_expiration)}L);', depth + 3)
         else:
             file.content += self.indent(f'return {Variable.format_constant_value(None)};', depth + 2)
@@ -293,18 +293,33 @@ class CodeGenNode(CodeGenImp):
 
 class CodeGenBaseNode(CodeGenNode):
     """
-    Code generation for atomic fields.
+    Code generation for atomic fields, i.e., it sets a particular (non-complex)
+    table row to the value of the attribute, e.g.,
+
+    tableRow.set("name", protoObj.getName());
     """
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int, type_map: dict):
-        # FUTURE: Enhance logic to represent timestamps
-        # This can be done by using a 'general' mapper function
-        # for each field, prior to extracting them.
-        file.content += self.indent(element.set(self._field.get_bigquery_field_name(), root_var.get() if not self._field.is_timestamp else f"Instant.ofEpochMilli({root_var.get()}).toString()"), depth)
+        if self._field.is_timestamp:
+            # FUTURE: Enhance logic to represent timestamps. This can be done
+            # by using a 'general' mapper function for each field, prior to assigning
+            # them to the bigquery table field.
+            file.content += self.indent(element.set(self._field.get_bigquery_field_name(), f"Instant.ofEpochMilli({root_var.get()}).toString()"), depth)
+        else:
+            file.content += self.indent(element.set(self._field.get_bigquery_field_name(), root_var.get()), depth)
 
 
 class CodeGenConditionalNode(CodeGenNode):
     """
-    Conditional code generation for a given field, i.e., node checks whether field value is available.
+    Conditional code generation for a given field, i.e., node checks whether field value is
+    available. Optionally, the node can throw an exception if the field is unavailable
+    or establish a default value.
+
+    if (protoObj.hasName()) {
+        ..
+    } else {
+        throw new Exception("Required attribute 'name' not found on input);
+        // or tableRow.set("name", defaultValue);
+    }
     """
     def __init__(self, field: Field, throw_exception = False, default_value=None):
         super().__init__(field)
@@ -335,7 +350,9 @@ class CodeGenConditionalNode(CodeGenNode):
 
 class CodeGenGetFieldNode(CodeGenNode):
     """
-    Code generation to apply a getter on the root variable.
+    Code generation to apply a getter on the root variable, e.g.,
+
+    street = protoObj.getAddress().getStreet();
     """
     def __init__(self, field: Field):
         super().__init__(field)
@@ -351,7 +368,15 @@ class CodeGenGetFieldNode(CodeGenNode):
 
 class CodeGenNestedNode(CodeGenNode):
     """
-    Code generation for (nested) message fields
+    Code generation for (nested) message fields. The node will create an intermediate
+    tableCell and process the elements within the nested field. After completion
+    the tableCell will be added to the tableRow.
+
+    TableCell address = new TableCell();
+    // recurse into children, e.g.,
+    // address.set("street", protoObj.getAddress().getStreet())
+    // ..
+    tableRow.set("address", address);
     """
     def __init__(self, field: Field):
         super().__init__(field)
@@ -373,7 +398,19 @@ class CodeGenNestedNode(CodeGenNode):
 
 class CodeGenRepeatedNode(CodeGenNode):
     """
-    Code generation for repeated atomic fields.
+    Code generation for repeated fields. Repeated nodes are handled similar to the
+    nested nodes, but construct an array of TableCells, e.g.,
+
+    List<String> tag_cells = new LinkedList<>();
+
+    for(ProtoTagObj tag: protoObj.getTagList()) {
+        TableCell tag_cell = new TableCell();
+        // recurse into children, e.g.,
+        // tag_cell.set("code", ProtoTagObj.getCode())
+        // ..
+    }
+
+    tableRow.set("tags", tag_cells)
     """
     def gen_code(self, file, element: Variable, root_var: Variable, depth: int, type_map: dict):
         list_var = ListVariable(Variable.to_variable(f"{self._field.field_name}_cells"), "LinkedList", "TableCell")

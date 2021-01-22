@@ -6,7 +6,7 @@ import "google/protobuf/descriptor.proto";
 
 // FUTURE: Support for enriching fields?
 
-message RootOptions {
+message BigQueryRootOptions {
 
   // Name of resulting BigQuery table.
   string table_name = 1;
@@ -41,18 +41,10 @@ message RootOptions {
   // FUTURE: Extend with advanced options, such as table expiration time.
 }
 
-message DefaultValue {
-  oneof value_oneof {
-    bool bool = 1;
-    int64 int = 2;
-    string string = 3;
-    float float = 4;
-  }
+extend google.protobuf.MessageOptions {
+  BigQueryRootOptions bq_root_options = 51235; // Which number to pick anyway?
 }
 
-extend google.protobuf.MessageOptions {
-  RootOptions root_options = 51235; // Which number to pick anyway?
-}
 
 extend google.protobuf.FieldOptions {
 
@@ -112,4 +104,13 @@ extend google.protobuf.FieldOptions {
   // assumes that the value is specified as a long
   // representing a unix millis timestamp.
   bool timestamp_attribute = 1017;
+}
+
+message DefaultValue {
+  oneof value_oneof {
+    bool bool = 1;
+    int64 int = 2;
+    string string = 3;
+    float float = 4;
+  }
 }

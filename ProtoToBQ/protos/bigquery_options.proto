@@ -37,8 +37,6 @@ message BigQueryRootOptions {
   // FUTURE: Introduce a nested option for partitioning
   // that bundles all options w.r.t. patitioning.
   int64 time_partitioning_expiration_ms = 4;
-
-  // FUTURE: Extend with advanced options, such as table expiration time.
 }
 
 extend google.protobuf.MessageOptions {

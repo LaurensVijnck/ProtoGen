@@ -5,6 +5,7 @@ VENV_PATH=/Users/lvijnck/Desktop/env/ProtoToBQ/bin/activate
 source $VENV_PATH
 
 # Add path to executable to path variable
+# FUTURE: Create venv as part of the plugin
 SRC_DIR=/Users/lvijnck/Desktop/ProtoBQGeneration/ProtoToBQ/
 export PATH=$SRC_DIR:$PATH
 
@@ -18,9 +19,9 @@ mkdir -p $DST_DIR/bigquery
 protoc -I=. \
     --java_out=$DST_DIR/java \
     --experimental_allow_proto3_optional \
-   protos/*
+    $1
 
 # Invoke Custom BigQuery pluging
-protoc ./protos/* \
+protoc $1 \
   --experimental_allow_proto3_optional \
   --bq_out=$DST_DIR/bigquery

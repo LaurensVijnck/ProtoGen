@@ -21,7 +21,7 @@ protoc -I=. \
     --experimental_allow_proto3_optional \
    protos/*
 
-# Invoke Custom BigQuery pluging
+# Invoke Custom BigQuery plugin
 protoc -I=. \
   --experimental_allow_proto3_optional \
   --plugin=protoc-gen-bq=protoc-gen-bq \

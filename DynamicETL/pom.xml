@@ -32,7 +32,7 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <executions>
                     <execution>
-                        <id>Stuff I want done</id>
+                        <id>ProtoToBQ</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>exec</goal>
@@ -40,6 +40,10 @@
                         <configuration>
                             <executable>/bin/bash</executable>
                             <executable>scripts/001_run.sh</executable>
+                            <arguments>
+                                <!-- Argument points to dir containing protos -->
+                                <argument>./protos/*</argument>
+                            </arguments>
                         </configuration>
                     </execution>
                 </executions>

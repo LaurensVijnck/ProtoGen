@@ -64,7 +64,7 @@ public class DynamicETL {
 
         @Override
         public String apply(PubsubMessage input) {
-            return input.getAttribute(this.attribute)
+            return input.getAttribute(this.attribute);
         }
     }
 

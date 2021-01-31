@@ -6,6 +6,7 @@ import "google/protobuf/descriptor.proto";
 
 // FUTURE: Support for enriching fields?
 
+
 message BigQueryRootOptions {
 
   // Name of resulting BigQuery table.

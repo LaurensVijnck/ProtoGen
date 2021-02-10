@@ -2,3 +2,4 @@ protobuf==3.13.0
 six==1.15.0
 google-cloud-pubsub>=0.39.0
 google-cloud-bigquery==1.24.0
+jsondiff==1.2.0

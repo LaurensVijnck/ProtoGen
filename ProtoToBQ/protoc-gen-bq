@@ -16,7 +16,6 @@ from google.protobuf.descriptor_pb2 import DescriptorProto, EnumDescriptorProto
 from codegen import *
 from enums import ProtoTypeEnum
 
-
 _PROTO_TO_JAVA_TYPE_MAP = {
     ProtoTypeEnum.TYPE_DOUBLE: "Double",
     ProtoTypeEnum.TYPE_FLOAT: "Float",
@@ -113,8 +112,9 @@ def _resolve_repository_fields(request: plugin.CodeGeneratorRequest, repository)
 
                     if f.options.HasExtension(bigquery_options_pb2.default_value):
                         default_extension = f.options.Extensions[bigquery_options_pb2.default_value]
-                        default_value = getattr(default_extension, default_extension.WhichOneof(oneof_name='value_oneof'))
+                        default_value = getattr(default_extension, default_extension.WhichOneof('value_oneof'))
 
+                    # TODO: make sure we respect proto indexes for ordering (to avoid diff issues)
                     fields.append(
                         Field(
                             field_index=f.number,

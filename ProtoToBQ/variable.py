@@ -2,6 +2,10 @@ from fields import *
 import re
 
 
+
+
+
+
 class Variable:
     """
     Representation of a variable.

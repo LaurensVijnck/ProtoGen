@@ -6,6 +6,7 @@ import logging
 
 from enum import Enum
 from pathlib import Path
+from jsondiff import diff
 
 from output.python.protos import bigquery_options_pb2
 from google.cloud import bigquery
@@ -14,23 +15,6 @@ from google.protobuf.descriptor_pb2 import DescriptorProto, EnumDescriptorProto
 
 from codegen import *
 from enums import ProtoTypeEnum
-
-
-# https://cloud.google.com/bigquery/docs/reference/standard-sql/data-types
-class BigQueryTypeEnum(Enum):
-    TYPE_INT64 = 1,
-    TYPE_NUMERIC = 2,
-    TYPE_FLOAT64 = 3,
-    TYPE_BOOL = 4,
-    TYPE_STRING = 5,
-    TYPE_BYTES = 6,
-    TYPE_DATE = 7,
-    TYPE_DATETIME = 8,
-    TYPE_TIME = 9,
-    TYPE_TIMESTAMP = 10,
-    TYPE_ARRAY = 11,
-    TYPE_STRUCT = 12,
-    TYPE_GEOGRAPHY = 13
 
 
 _PROTO_TO_JAVA_TYPE_MAP = {
@@ -223,6 +207,9 @@ def _contruct_bigquery_schema_rec(field: MessageFieldType, schema_fields: list):
     """
     Function to recursively generate a BigQuery schema for a message.
 
+    FUTURE: When supporting multi-language codegen, the CodeGenSchema node
+    should handle the generation of the JSON version of the schema.
+
     :param field: MessageFieldType
     :param schema_fields: wrapper for the fields
     :return:
@@ -249,7 +236,7 @@ def _contruct_bigquery_schema_rec(field: MessageFieldType, schema_fields: list):
     return schema_fields
 
 
-def add_codegen_node_conditionally(root: CodeGenImp, node: CodeGenImp, condition = True):
+def _add_codegen_node_conditionally(root: CodeGenImp, node: CodeGenImp, condition = True):
     """
     Function to conditionally add a node to the tree, if the conditional succeeds, the node is
     added and is returned by the function. If the conditional fails, the old root is returned.
@@ -262,6 +249,7 @@ def add_codegen_node_conditionally(root: CodeGenImp, node: CodeGenImp, condition
     if condition:
         root.add_child(node)
         return node
+
     return root
 
 
@@ -278,23 +266,23 @@ def codegen_rec(field_type: MessageFieldType, root: CodeGenImp, table_root: bool
     for field in field_type.fields:
 
         field_root = node
-        field_root = add_codegen_node_conditionally(field_root, CodeGenRepeatedNode(field), field.is_repeated_field and not (table_root and field.is_batch_field))
+        field_root = _add_codegen_node_conditionally(field_root, CodeGenRepeatedNode(field), field.is_repeated_field and not (table_root and field.is_batch_field))
 
         if field.field_type == ProtoTypeEnum.TYPE_MESSAGE:
             if table_root and field.is_batch_field:
                 # Batch field attached directly to the root, as to allow
                 # grouping of the batch and non-batch nodes.
-                field_root = add_codegen_node_conditionally(root, CodeGenGetBatchNode(field, node))
+                field_root = _add_codegen_node_conditionally(root, CodeGenGetBatchNode(field, node))
             else:
-                field_root = add_codegen_node_conditionally(field_root, CodeGenNestedNode(field), not field.is_repeated_field)
-                field_root = add_codegen_node_conditionally(field_root, CodeGenConditionalNode(field, field.field_required, field.default_value), not field.is_repeated_field)
-                field_root = add_codegen_node_conditionally(field_root, CodeGenGetFieldNode(field), not field.is_repeated_field)
+                field_root = _add_codegen_node_conditionally(field_root, CodeGenNestedNode(field), not field.is_repeated_field)
+                field_root = _add_codegen_node_conditionally(field_root, CodeGenConditionalNode(field, field.field_required, field.default_value), not field.is_repeated_field)
+                field_root = _add_codegen_node_conditionally(field_root, CodeGenGetFieldNode(field), not field.is_repeated_field)
 
             # Recurse child fields
             codegen_rec(field.field_type_value, field_root)
         else:
-            field_root = add_codegen_node_conditionally(field_root, CodeGenConditionalNode(field, field.field_required, field.default_value), field.is_optional_field or field.default_value is not None)
-            field_root = add_codegen_node_conditionally(field_root, CodeGenGetFieldNode(field), not field.is_repeated_field)
+            field_root = _add_codegen_node_conditionally(field_root, CodeGenConditionalNode(field, field.field_required, field.default_value), field.is_optional_field or field.default_value is not None)
+            field_root = _add_codegen_node_conditionally(field_root, CodeGenGetFieldNode(field), not field.is_repeated_field)
             field_root.add_child(CodeGenBaseNode(field))
 
     root.add_child(node)
@@ -322,6 +310,31 @@ def create_codegen_tree(class_name: str, interface_name: str, root: MessageField
     return class_node
 
 
+def read_repository(repository_path: str) -> dict:
+    """
+    Read repository from file.
+
+    :param repository_path: (str) Repository path.
+    :return: (dict) Repository
+    """
+    with open(repository_path) as fp:
+        repo = json.loads(fp.read())
+
+    return repo
+
+
+def validate_changes(new_repo: dict, old_repo: dict):
+    """
+    Function to detect conflicting changes in the new and
+    old repositories.
+
+    :param old_repo:
+    :param new_repo:
+    :return:
+    """
+    logging.warning(diff(old_repo, new_repo))
+
+
 def generate_code(request: plugin.CodeGeneratorRequest, response: plugin.CodeGeneratorResponse):
     """
     :param request: the plugin's input source
@@ -329,11 +342,14 @@ def generate_code(request: plugin.CodeGeneratorRequest, response: plugin.CodeGen
     :return: None
     """
 
-    # FUTURE: Add validation to old and new repository to detect conflicting changes.
-    # FUTURE: Enforce that required and fields with defaults are marked optional.
-
     client = bigquery.Client() # JSON Serializing the schema requires the BigQuery client :(
     repo, root_elements = _generate_repository(request)
+
+    # FUTURE: Enforce that required and fields with defaults are marked optional.
+    # FUTURE: Add validation to old and new repository to detect conflicting changes.
+    new_repo = {k: v.to_json() for k, v in repo.items()}
+    old_repo = read_repository(request.parameter)
+    validate_changes(new_repo, old_repo)
 
     package_name = "lvi"
     interface_name = "BQParserImp"
@@ -375,7 +391,7 @@ def generate_code(request: plugin.CodeGeneratorRequest, response: plugin.CodeGen
 
     # Drop new repository
     f = response.file.add()
-    f.name = 'repository_new.json'
+    f.name = 'repository.json'
     f.content = json.dumps({k: v.to_json() for k, v in repo.items()}, indent=2)
 
 
@@ -387,9 +403,6 @@ if __name__ == '__main__':
     # Parse request
     request = plugin.CodeGeneratorRequest()
     request.ParseFromString(data)
-
-    logging.warning(dir(request))
-    logging.warning(request.parameter)
 
     # Create response
     response = plugin.CodeGeneratorResponse()

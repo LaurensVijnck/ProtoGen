@@ -2,6 +2,7 @@ from fields import *
 import re
 
 
+# FUTURE: Distinction between variable and variables with constant values
 class Variable:
     """
     Representation of a variable.
@@ -20,6 +21,7 @@ class Variable:
     def has(self, field: Field):
         return self.get() + self.underscore_to_camelcase(f".has_{field.field_name}()")
 
+    # TODO: Move to JavaSyntax
     def get(self):
         return self.name + "".join([self.underscore_to_camelcase(f".get_{getter.field_name}()") for getter in self.getters])
 
@@ -45,6 +47,7 @@ class Variable:
             return s[0].upper() + Variable.underscore_to_camelcase(s[1:])
         return s
 
+    # TODO Move to JavaSyntax
     @staticmethod
     def format_constant_value(val):
 
@@ -58,6 +61,7 @@ class Variable:
             return f'{val}f'
 
         return val
+
 
 class ListVariable(Variable):
     """

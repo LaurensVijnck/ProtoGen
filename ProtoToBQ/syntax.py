@@ -15,6 +15,17 @@ class LanguageSyntax(ABC):
         :return:
         """
 
+    def generate_class(self, name: str, parent_classes: [] = None, abstract: bool = False, final: bool = False) -> str:
+        """
+        Function to generate a class in the programming language.
+
+        :param name: name of the class
+        :param parent_classes: names of parent classes
+        :param abstract: indicator whether class is abstract
+        :return:
+        """
+        ...
+
     def generate_function_header(self, name: str, return_type: str, params: [Variable], exceptions: [str] = None, abstract: bool = False) -> str:
         """
         Function to declare a function.
@@ -57,7 +68,16 @@ class LanguageSyntax(ABC):
         """
         ...
 
-    def generate_comment(self, message: str):
+    def generate_return(self, value: Value) -> str:
+        """
+        Function to generate a return statement
+
+        :param value:
+        :return:
+        """
+        ...
+
+    def generate_comment(self, message: str) -> str:
         """
         Function to generate a comment in the given programming language.
 
@@ -66,7 +86,7 @@ class LanguageSyntax(ABC):
         """
         ...
 
-    def declare_variable(self, variable: Variable):
+    def declare_variable(self, variable: Variable) -> str:
         """
         Function to declare a variable.
 
@@ -143,10 +163,14 @@ class JavaSyntax(LanguageSyntax):
         # TODO Unsure if this is the right location to do this, maybe move to variable
         return variable.name + "".join([self.underscore_to_camelcase(f".get_{getter.field_name}()") for getter in variable.getters])
 
+    def generate_class(self, name: str, parent_classes: [] = None, abstract: bool = False, final: bool = False) -> str:
+        parents_formatted = f" extends {', '.join([self.to_class_name(clss) for clss in parent_classes])}" if parent_classes is not None else ""
+        return f"public{' abstract' if abstract else ''}{' final' if final else ''} class {self.to_class_name(name)}{parents_formatted} "
+
     def generate_function_header(self, name: str, return_type: str, params: [Variable], exceptions: [str] = None, abstract: bool = False) -> str:
         exceptions_formatted = f" throws {', '.join([self.to_class_name(exception) for exception in exceptions])}" if exceptions is not None else ""
-        end_formatted = ";" if abstract else ''
-        return f"public {'abstract' if abstract else ''} {self.to_class_name(return_type)} {self.to_function_name(name)}({', '.join([param.type + ' ' + self.to_variable_name(param.name) for param in params])}){exceptions_formatted}{end_formatted}"
+        end_formatted = ";" if abstract else ' '
+        return f"public{' abstract' if abstract else ''} {self.to_class_name(return_type)} {self.to_function_name(name)}({', '.join([param.type + ' ' + self.to_variable_name(param.name) for param in params])}){exceptions_formatted}{end_formatted}"
 
     def generate_function_invocation(self, variable: Variable, function_name: str, params: [Value]) -> str:
         return f"{self.unroll_getters(variable)}.{function_name}({', '.join(param.format_value(self) for param in params)});"
@@ -154,13 +178,16 @@ class JavaSyntax(LanguageSyntax):
     def generate_if_clause(self, condition: str) -> str:
         return f"if({condition}"
 
+    def generate_return(self, value: Value) -> str:
+        return f"return {value.format_value(self)}"
+
     def generate_comment(self, message: str):
         return f"// {message}"
 
     def generate_exception(self, exception_type: str, message: str) -> str:
         return f'throw new {self.to_class_name(exception_type)}("{message}");'
 
-    def declare_variable(self, variable: Variable):
+    def declare_variable(self, variable: Variable) -> str:
         return f"{self.to_class_name(variable.type)} {self.to_variable_name(variable.name)} = new {self.to_class_name(variable.type)}();"
 
     def block_start_delimiter(self) -> str:
@@ -168,6 +195,9 @@ class JavaSyntax(LanguageSyntax):
 
     def block_end_delimiter(self) -> str:
         return "}"
+
+    def terminate_statement_delimiter(self) -> str:
+        return ";"
 
     def to_function_name(self, name: str) -> str:
         return self.to_variable_name(name)

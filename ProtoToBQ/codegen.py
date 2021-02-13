@@ -60,27 +60,33 @@ class CodeGenInterfaceNode(CodeGenImp):
 
         # Generate abstract function
         file.content += self.indent("", depth)
-        file.content += self.indent(f"public abstract LinkedList<TableRow> {Variable.to_variable(self.function_name)}({obj.type} {obj.get()}) throws Exception;", depth + 1)
+        # file.content += self.indent(f"public abstract LinkedList<TableRow> {Variable.to_variable(self.function_name)}({obj.type} {obj.get()}) throws Exception;", depth + 1)
+        file.content += self.indent(syntax.generate_function_declaration(name=self.function_name, abstract=True, return_type="LinkedList<TableRow>", params=[obj]), depth + 1)
 
         # Generate table name extractor function
         file.content += self.indent("", depth)
-        file.content += self.indent('public abstract String getBigQueryTableName();', depth + 1)
+        # file.content += self.indent('public abstract String getBigQueryTableName();', depth + 1)
+        file.content += self.indent(syntax.generate_function_declaration(name="getBigQueryTableName", abstract=True, return_type="String", params=[]), depth + 1)
 
         # Generate table description extractor function
         file.content += self.indent("", depth)
-        file.content += self.indent('public abstract String getBigQueryTableDescription();', depth + 1)
+        # file.content += self.indent('public abstract String getBigQueryTableDescription();', depth + 1)
+        file.content += self.indent(syntax.generate_function_declaration(name="getBigQueryTableDescription", abstract=True, return_type="String", params=[]), depth + 1)
 
         # Generate partition field extractor function
         file.content += self.indent("", depth)
-        file.content += self.indent('public abstract TimePartitioning getPartitioning();', depth + 1)
+        # file.content += self.indent('public abstract TimePartitioning getPartitioning();', depth + 1)
+        file.content += self.indent(syntax.generate_function_declaration(name="getPartitioning", abstract=True, return_type="TimePartitioning", params=[]), depth + 1)
 
         # Generate cluster fields extractor function
         file.content += self.indent("", depth)
-        file.content += self.indent(f'public abstract Clustering getClustering();', depth + 1)
+        # file.content += self.indent(f'public abstract Clustering getClustering();', depth + 1)
+        file.content += self.indent(syntax.generate_function_declaration(name="getClustering", abstract=True, return_type="Clustering", params=[]), depth + 1)
 
         # Schema extractor function
         file.content += self.indent("", depth)
-        file.content += self.indent('public abstract TableSchema getBigQueryTableSchema();', depth + 1)
+        # file.content += self.indent('public abstract TableSchema getBigQueryTableSchema();', depth + 1)
+        file.content += self.indent(syntax.generate_function_declaration(name="getBigQueryTableSchema", abstract=True, return_type="TableSchema", params=[]), depth + 1)
 
         # Generate repository function
         # FUTURE: By far not the most elegant approach, but I required a way to fetch parsers given their name.
@@ -308,7 +314,7 @@ class CodeGenBaseNode(CodeGenNode):
         # else:
         #     file.content += self.indent(element.set(self._field.get_bigquery_field_name(), root_var.get()), depth)
         # FUTURE: Extend with timestamps
-        file.content += self.indent(syntax.generate_function_invocation(element, "set", [syntax.format_constant_value(self._field.get_bigquery_field_name()), root_var.get()]), depth)
+        file.content += self.indent(syntax.generate_function_invocation(element, function_name="set", params=[syntax.format_constant_value(self._field.get_bigquery_field_name()), root_var.get()]), depth)
 
 
 class CodeGenConditionalNode(CodeGenNode):
@@ -330,25 +336,28 @@ class CodeGenConditionalNode(CodeGenNode):
         self._default_value = default_value
 
     def gen_code(self, syntax: LanguageSyntax, file, element: Variable, root_var: Variable, depth: int, type_map: dict):
-        file.content += self.indent(f"if({root_var.has(self._field)}) {{", depth)
+        # file.content += self.indent(f"if({}) {{", depth)
+        file.content += self.indent(f"{syntax.generate_if_clause(condition=root_var.has(self._field))} {syntax.block_start_delimiter()}", depth)
 
         for child in self._children:
              child.gen_code(syntax, file, element, root_var, depth + 1, type_map)
 
         if self._default_value is not None or self._throw_exception:
 
-            file.content += self.indent("} else {", depth)
+            file.content += self.indent(f"{syntax.block_end_delimiter()} else {syntax.block_start_delimiter()}", depth)
 
             # Fall back onto the fault value
             if self._default_value is not None:
-                file.content += self.indent(element.set(self._field.get_bigquery_field_name(), Variable.format_constant_value(self._default_value)), depth + 1)
+                # file.content += self.indent(element.set(self._field.get_bigquery_field_name(), Variable.format_constant_value(self._default_value)), depth + 1)
+                file.content += self.indent(syntax.generate_function_invocation(element, function_name="set", params=[syntax.format_constant_value(self._field.get_bigquery_field_name()), Variable.format_constant_value(self._default_value)]), depth)
 
             # Otherwise throw exception
             else:
                 field_path = [x.field_name for x in root_var.getters] + [self._field.get_bigquery_field_name()]
-                file.content += self.indent(f'throw new Exception("Required attribute \'{".".join(field_path)}\' not found on input.");', depth + 1)
+                #file.content += self.indent(f'throw new Exception("Required attribute \'{".".join(field_path)}\' not found on input.");', depth + 1)
+                file.content += self.indent(syntax.generate_exception(exception_type="Exception", message=f'Required attribute \'{".".join(field_path)}\' not found on input.'), depth + 1)
 
-        file.content += self.indent("}", depth)
+        file.content += self.indent(f"{syntax.block_end_delimiter()}", depth)
 
 
 class CodeGenGetFieldNode(CodeGenNode):

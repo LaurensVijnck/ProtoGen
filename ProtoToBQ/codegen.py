@@ -276,7 +276,7 @@ class CodeNopNode(CodeGenImp):
         new_root = element
         if self._table_root and self.get_num_children() > 0:
             self._variable = Variable("common", "TableRow")
-            file.content += self.indent(self._variable.initialize(), depth)
+            file.content += self.indent(syntax.declare_variable(self._variable), depth)
             new_root = self._variable
 
         for child in self._children:
@@ -446,7 +446,7 @@ class CodeGenGetBatchNode(CodeGenNode):
         self._neighbour = neighbour
 
     def gen_code(self, syntax: LanguageSyntax, file, element: Variable, root_var: Variable, depth: int, type_map: dict):
-        root = Variable(Variable.to_variable(self._field.field_name), self._field.resolve_type(type_map))
+        root = Variable(self._field.field_name, self._field.resolve_type(type_map))
         row = Variable("row", "TableRow")
 
         file.content += self.indent(f"for({root.type} {root.get()}: {root_var.get()}.{Variable.underscore_to_camelcase(f'get_{self._field.field_name}_list()')}) {{", depth) # nopep8

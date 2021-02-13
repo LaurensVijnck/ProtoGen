@@ -203,8 +203,18 @@ class JavaSyntax(LanguageSyntax):
 
 
 class PythonSyntax(LanguageSyntax):
+
+    def generate_if_clause(self, condition: str) -> str:
+        return f"if {condition}"
+
     def generate_comment(self, message: str):
         return f"# {message}"
+
+    def block_start_delimiter(self) -> str:
+        return ":"
+
+    def block_end_delimiter(self) -> str:
+        return ""
 
     def generate_exception(self, exception_type: str, message: str) -> str:
         return f'raise {exception_type}("{message}");'

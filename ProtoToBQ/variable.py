@@ -1,15 +1,39 @@
+from abc import ABC
 from fields import *
 import re
 
 
+class Value(ABC):
+    def __init__(self, type: str):
+        self.type = type
+
+    def format_value(self, syntax) -> str:
+        """
+        Function to format the value in the specified programming language.
+
+        :param syntax:
+        :return:
+        """
+        ...
+
+
+class StaticValue(Value):
+    def __init__(self, value):
+        super().__init__("") # TODO Infer the type from the value
+        self.value = value
+
+    def format_value(self, syntax) -> str:
+        return syntax.format_constant_value(self.value)
+
+
 # FUTURE: Distinction between variable and variables with constant values
-class Variable:
+class Variable(Value):
     """
     Representation of a variable.
     """
     def __init__(self, name: str, type: str):
+        super().__init__(type)
         self.name = name
-        self.type = type
         self.getters = []
 
     def push_getter(self, field: Field):
@@ -18,6 +42,10 @@ class Variable:
     def pop_getter(self):
         self.getters.pop()
 
+    def format_value(self, syntax) -> str:
+        return syntax.unroll_getters(self)
+
+    # TODO: Move to JavaSyntax
     def has(self, field: Field):
         return self.get() + self.underscore_to_camelcase(f".has_{field.field_name}()")
 
@@ -25,9 +53,11 @@ class Variable:
     def get(self):
         return self.name + "".join([self.underscore_to_camelcase(f".get_{getter.field_name}()") for getter in self.getters])
 
+    # TODO: Move to JavaSyntax
     def set(self, attribute: str, value):
         return f'{self.get()}.set("{attribute}", {value});'
 
+    # TODO: Move to JavaSyntax
     def initialize(self):
         return f'{self.type} {self.name} = new {self.type}();'
 

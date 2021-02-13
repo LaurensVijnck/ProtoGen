@@ -15,14 +15,15 @@ class LanguageSyntax(ABC):
         :return:
         """
 
-    def generate_function_declaration(self, name: str, abstract: bool, return_type: str, params: [Variable]) -> str:
+    def generate_function_header(self, name: str, return_type: str, params: [Variable], exceptions: [str] = None, abstract: bool = False) -> str:
         """
         Function to declare a function.
 
         :param name: name of the function
         :param return_type: return type of the function
-        :param abstract: specifies whether function is abstract
         :param params: parameters on which the function is invoked
+        :param exceptions: list of exceptions
+        :param abstract: specifies whether function is abstract
         :return:
         """
         ...
@@ -48,10 +49,28 @@ class LanguageSyntax(ABC):
 
     def generate_exception(self, exception_type: str, message: str) -> str:
         """
-        Function to generate an exception in the given programming language
+        Function to generate an exception in the given programming language.
 
         :param exception_type: type of the exception
         :param message:
+        :return:
+        """
+        ...
+
+    def generate_comment(self, message: str):
+        """
+        Function to generate a comment in the given programming language.
+
+        :param message:
+        :return:
+        """
+        ...
+
+    def declare_variable(self, variable: Variable):
+        """
+        Function to declare a variable.
+
+        :param variable: variable to declare
         :return:
         """
 
@@ -124,17 +143,25 @@ class JavaSyntax(LanguageSyntax):
         # TODO Unsure if this is the right location to do this, maybe move to variable
         return variable.name + "".join([self.underscore_to_camelcase(f".get_{getter.field_name}()") for getter in variable.getters])
 
-    def generate_function_declaration(self, name: str, abstract: bool, return_type: str, params: [Variable]) -> str:
-        return f"public {'abstract' if abstract else ''} {return_type} {self.to_function_name(name)}({', '.join([param.type + ' ' + self.to_variable_name(param.name) for param in params])});"
+    def generate_function_header(self, name: str, return_type: str, params: [Variable], exceptions: [str] = None, abstract: bool = False) -> str:
+        exceptions_formatted = f" throws {', '.join([self.to_class_name(exception) for exception in exceptions])}" if exceptions is not None else ""
+        end_formatted = ";" if abstract else ''
+        return f"public {'abstract' if abstract else ''} {self.to_class_name(return_type)} {self.to_function_name(name)}({', '.join([param.type + ' ' + self.to_variable_name(param.name) for param in params])}){exceptions_formatted}{end_formatted}"
 
-    def generate_function_invocation(self, variable: Variable, function_name: str, params: [str]) -> str:
-        return f"{self.unroll_getters(variable)}.{function_name}({', '.join(params)})"
+    def generate_function_invocation(self, variable: Variable, function_name: str, params: [Value]) -> str:
+        return f"{self.unroll_getters(variable)}.{function_name}({', '.join(param.format_value(self) for param in params)});"
 
     def generate_if_clause(self, condition: str) -> str:
         return f"if({condition}"
 
+    def generate_comment(self, message: str):
+        return f"// {message}"
+
     def generate_exception(self, exception_type: str, message: str) -> str:
         return f'throw new {self.to_class_name(exception_type)}("{message}");'
+
+    def declare_variable(self, variable: Variable):
+        return f"{self.to_class_name(variable.type)} {self.to_variable_name(variable.name)} = new {self.to_class_name(variable.type)}();"
 
     def block_start_delimiter(self) -> str:
         return "{"
@@ -158,7 +185,7 @@ class JavaSyntax(LanguageSyntax):
         return name
 
     def format_constant_value(self, val: object) -> str:
-        # Limitation: Unable to determine long type in Pyhon
+        # Limitation: Unable to determine long type in Python
         if val is None:
             return "null"
 
@@ -173,3 +200,11 @@ class JavaSyntax(LanguageSyntax):
     @staticmethod
     def underscore_to_camelcase(s: str) -> str:
         return re.sub(r'(?!^)_([a-zA-Z])', lambda m: m.group(1).upper(), s)
+
+
+class PythonSyntax(LanguageSyntax):
+    def generate_comment(self, message: str):
+        return f"# {message}"
+
+    def generate_exception(self, exception_type: str, message: str) -> str:
+        return f'raise {exception_type}("{message}");'

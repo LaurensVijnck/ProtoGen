@@ -6,6 +6,12 @@ class LanguageSyntax(ABC):
     """
     Abstract class to define the syntax for a programming language.
     """
+    def get_file_extension(self) -> str:
+        """
+        Function to retrieve the file extension for given programming language.
+        :return:
+        """
+        ...
 
     def unroll_getters(self, variable: Variable) -> str:
         """
@@ -14,6 +20,17 @@ class LanguageSyntax(ABC):
         :param variable: variable to unroll getters
         :return:
         """
+
+    def generate_import(self, module: str, dependency: str):
+        """
+        Function to generate an import statement for the specified dependency.
+
+        :param module:
+        :param str:
+        :param dependency:
+        :return:
+        """
+        ...
 
     def generate_class(self, name: str, parent_classes: [] = None, abstract: bool = False, final: bool = False) -> str:
         """
@@ -162,10 +179,15 @@ class JavaSyntax(LanguageSyntax):
     """
     Class that defines the syntax of the Java programming language.
     """
+    def get_file_extension(self) -> str:
+        return "java"
 
     def unroll_getters(self, variable: Variable) -> str:
         # TODO Unsure if this is the right location to do this, maybe move to variable
         return variable.name + "".join([self.underscore_to_camelcase(f".get_{getter.field_name}()") for getter in variable.getters])
+
+    def generate_import(self, module: str, dependency: str):
+        return f"import {module}.{dependency};"
 
     def generate_class(self, name: str, parent_classes: [] = None, abstract: bool = False, final: bool = False) -> str:
         parents_formatted = f" extends {', '.join([self.to_class_name(clss) for clss in parent_classes])}" if parent_classes is not None else ""
@@ -234,8 +256,14 @@ class JavaSyntax(LanguageSyntax):
 
 class PythonSyntax(LanguageSyntax):
 
+    def get_file_extension(self) -> str:
+        return "py"
+
     def unroll_getters(self, variable: Variable) -> str:
         return variable.name + "".join([self.underscore_to_camelcase(f".{getter.field_name}") for getter in variable.getters])
+
+    def generate_import(self, module: str, dependency: str):
+        return f"from {module} import {dependency}"
 
     def generate_class(self, name: str, parent_classes: [] = None, abstract: bool = False, final: bool = False) -> str:
         parents_formatted = f"({', '.join([self.to_class_name(clss) for clss in parent_classes])})" if parent_classes is not None else ""

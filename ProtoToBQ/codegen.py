@@ -48,11 +48,11 @@ class CodeGenInterfaceNode(CodeGenImp):
 
         # BigQuery imports
         file.content += self.indent("", depth)
-        file.content += self.indent(f"import com.google.api.services.bigquery.model.*;", depth)
+        file.content += self.indent(syntax.generate_import(module="com.google.api.services.bigquery.model", dependency="*"), depth)
 
         # Java imports
         file.content += self.indent("", depth)
-        file.content += self.indent(f"import java.util.LinkedList;", depth)
+        file.content += self.indent(syntax.generate_import(module="java.util", dependency="LinkedList"), depth)
         file.content += self.indent("", depth)
 
         obj = Variable("obj", "byte[]")
@@ -117,14 +117,14 @@ class CodeGenClassNode(CodeGenImp):
 
         # BigQuery imports
         file.content += self.indent("", depth)
-        file.content += self.indent(f"import com.google.api.services.bigquery.model.*;", depth)
+        file.content += self.indent(syntax.generate_import(module="com.google.api.services.bigquery.model", dependency="*"), depth)
 
         # Java imports
         file.content += self.indent("", depth)
-        file.content += self.indent(f"import java.util.LinkedList;", depth)
-        file.content += self.indent(f"import java.util.List;", depth)
-        file.content += self.indent(f"import java.util.Arrays;", depth)
-        file.content += self.indent(f"import org.joda.time.Instant;", depth) # Requires a custom Maven dependency
+        file.content += self.indent(syntax.generate_import(module="java.util", dependency="LinkedList"), depth)
+        file.content += self.indent(syntax.generate_import(module="java.util", dependency="List"), depth)
+        file.content += self.indent(syntax.generate_import(module="java.util", dependency="Arrays"), depth)
+        file.content += self.indent(syntax.generate_import(module="org.joda.time", dependency="Instant"), depth)
         file.content += self.indent("", depth)
 
         file.content += self.indent(syntax.generate_class(self.class_name, parent_classes=[self.base_class], final=True), depth)
@@ -283,7 +283,7 @@ class CodeNopNode(CodeGenImp):
             child.gen_code(syntax, file, new_root, root_var, depth, type_map)
 
         if self._table_root and not self._batch_table:
-            file.content += self.indent(element.add(self._variable), depth)
+            file.content += self.indent(syntax.generate_function_invocation(element, function_name="add", params=[self._variable]), depth)
 
 
 class CodeGenNode(CodeGenImp):
@@ -430,7 +430,7 @@ class CodeGenRepeatedNode(CodeGenNode):
         for child in self._children:
             child.gen_code(syntax, file, var, res, depth + 1, type_map)
 
-        file.content += self.indent(list_var.add(var), depth + 1)
+        file.content += self.indent(syntax.generate_function_invocation(list_var, function_name="add", params=[var]), depth + 1)
         file.content += self.indent(syntax.block_end_delimiter(), depth)
         file.content += self.indent(syntax.generate_function_invocation(element, function_name="set", params=[StaticValue(self._field.get_bigquery_field_name()), list_var]), depth)
 
@@ -462,7 +462,7 @@ class CodeGenGetBatchNode(CodeGenNode):
             file.content += self.indent(f"{row.get()}.set(key, {variable.get()}.get(key));", depth + 2)
             file.content += self.indent(syntax.block_end_delimiter(), depth + 1)
 
-        file.content += self.indent(element.add(row), depth + 1)
+        file.content += self.indent(syntax.generate_function_invocation(element, function_name="add", params=[row]), depth + 1)
         file.content += self.indent(syntax.block_end_delimiter(), depth)
 
 

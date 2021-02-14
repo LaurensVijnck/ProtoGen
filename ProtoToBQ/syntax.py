@@ -153,6 +153,10 @@ class LanguageSyntax(ABC):
         """
         ...
 
+    @staticmethod
+    def underscore_to_camelcase(s: str) -> str:
+        return re.sub(r'(?!^)_([a-zA-Z])', lambda m: m.group(1).upper(), s)
+
 
 class JavaSyntax(LanguageSyntax):
     """
@@ -227,12 +231,21 @@ class JavaSyntax(LanguageSyntax):
 
         return val
 
-    @staticmethod
-    def underscore_to_camelcase(s: str) -> str:
-        return re.sub(r'(?!^)_([a-zA-Z])', lambda m: m.group(1).upper(), s)
-
 
 class PythonSyntax(LanguageSyntax):
+
+    def unroll_getters(self, variable: Variable) -> str:
+        return variable.name + "".join([self.underscore_to_camelcase(f".{getter.field_name}") for getter in variable.getters])
+
+    def generate_class(self, name: str, parent_classes: [] = None, abstract: bool = False, final: bool = False) -> str:
+        parents_formatted = f"({', '.join([self.to_class_name(clss) for clss in parent_classes])})" if parent_classes is not None else ""
+        return f"class {self.to_class_name(name)}{parents_formatted}"
+
+    def generate_function_header(self, name: str, return_type: str, params: [Variable], exceptions: [str] = None, abstract: bool = False) -> str:
+        return f"def {self.to_function_name(name)}(self{''.join([f', {self.to_variable_name(param.name)}: {param.type}' for param in params])}) -> {return_type}:"
+
+    def generate_function_invocation(self, variable: Variable, function_name: str, params: [Value]) -> str:
+        return f"{self.unroll_getters(variable)}.{function_name}({', '.join(param.format_value(self) for param in params)});"
 
     def generate_if_clause(self, condition: str) -> str:
         return f"if {condition}"
@@ -240,11 +253,42 @@ class PythonSyntax(LanguageSyntax):
     def generate_comment(self, message: str):
         return f"# {message}"
 
+    def generate_exception(self, exception_type: str, message: str) -> str:
+        return f"raise {self.to_class_name(exception_type)}({self.format_constant_value(message)})"
+
+    def declare_variable(self, variable: Variable) -> str:
+        return f"{self.to_variable_name(variable.name)} = {self.to_class_name(variable.type)}()"
+
     def block_start_delimiter(self) -> str:
         return ":"
 
     def block_end_delimiter(self) -> str:
         return ""
 
-    def generate_exception(self, exception_type: str, message: str) -> str:
-        return f'raise {exception_type}("{message}");'
+    def terminate_statement_delimiter(self) -> str:
+        return ""
+
+    def to_function_name(self, name: str) -> str:
+        return name
+
+    def to_variable_name(self, name: str) -> str:
+        return name
+
+    def to_class_name(self, name: str) -> str:
+        # Implements upperCamelCase
+        if len(name) > 0:
+            return self.underscore_to_camelcase(name)
+        return name
+
+    def format_constant_value(self, val: object) -> str:
+        # Limitation: Unable to determine long type in Python
+        if val is None:
+            return "None"
+
+        if isinstance(val, str):
+            return f'"{val}"'
+
+        if isinstance(val, float):
+            return f'{val}f'
+
+        return val

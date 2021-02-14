@@ -15,7 +15,7 @@ from google.protobuf.descriptor_pb2 import DescriptorProto, EnumDescriptorProto
 
 from codegen import *
 from enums import ProtoTypeEnum
-from syntax import JavaSyntax
+from syntax import JavaSyntax, PythonSyntax
 
 
 _PROTO_TO_JAVA_TYPE_MAP = {
@@ -354,7 +354,7 @@ def generate_code(request: plugin.CodeGeneratorRequest, response: plugin.CodeGen
 
     package_name = "lvi"
     interface_name = "BQParserImp"
-    function_name = "convertToTableRow"
+    function_name = "convert_to_table_row"
     parsers = {}
 
     for root_element in root_elements:
@@ -379,7 +379,7 @@ def generate_code(request: plugin.CodeGeneratorRequest, response: plugin.CodeGen
         file = response.file.add()
         class_name = root_element.name + "BQParser"
         file.name = class_name + ".java"
-        create_codegen_tree(class_name, f'{package_name}.{interface_name}', root_element, function_name).gen_code(JavaSyntax(), file, None, None, 0, _PROTO_TO_JAVA_TYPE_MAP)
+        create_codegen_tree(class_name, f'{package_name}.{interface_name}', root_element, function_name).gen_code(PythonSyntax(), file, None, None, 0, _PROTO_TO_JAVA_TYPE_MAP)
 
         # Add to parsers
         parsers[root_element.get_fq_name()[1:]] = f'{package_name}.{class_name}'
@@ -388,7 +388,7 @@ def generate_code(request: plugin.CodeGeneratorRequest, response: plugin.CodeGen
     file = response.file.add()
     file.name = interface_name + ".java"
     interface_node = CodeGenInterfaceNode(package_name, "BQParserImp", function_name, parsers)  # TODO Where to fetch the package from?
-    interface_node.gen_code(JavaSyntax(), file, None, None, 0, _PROTO_TO_JAVA_TYPE_MAP)
+    interface_node.gen_code(PythonSyntax(), file, None, None, 0, _PROTO_TO_JAVA_TYPE_MAP)
 
     # Drop new repository
     f = response.file.add()

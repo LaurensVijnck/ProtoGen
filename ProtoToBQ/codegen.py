@@ -56,7 +56,7 @@ class CodeGenInterfaceNode(CodeGenImp):
         file.content += self.indent("", depth)
 
         obj = Variable("obj", "byte[]")
-        file.content += self.indent(syntax.generate_class(self.class_name, abstract=True), terminator=syntax.block_start_delimiter(), depth=depth)
+        file.content += self.indent(syntax.generate_class(self.class_name, abstract=True), depth=depth)
 
         # Generate abstract function
         file.content += self.indent("", depth)
@@ -64,11 +64,11 @@ class CodeGenInterfaceNode(CodeGenImp):
 
         # Generate table name extractor function
         file.content += self.indent("", depth)
-        file.content += self.indent(syntax.generate_function_header(name="get_bigquery_table_name", return_type="String", params=[], abstract=True), depth + 1)
+        file.content += self.indent(syntax.generate_function_header(name="get_big_query_table_name", return_type="String", params=[], abstract=True), depth + 1)
 
         # Generate table description extractor function
         file.content += self.indent("", depth)
-        file.content += self.indent(syntax.generate_function_header(name="get_bigquery_table_description", return_type="String", params=[], abstract=True), depth + 1)
+        file.content += self.indent(syntax.generate_function_header(name="get_big_query_table_description", return_type="String", params=[], abstract=True), depth + 1)
 
         # Generate partition field extractor function
         file.content += self.indent("", depth)
@@ -79,22 +79,22 @@ class CodeGenInterfaceNode(CodeGenImp):
         file.content += self.indent(syntax.generate_function_header(name="get_clustering", return_type="Clustering", params=[], abstract=True), depth + 1)
 
         # Schema extractor function
-        file.content += self.indent("", depth)
-        file.content += self.indent(syntax.generate_function_header(name="get_bigquery_table_schema", return_type="TableSchema", params=[], abstract=True), depth + 1)
+        # file.content += self.indent("", depth)
+        # file.content += self.indent(syntax.generate_function_header(name="get_big_query_table_schema", return_type="TableSchema", params=[], abstract=True), depth + 1)
 
         # Generate repository function
         # FUTURE: By far not the most elegant approach, but I required a way to fetch parsers given their name.
         file.content += self.indent("", depth)
         proto_type = Variable("proto_type", "String")
-        file.content += self.indent(syntax.generate_function_header(name="get_parser_for_type", return_type=self.class_name, params=[proto_type], exceptions=["exception"]), terminator=syntax.block_start_delimiter(), depth=depth + 1)
-        file.content += self.indent(f"switch({proto_type.get()}) {{", depth + 2)
+        file.content += self.indent(syntax.generate_function_header(name="get_parser_for_type", return_type=self.class_name, params=[proto_type], exceptions=["exception"], static=True), terminator=syntax.block_start_delimiter(), depth=depth + 1)
+        file.content += self.indent(f"switch({syntax.to_variable_name(proto_type.get())}) {{", depth + 2)
 
         for type, parser in self.parsers.items():
             file.content += self.indent(f'case {syntax.format_constant_value(type)}:', depth + 3)
             file.content += self.indent(f'return new {parser}();', depth + 4)
 
         file.content += self.indent(f'default:', depth + 3)
-        file.content += self.indent(syntax.generate_exception(exception_type="Exception", message=f'Parser for type \'" + {proto_type.format_value(syntax)} + "\' not registered.'), depth + 4)
+        file.content += self.indent(syntax.generate_exception(exception_type="Exception", message=f'Parser for type \'" + {syntax.to_variable_name(proto_type.format_value(syntax))} + "\' not registered.'), depth + 4)
         file.content += self.indent("}", depth + 2)
         file.content += self.indent("}", depth + 1)
 
@@ -134,13 +134,13 @@ class CodeGenClassNode(CodeGenImp):
 
         # Generate table name extractor function
         file.content += self.indent("", depth)
-        file.content += self.indent(syntax.generate_function_header(name="get_bigquery_table_schema", return_type="TableSchema", params=[]), terminator=syntax.block_start_delimiter(), depth=depth + 1)
+        file.content += self.indent(syntax.generate_function_header(name="get_big_query_table_name", return_type="String", params=[]), terminator=syntax.block_start_delimiter(), depth=depth + 1)
         file.content += self.indent(syntax.generate_return(StaticValue(self.field_type.table_name)), terminator=syntax.terminate_statement_delimiter(), depth=depth + 2)
         file.content += self.indent(syntax.block_end_delimiter(), depth + 1)
 
         # Generate table description extractor function
         file.content += self.indent("", depth)
-        file.content += self.indent(syntax.generate_function_header(name="get_bigquery_table_description", return_type="String", params=[]), terminator=syntax.block_start_delimiter(), depth=depth + 1)
+        file.content += self.indent(syntax.generate_function_header(name="get_big_query_table_description", return_type="String", params=[]), terminator=syntax.block_start_delimiter(), depth=depth + 1)
         file.content += self.indent(syntax.generate_return(StaticValue(self.field_type.table_description)), terminator=syntax.terminate_statement_delimiter(), depth=depth + 2)
         file.content += self.indent(syntax.block_end_delimiter(), depth + 1)
 
@@ -187,7 +187,7 @@ class CodeGenSchemaFunctionNode(CodeGenImp):
 
     def gen_code(self, syntax: LanguageSyntax, file, element: Variable, root_var: Variable, depth: int, type_map: dict):
 
-        file.content += self.indent(f"public TableSchema get_bigquery_table_schema() {{", depth)
+        file.content += self.indent(f"public TableSchema {syntax.underscore_to_camelcase('get_big_query_table_schema')}() {{", depth)
 
         # Generate return
         file.content += self.indent(f'return new TableSchema().setFields(Arrays.asList(', depth + 1)

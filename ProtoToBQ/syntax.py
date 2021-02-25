@@ -43,7 +43,7 @@ class LanguageSyntax(ABC):
         """
         ...
 
-    def generate_function_header(self, name: str, return_type: str, params: [Variable], exceptions: [str] = None, abstract: bool = False) -> str:
+    def generate_function_header(self, name: str, return_type: str, params: [Variable], exceptions: [str] = None, abstract: bool = False, static: bool = False) -> str:
         """
         Function to declare a function.
 
@@ -184,25 +184,25 @@ class JavaSyntax(LanguageSyntax):
 
     def unroll_getters(self, variable: Variable) -> str:
         # TODO Unsure if this is the right location to do this, maybe move to variable
-        return variable.name + "".join([self.underscore_to_camelcase(f".get_{getter.field_name}()") for getter in variable.getters])
+        return self.to_variable_name(variable.name) + "".join([self.underscore_to_camelcase(f".get_{getter.field_name}()") for getter in variable.getters])
 
     def generate_import(self, module: str, dependency: str):
         return f"import {module}.{dependency};"
 
     def generate_class(self, name: str, parent_classes: [] = None, abstract: bool = False, final: bool = False) -> str:
         parents_formatted = f" extends {', '.join([self.to_class_name(clss) for clss in parent_classes])}" if parent_classes is not None else ""
-        return f"public{' abstract' if abstract else ''}{' final' if final else ''} class {self.to_class_name(name)}{parents_formatted} "
+        return f"public{' abstract' if abstract else ''}{' final' if final else ''} class {self.to_class_name(name)}{parents_formatted} " + '{'
 
-    def generate_function_header(self, name: str, return_type: str, params: [Variable], exceptions: [str] = None, abstract: bool = False) -> str:
-        exceptions_formatted = f" throws {', '.join([self.to_class_name(exception) for exception in exceptions])}" if exceptions is not None else ""
+    def generate_function_header(self, name: str, return_type: str, params: [Variable], exceptions: [str] = None, abstract: bool = False, static: bool = False) -> str:
+        exceptions_formatted = f" throws {', '.join([self.to_class_name(exception).capitalize() for exception in exceptions])}" if exceptions is not None else ""
         end_formatted = ";" if abstract else ' '
-        return f"public{' abstract' if abstract else ''} {self.to_class_name(return_type)} {self.to_function_name(name)}({', '.join([param.type + ' ' + self.to_variable_name(param.name) for param in params])}){exceptions_formatted}{end_formatted}"
+        return f"public {' static ' if static else '' } {' abstract' if abstract else ''} {self.to_class_name(return_type)} {self.to_function_name(name)}({', '.join([param.type + ' ' + self.to_variable_name(param.name) for param in params])}){exceptions_formatted}{end_formatted}"
 
     def generate_function_invocation(self, variable: Variable, function_name: str, params: [Value]) -> str:
         return f"{self.unroll_getters(variable)}.{function_name}({', '.join(param.format_value(self) for param in params)});"
 
     def generate_if_clause(self, condition: str) -> str:
-        return f"if({condition}"
+        return f"if({condition})"
 
     def generate_return(self, value: Value) -> str:
         return f"return {value.format_value(self)}"
@@ -269,7 +269,7 @@ class PythonSyntax(LanguageSyntax):
         parents_formatted = f"({', '.join([self.to_class_name(clss) for clss in parent_classes])})" if parent_classes is not None else ""
         return f"class {self.to_class_name(name)}{parents_formatted}"
 
-    def generate_function_header(self, name: str, return_type: str, params: [Variable], exceptions: [str] = None, abstract: bool = False) -> str:
+    def generate_function_header(self, name: str, return_type: str, params: [Variable], exceptions: [str] = None, abstract: bool = False, static: bool = False) -> str:
         return f"def {self.to_function_name(name)}(self{''.join([f', {self.to_variable_name(param.name)}: {param.type}' for param in params])}) -> {return_type}:"
 
     def generate_function_invocation(self, variable: Variable, function_name: str, params: [Value]) -> str:

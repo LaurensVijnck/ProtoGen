@@ -364,11 +364,13 @@ class CodeGenGetFieldNode(CodeGenNode):
         super().__init__(field)
 
     def gen_code(self, syntax: LanguageSyntax, file, element: Variable, root_var: Variable, depth: int, type_map: dict):
+        # FUTURE: root_var.push_invocation(Getter(self._field.field_name))
         root_var.push_getter(self._field)
 
         for child in self._children:
             child.gen_code(syntax, file, element, root_var, depth, type_map)
 
+        # FUTURE: root_var.pop_invocation(Getter(self._field.field_name))
         root_var.pop_getter()
 
 

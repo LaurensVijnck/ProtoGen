@@ -26,6 +26,23 @@ class StaticValue(Value):
         return syntax.format_constant_value(self.value)
 
 
+class Invocation:
+    def __init__(self, name: str, params: [Value] = None):
+        self.name = name
+        self.params = params
+
+
+class Getter(Invocation):
+    def __init__(self, name: str, params: [Value] = None):
+        super().__init__(name, None)
+        self.field_name = name
+        self.params = params
+
+
+class Setter(Invocation):
+    ...
+
+
 # FUTURE: Distinction between variable and variables with constant values
 class Variable(Value):
     """
@@ -35,12 +52,19 @@ class Variable(Value):
         super().__init__(type)
         self.name = name
         self.getters = []
+        self.invocations = []
 
     def push_getter(self, field: Field):
         self.getters.append(field)
 
+    def push_invocation(self, invocation: Invocation):
+        self.invocations.append(invocation)
+
     def pop_getter(self):
         self.getters.pop()
+
+    def pop_invocation(self):
+        self.invocations.pop()
 
     def format_value(self, syntax) -> str:
         return syntax.unroll_getters(self)

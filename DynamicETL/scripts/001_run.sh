@@ -1,12 +1,15 @@
-export GOOGLE_APPLICATION_CREDENTIALS=/Users/jonnydaenen/tmp/datalayer-core-dev-tf.json
+# export GOOGLE_APPLICATION_CREDENTIALS=/Users/jonnydaenen/tmp/datalayer-core-dev-tf.json
+export GOOGLE_APPLICATION_CREDENTIALS="/Users/lvijnck/Documents/google-cloud-sdk/geometric-ocean-284614-77fba73ca7b0.json"
 
 # Activate venv
-VENV_PATH=/Users/jonnydaenen/repos/github/ProtoGen/ProtoToBQ/venv/bin/activate
+VENV_PATH=/Users/lvijnck/Desktop/env/ProtoToBQ/bin/activate
+#VENV_PATH=/Users/jonnydaenen/repos/github/ProtoGen/ProtoToBQ/venv/bin/activate
 source $VENV_PATH
 
 # Add path to executable to path variable
 # FUTURE: Create venv as part of the plugin
-SRC_DIR=/Users/jonnydaenen/repos/github/ProtoGen/ProtoToBQ
+SRC_DIR=/Users/lvijnck/Desktop/ProtoBQGeneration/ProtoToBQ/
+#SRC_DIR=/Users/jonnydaenen/repos/github/ProtoGen/ProtoToBQ
 export PATH=$SRC_DIR:$PATH
 
 DST_DIR=target/generated-sources/protobuf

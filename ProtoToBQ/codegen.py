@@ -56,7 +56,7 @@ class CodeGenInterfaceNode(CodeGenImp):
         file.content += self.indent("", depth)
 
         obj = Variable("obj", "byte[]")
-        file.content += self.indent(syntax.generate_class(self.class_name, abstract=True), depth=depth)
+        file.content += self.indent(syntax.generate_class(self.class_name, abstract=True), terminator=syntax.block_start_delimiter(), depth=depth)
 
         # Generate abstract function
         file.content += self.indent("", depth)
@@ -79,8 +79,8 @@ class CodeGenInterfaceNode(CodeGenImp):
         file.content += self.indent(syntax.generate_function_header(name="get_clustering", return_type="Clustering", params=[], abstract=True), depth + 1)
 
         # Schema extractor function
-        # file.content += self.indent("", depth)
-        # file.content += self.indent(syntax.generate_function_header(name="get_big_query_table_schema", return_type="TableSchema", params=[], abstract=True), depth + 1)
+        file.content += self.indent("", depth)
+        file.content += self.indent(syntax.generate_function_header(name="get_big_query_table_schema", return_type="TableSchema", params=[], abstract=True), depth + 1)
 
         # Generate repository function
         # FUTURE: By far not the most elegant approach, but I required a way to fetch parsers given their name.
@@ -127,7 +127,7 @@ class CodeGenClassNode(CodeGenImp):
         file.content += self.indent(syntax.generate_import(module="org.joda.time", dependency="Instant"), depth)
         file.content += self.indent("", depth)
 
-        file.content += self.indent(syntax.generate_class(self.class_name, parent_classes=[self.base_class], final=True), depth)
+        file.content += self.indent(syntax.generate_class(self.class_name, parent_classes=[self.base_class], final=True), terminator=syntax.block_start_delimiter(), depth=depth)
 
         for child in self._children:
             child.gen_code(syntax, file, element, root_var, depth + 1, type_map)

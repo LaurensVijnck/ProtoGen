@@ -29,18 +29,26 @@ class StaticValue(Value):
 class Invocation:
     def __init__(self, name: str, params: [Value] = None):
         self.name = name
-        self.params = params
+        self.params = []
+
+        if params is not None:
+            self.params = params
 
 
 class Getter(Invocation):
     def __init__(self, name: str, params: [Value] = None):
-        super().__init__(name, None)
-        self.field_name = name
-        self.params = params
+        super().__init__(name, params)
+
+    def format_value(self, syntax) -> str:
+        return syntax.to_function_name(f"get_{self.name}({', '.join([f'{param.format_value(syntax)}' for param in self.params])})")
 
 
 class Setter(Invocation):
-    ...
+    def __init__(self, name: str, params: [Value] = None):
+        super().__init__(name, params)
+
+    def format_value(self, syntax) -> str:
+        return syntax.to_function_name(f"set_{self.name}({', '.join([f'{param.format_value(syntax)}' for param in self.params])})")
 
 
 # FUTURE: Distinction between variable and variables with constant values
@@ -51,7 +59,7 @@ class Variable(Value):
     def __init__(self, name: str, type: str):
         super().__init__(type)
         self.name = name
-        self.getters = []
+        self.getters = [] # Use the more generic invocation system
         self.invocations = []
 
     def push_getter(self, field: Field):
@@ -67,7 +75,8 @@ class Variable(Value):
         self.invocations.pop()
 
     def format_value(self, syntax) -> str:
-        return syntax.unroll_getters(self)
+        # return syntax.unroll_getters(self)
+        return syntax.to_variable_name(self.name) + "".join(["." + inv.format_value(syntax) for inv in self.invocations])
 
     # TODO: Move to JavaSyntax
     def has(self, field: Field):

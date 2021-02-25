@@ -148,13 +148,16 @@ class CodeGenClassNode(CodeGenImp):
         file.content += self.indent("", depth)
         file.content += self.indent(syntax.generate_function_header(name="get_partitioning", return_type="TimePartitioning", params=[]), terminator=syntax.block_start_delimiter(), depth=depth + 1)
 
+        # https://www.javadoc.io/doc/com.google.apis/google-api-services-bigquery/v2-rev20181221-1.28.0/com/google/api/services/bigquery/model/TimePartitioning.html
         if self.field_type.time_partitioning:
-            # https://www.javadoc.io/doc/com.google.apis/google-api-services-bigquery/v2-rev20181221-1.28.0/com/google/api/services/bigquery/model/TimePartitioning.html
-            file.content += self.indent(f'return new TimePartitioning()', depth + 2)
-            file.content += self.indent(f'.setField({Variable.format_constant_value(self.field_type.partition_field)})', depth + 3)
+            # Construct the time partitioning object
+            time_partitioning = Variable("time_partitioning", "TimePartitioning")
+            time_partitioning.push_invocation(Setter("field", params=[StaticValue(self.field_type.partition_field)]))
+            time_partitioning.push_invocation(Setter("expiration_ms", params=[StaticValue(self.field_type.partitioning_expiration)])) # TODO Fix python _not_ explicitly supporting long values
 
-            # Includes a rather nasty fix as python does _not_ explicitly support long values
-            file.content += self.indent(f'.setExpirationMs({Variable.format_constant_value(self.field_type.partitioning_expiration)}L);', depth + 3)
+            # Declare and return the time partitioning object
+            file.content += self.indent(syntax.declare_variable(time_partitioning), depth=depth+2)
+            file.content += self.indent(syntax.generate_return(time_partitioning), terminator=syntax.terminate_statement_delimiter(), depth=depth+2)
         else:
             file.content += self.indent(syntax.generate_return(StaticValue(None)), terminator=syntax.terminate_statement_delimiter(), depth=depth + 2)
         file.content += self.indent(syntax.block_end_delimiter(), depth + 1)
@@ -163,12 +166,16 @@ class CodeGenClassNode(CodeGenImp):
         file.content += self.indent("", depth)
         file.content += self.indent(syntax.generate_function_header(name="get_clustering", return_type="Clustering", params=[]), terminator=syntax.block_start_delimiter(), depth=depth + 1)
 
-        if len(self.field_type.cluster_fields) == 0:
-            file.content += self.indent(syntax.generate_return(StaticValue(None)), terminator=syntax.terminate_statement_delimiter(), depth=depth + 2)
+        # https://www.javadoc.io/doc/com.google.apis/google-api-services-bigquery/v2-rev20181221-1.28.0/com/google/api/services/bigquery/model/Clustering.html
+        if len(self.field_type.cluster_fields) > 0:
+            # Construct the clustering object
+            clustering = Variable("clustering", "Clustering")
+            clustering.push_invocation(Setter("Fields", params=[StaticValue(self.field_type.cluster_fields)]))
+
+            file.content += self.indent(syntax.declare_variable(clustering), depth=depth + 2)
+            file.content += self.indent(syntax.generate_return(clustering), terminator=syntax.terminate_statement_delimiter(), depth=depth + 2)
         else:
-            # https://www.javadoc.io/doc/com.google.apis/google-api-services-bigquery/v2-rev20181221-1.28.0/com/google/api/services/bigquery/model/Clustering.html
-            file.content += self.indent(f'return new Clustering()',depth + 2)
-            file.content += self.indent(f'.setFields(Arrays.asList({", ".join([Variable.format_constant_value(field) for field in self.field_type.cluster_fields])}));',depth + 3)
+            file.content += self.indent(syntax.generate_return(StaticValue(None)), terminator=syntax.terminate_statement_delimiter(), depth=depth + 2)
         file.content += self.indent(syntax.block_end_delimiter(), depth + 1)
 
         file.content += self.indent(syntax.block_end_delimiter(), depth)

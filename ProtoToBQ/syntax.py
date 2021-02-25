@@ -245,6 +245,9 @@ class JavaSyntax(LanguageSyntax):
         if val is None:
             return "null"
 
+        if isinstance(val, list):
+            return f"Arrays.asList({', '.join([self.format_constant_value(item) for item in val])})"
+
         if isinstance(val, str):
             return f'"{val}"'
 

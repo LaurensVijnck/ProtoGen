@@ -169,7 +169,7 @@ class CodeGenClassNode(CodeGenImp):
         if len(self.field_type.cluster_fields) > 0:
             # Construct the clustering object
             clustering = Variable("clustering", "Clustering", anonymous=True)
-            clustering.push_invocation(Setter("Fields", params=[StaticValue(self.field_type.cluster_fields)]))
+            clustering.push_invocation(Setter("Fields", params=[StaticValue([StaticValue(cluster_field) for cluster_field in self.field_type.cluster_fields])]))
 
             # Return the clustering object
             file.content += self.indent(syntax.generate_return(clustering), terminator=syntax.terminate_statement_delimiter(), depth=depth + 2)

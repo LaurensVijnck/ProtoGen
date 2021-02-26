@@ -246,7 +246,7 @@ class JavaSyntax(LanguageSyntax):
             return "null"
 
         if isinstance(val, list):
-            return f"Arrays.asList({', '.join([item.format_value(self) if isinstance(item, Value) else self.format_constant_value(item) for item in val])})"
+            return f"Arrays.asList({', '.join([item.format_value(self) for item in val])})"
 
         if isinstance(val, str):
             return f'"{val}"'

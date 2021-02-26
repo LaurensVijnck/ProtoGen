@@ -56,7 +56,7 @@ class CodeGenInterfaceNode(CodeGenImp):
         file.content += self.indent("", depth)
 
         obj = Variable("obj", "byte[]")
-        file.content += self.indent(syntax.generate_class(self.class_name, abstract=True), terminator=syntax.block_start_delimiter(), depth=depth)
+        file.content += self.indent(syntax.generate_class(self.class_name, abstract=True), depth=depth)
 
         # Generate abstract function
         file.content += self.indent("", depth)

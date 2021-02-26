@@ -56,11 +56,12 @@ class Variable(Value):
     """
     Representation of a variable.
     """
-    def __init__(self, name: str, type: str):
+    def __init__(self, name: str, type: str, anonymous: bool = False):
         super().__init__(type)
         self.name = name
         self.getters = [] # Use the more generic invocation system
         self.invocations = []
+        self.anonymous = anonymous
 
     def push_getter(self, field: Field):
         self.getters.append(field)
@@ -75,7 +76,11 @@ class Variable(Value):
         self.invocations.pop()
 
     def format_value(self, syntax) -> str:
-        # return syntax.unroll_getters(self)
+
+        if self.anonymous:
+            # TODO push to syntax
+            return f"new {self.type}()" + "".join(["." + inv.format_value(syntax) for inv in self.invocations])
+
         return syntax.to_variable_name(self.name) + "".join(["." + inv.format_value(syntax) for inv in self.invocations])
 
     # TODO: Move to JavaSyntax

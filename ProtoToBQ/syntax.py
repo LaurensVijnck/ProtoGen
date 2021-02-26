@@ -196,11 +196,7 @@ class JavaSyntax(LanguageSyntax):
     def generate_function_header(self, name: str, return_type: str, params: [Variable], exceptions: [str] = None, abstract: bool = False, static: bool = False) -> str:
         exceptions_formatted = f" throws {', '.join([self.to_class_name(exception).capitalize() for exception in exceptions])}" if exceptions is not None else ""
         end_formatted = ";" if abstract else ' '
-<<<<<<< HEAD
         return f"public{' static ' if static else '' }{' abstract' if abstract else ''} {self.to_class_name(return_type)} {self.to_function_name(name)}({', '.join([param.type + ' ' + self.to_variable_name(param.name) for param in params])}){exceptions_formatted}{end_formatted}"
-=======
-        return f"public {' static ' if static else '' } {' abstract' if abstract else ''} {self.to_class_name(return_type)} {self.to_function_name(name)}({', '.join([param.type + ' ' + self.to_variable_name(param.name) for param in params])}){exceptions_formatted}{end_formatted}"
->>>>>>> 425959e9ba6aa246d29360a1dbc8a7e404a87e40
 
     def generate_function_invocation(self, variable: Variable, function_name: str, params: [Value]) -> str:
         return f"{self.unroll_getters(variable)}.{function_name}({', '.join(param.format_value(self) for param in params)});"
@@ -250,13 +246,13 @@ class JavaSyntax(LanguageSyntax):
             return "null"
 
         if isinstance(val, list):
-            return f"Arrays.asList({', '.join([self.format_constant_value(item) for item in val])})"
+            return f"Arrays.asList({', '.join([item.format_value(self) if isinstance(item, Value) else self.format_constant_value(item) for item in val])})"
 
         if isinstance(val, str):
             return f'"{val}"'
 
         if isinstance(val, float):
-            return f'{val}f'
+            return f'{val}'
 
         return val
 

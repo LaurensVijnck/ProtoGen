@@ -87,7 +87,7 @@ class CodeGenInterfaceNode(CodeGenImp):
         file.content += self.indent("", depth)
         proto_type = Variable("proto_type", "String")
         file.content += self.indent(syntax.generate_function_header(name="get_parser_for_type", return_type=self.class_name, params=[proto_type], exceptions=["exception"], static=True), terminator=syntax.block_start_delimiter(), depth=depth + 1)
-        file.content += self.indent(f"switch({syntax.to_variable_name(proto_type.get())}) {{", depth + 2)
+        file.content += self.indent(f"switch({syntax.to_variable_name(proto_type.get())})", terminator=syntax.block_start_delimiter(), depth=depth + 2)
 
         for type, parser in self.parsers.items():
             file.content += self.indent(f'case {syntax.format_constant_value(type)}:', depth + 3)
@@ -95,10 +95,10 @@ class CodeGenInterfaceNode(CodeGenImp):
 
         file.content += self.indent(f'default:', depth + 3)
         file.content += self.indent(syntax.generate_exception(exception_type="Exception", message=f'Parser for type \'" + {syntax.to_variable_name(proto_type.format_value(syntax))} + "\' not registered.'), depth + 4)
-        file.content += self.indent("}", depth + 2)
-        file.content += self.indent("}", depth + 1)
+        file.content += self.indent(syntax.block_end_delimiter(), depth + 2)
+        file.content += self.indent(syntax.block_end_delimiter(), depth + 1)
 
-        file.content += self.indent("}", depth)
+        file.content += self.indent(syntax.block_end_delimiter(), depth)
 
 
 class CodeGenClassNode(CodeGenImp):
@@ -151,12 +151,11 @@ class CodeGenClassNode(CodeGenImp):
         # https://www.javadoc.io/doc/com.google.apis/google-api-services-bigquery/v2-rev20181221-1.28.0/com/google/api/services/bigquery/model/TimePartitioning.html
         if self.field_type.time_partitioning:
             # Construct the time partitioning object
-            time_partitioning = Variable("time_partitioning", "TimePartitioning")
+            time_partitioning = Variable("time_partitioning", "TimePartitioning", anonymous=True)
             time_partitioning.push_invocation(Setter("field", params=[StaticValue(self.field_type.partition_field)]))
             time_partitioning.push_invocation(Setter("expiration_ms", params=[StaticValue(self.field_type.partitioning_expiration)])) # TODO Fix python _not_ explicitly supporting long values
 
-            # Declare and return the time partitioning object
-            file.content += self.indent(syntax.declare_variable(time_partitioning), depth=depth+2)
+            # Return the time partitioning object
             file.content += self.indent(syntax.generate_return(time_partitioning), terminator=syntax.terminate_statement_delimiter(), depth=depth+2)
         else:
             file.content += self.indent(syntax.generate_return(StaticValue(None)), terminator=syntax.terminate_statement_delimiter(), depth=depth + 2)
@@ -169,10 +168,10 @@ class CodeGenClassNode(CodeGenImp):
         # https://www.javadoc.io/doc/com.google.apis/google-api-services-bigquery/v2-rev20181221-1.28.0/com/google/api/services/bigquery/model/Clustering.html
         if len(self.field_type.cluster_fields) > 0:
             # Construct the clustering object
-            clustering = Variable("clustering", "Clustering")
+            clustering = Variable("clustering", "Clustering", anonymous=True)
             clustering.push_invocation(Setter("Fields", params=[StaticValue(self.field_type.cluster_fields)]))
 
-            file.content += self.indent(syntax.declare_variable(clustering), depth=depth + 2)
+            # Return the clustering object
             file.content += self.indent(syntax.generate_return(clustering), terminator=syntax.terminate_statement_delimiter(), depth=depth + 2)
         else:
             file.content += self.indent(syntax.generate_return(StaticValue(None)), terminator=syntax.terminate_statement_delimiter(), depth=depth + 2)
@@ -194,42 +193,41 @@ class CodeGenSchemaFunctionNode(CodeGenImp):
 
     def gen_code(self, syntax: LanguageSyntax, file, element: Variable, root_var: Variable, depth: int, type_map: dict):
 
-        file.content += self.indent(f"public TableSchema {syntax.underscore_to_camelcase('get_big_query_table_schema')}() {{", depth)
+        # Create function header
+        file.content += self.indent(syntax.generate_function_header(name="get_big_query_table_schema", return_type="TableSchema", params=[]), terminator=syntax.block_start_delimiter(), depth=depth)
 
-        # Generate return
-        file.content += self.indent(f'return new TableSchema().setFields(Arrays.asList(', depth + 1)
-        self._codegen_schema(syntax, file, self.field_type, depth + 2)
-        file.content += self.indent('));', depth + 1)
+        # Create variable
+        table_schema = Variable("table_schema", "TableSchema", anonymous=True)
+        table_schema.push_invocation(Setter("fields", params=[StaticValue(self._codegen_schema(syntax, file, self.field_type))]))
 
-        file.content += self.indent("}", depth)
+        # Return the variable
+        file.content += self.indent(syntax.generate_return(table_schema), terminator=syntax.terminate_statement_delimiter(), depth=depth + 1)
+        file.content += self.indent(syntax.block_end_delimiter(), depth)
 
-    def _codegen_schema_field(self, syntax: LanguageSyntax, file, field: Field, depth: int):
+    def _codegen_schema_field(self, syntax: LanguageSyntax, file, field: Field) -> [Variable]:
         if field.is_batch_field:
             # Batch fields should be skipped, by immediately fetching the next level
-            return self._codegen_schema(syntax, file, field.field_type_value, depth)
+            return self._codegen_schema(syntax, file, field.field_type_value)
 
-        file.content += self.indent(f'new TableFieldSchema()', depth)
-        file.content += self.indent(f'.setName({Variable.format_constant_value(field.get_bigquery_field_name())})', depth + 1)
-
-        # FUTURE: Enhance logic to represent timestamps
-        file.content += self.indent(f'.setType({Variable.format_constant_value(self.bq_type_map[field.field_type] if not field.is_timestamp else "TIMESTAMP")})', depth + 1)
-
-        # FUTURE: Design utility to extract the mode
-        file.content += self.indent(f'.setMode("{"REPEATED" if field.is_repeated_field else "REQUIRED" if field.field_required else "NULLABLE"}")', depth + 1)
-        file.content += self.indent(f'.setDescription("{field.field_description}")', depth + 1)
+        # Construct table schema
+        table_field_schema = Variable("table_field_schema", "TableFieldSchema", anonymous=True)
+        table_field_schema.push_invocation(Setter("name", params=[StaticValue(field.get_bigquery_field_name())]))
+        table_field_schema.push_invocation(Setter("type", params=[StaticValue(self.bq_type_map[field.field_type] if not field.is_timestamp else "TIMESTAMP")]))
+        table_field_schema.push_invocation(Setter("mode", params=[StaticValue("REPEATED" if field.is_repeated_field else "REQUIRED" if field.field_required else "NULLABLE")]))
+        table_field_schema.push_invocation(Setter("description", params=[StaticValue(field.field_description)]))
 
         if field.field_type_value is not None:
-            file.content += self.indent(f'.setFields(Arrays.asList(', depth + 1)
-            self._codegen_schema(syntax, file, field.field_type_value, depth + 2)
-            file.content += self.indent(f'))', depth + 1)
+            table_field_schema.push_invocation(Setter("fields", params=[StaticValue(self._codegen_schema(syntax, file, field.field_type_value))]))
 
-    def _codegen_schema(self, syntax: LanguageSyntax, file, field_type: MessageFieldType, depth: int):
+        return [table_field_schema]
 
+    def _codegen_schema(self, syntax: LanguageSyntax, file, field_type: MessageFieldType) -> [Variable]:
+
+        ret = []
         for idx, field in enumerate(field_type.fields):
-            self._codegen_schema_field(syntax, file, field, depth)
+            ret += self._codegen_schema_field(syntax, file, field)
 
-            if idx < len(field_type.fields) - 1:
-                file.content += self.indent(f',', depth)
+        return ret
 
 
 class CodeGenFunctionNode(CodeGenImp):

@@ -2569,7 +2569,7 @@
     "ambiguous_file_name": true,
     "name": "Event",
     "table_root": true,
-    "batch_table": true,
+    "batch_table": false,
     "cluster_fields": [
       "tenant_id"
     ],
@@ -2603,7 +2603,7 @@
         "type": "TYPE_MESSAGE",
         "type_value": ".lvi.BatchEvent",
         "required": true,
-        "batch_field": true,
+        "batch_field": false,
         "clustering_field": false,
         "partitioning_field": false,
         "timestamp": false,
@@ -2640,6 +2640,22 @@
         "partitioning_field": false,
         "timestamp": false,
         "optional_field": true,
+        "repeated_field": false,
+        "default_value": null
+      },
+      {
+        "index": 5,
+        "name": "example",
+        "alias": null,
+        "description": "example",
+        "type": "TYPE_STRING",
+        "type_value": null,
+        "required": true,
+        "batch_field": false,
+        "clustering_field": false,
+        "partitioning_field": false,
+        "timestamp": false,
+        "optional_field": false,
         "repeated_field": false,
         "default_value": null
       }

@@ -12,14 +12,17 @@ public class ProtoToBQParser<InputT> extends PTransform<PCollection<InputT>, PDo
 
     private static final Logger LOG = LoggerFactory.getLogger(ProtoToBQParser.class);
 
+    private final String project;
     private final SerializableFunction<InputT, String> protoTypeExtractor;
     private final SerializableFunction<InputT, byte[]> protoPayloadExtractor;
     private final SerializableFunction<InputT, String> datasetExtractor;
 
-    public ProtoToBQParser(SerializableFunction<InputT, String> protoTypeExtractor,
+    public ProtoToBQParser(String project,
+                           SerializableFunction<InputT, String> protoTypeExtractor,
                            SerializableFunction<InputT, String> datasetExtractor,
                            SerializableFunction<InputT, byte[]> protoPayloadExtractor) {
 
+        this.project = project;
         this.protoTypeExtractor = protoTypeExtractor;
         this.datasetExtractor = datasetExtractor;
         this.protoPayloadExtractor = protoPayloadExtractor;
@@ -30,16 +33,6 @@ public class ProtoToBQParser<InputT> extends PTransform<PCollection<InputT>, PDo
 
         // Apply ParDo
         input
-                // The cool thing about this technique, is that the pipeline is able to process
-                // different sources simultaneously. If they, for example, originate from different
-                // topics, one could union the streams from these topics and alter the protoTypeExtractor
-                // of the ProtoBQParser. e.g.,
-                //
-                //  1. Consume stream A, map onto KV<PubSubMessage, String ("A")>
-                //  2. Consume stream B, map onto KV<PubSubMessage, String ("B")>
-                //  3. Union streams above
-                //  4. Pass function that extracts the value from the KVs constructed above as the ProtoTypeExtractor of ProtoBQParser
-                //
                 .apply("ProtoToBQ", ParDo.of(new ProtoToBQ()))
                 .apply(BigQueryIO.<KV<KV<TableDestination, String>, TableRow>>write()
                         .to(new ProtoToBQDynamicDestinations())
@@ -70,11 +63,9 @@ public class ProtoToBQParser<InputT> extends PTransform<PCollection<InputT>, PDo
 
                     LOG.info(row.toPrettyString());
 
-                    String tableRef = "geometric-ocean-284614:" + datasetExtractor.apply(input) + "." + parser.getBigQueryTableName();
-
                     // Generate output object
                     c.output(KV.of(
-                            KV.of(new TableDestination(tableRef,
+                            KV.of(new TableDestination(constructTableRef(project, datasetExtractor.apply(input), parser.getBigQueryTableName()),
                                             parser.getBigQueryTableDescription(),
                                             parser.getPartitioning(),
                                             parser.getClustering()),
@@ -87,6 +78,10 @@ public class ProtoToBQParser<InputT> extends PTransform<PCollection<InputT>, PDo
                 // FUTURE: Add DLQ path to pipeline
                 // c.output(DLQTag, new FailSafeElement<>(input, e.getMessage()));
             }
+        }
+
+        private String constructTableRef(String project, String datasetName, String tableName) {
+            return project + ":" + datasetName + "." + tableName;
         }
     }
 

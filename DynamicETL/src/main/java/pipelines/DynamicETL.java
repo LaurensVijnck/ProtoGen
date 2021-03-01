@@ -25,6 +25,7 @@ public class DynamicETL {
         System.out.println(options.getPubSubInputSubscription());
 
         options.setTempLocation("gs://dataflow-staging-us-central1-230586129391/temp");
+        options.setProject("geometric-ocean-284614");
 
         // Create pipeline object
         Pipeline p = Pipeline.create(options);
@@ -34,7 +35,18 @@ public class DynamicETL {
                 .apply("ReadInput", PubsubIO
                     .readMessagesWithAttributes()
                     .fromSubscription(options.getPubSubInputSubscription()))
-                .apply(new ProtoToBQParser<>(
+
+                // The cool thing about this technique, is that the pipeline is able to process
+                // different sources simultaneously. If they, for example, originate from different
+                // topics, one could union the streams from these topics and alter the protoTypeExtractor
+                // of the ProtoBQParser. e.g.,
+                //
+                //  1. Consume stream A, map onto KV<PubSubMessage, String ("A")>
+                //  2. Consume stream B, map onto KV<PubSubMessage, String ("B")>
+                //  3. Union streams above
+                //  4. Pass function that extracts the value from the KVs constructed above as the ProtoTypeExtractor of ProtoBQParser
+                //
+                .apply(new ProtoToBQParser<>(options.getProject(),
                         new PubSubAttributeExtractor("proto_type"),
                         new PubSubAttributeExtractor("tenant_id"),
                         new PubSubBytesExtractor()));

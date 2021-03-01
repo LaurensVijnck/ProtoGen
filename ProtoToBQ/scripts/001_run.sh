@@ -2,8 +2,8 @@
 
 DST_DIR=output
 
-export GOOGLE_APPLICATION_CREDENTIALS=/Users/jonnydaenen/tmp/datalayer-core-dev-jda.json
-# export GOOGLE_APPLICATION_CREDENTIALS="/Users/lvijnck/Documents/google-cloud-sdk/geometric-ocean-284614-77fba73ca7b0.json"
+# export GOOGLE_APPLICATION_CREDENTIALS=/Users/jonnydaenen/tmp/datalayer-core-dev-jda.json
+export GOOGLE_APPLICATION_CREDENTIALS="/Users/lvijnck/Documents/google-cloud-sdk/geometric-ocean-284614-77fba73ca7b0.json"
 
 # Make file executable
 chmod +x protoc-gen-bq
@@ -25,6 +25,6 @@ protoc -I=. \
 protoc -I=. \
   --experimental_allow_proto3_optional \
   --plugin=protoc-gen-bq=protoc-gen-bq \
-# --bq_out=$DST_DIR/bigquery \
+ --bq_out=$DST_DIR/bigquery \
   --bq_opt=input/repository.json \
   protos/*

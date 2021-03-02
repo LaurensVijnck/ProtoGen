@@ -184,10 +184,14 @@ resource "google_bigquery_dataset_access" "proto_to_bq_dataset_access" {
 
   for_each = toset(local.tenant_datasets)
 
+  # Ensure datasets are created before provisioning tables
+  # https://www.terraform.io/docs/language/meta-arguments/depends_on.html
+  depends_on = [google_bigquery_dataset.proto_to_bq_datasets]
+
   # Access specific attributes
   # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/bigquery_dataset_access
-  dataset_id    = each.value
-  role          = "OWNER" # FUTURE: Revoke permission to delete the dataset
+  dataset_id    = "${var.env}_${each.value}"
+  role          = "roles/bigquery.dataOwner" # FUTURE: Revoke permission to delete the dataset
   user_by_email = google_service_account.sa.email
 }
 
@@ -223,7 +227,9 @@ resource "google_dataflow_job" "proto_to_bq_dataflow_job" {
   template_gcs_path = "gs://dev-lvi-templates/proto-to-bq/v1"
   temp_gcs_location = "gs://${google_storage_bucket.default.name}/app/${local.module_name}/v1"
 
+  # Template parameters
   parameters = {
+    environment             = var.env
     pubSubInputSubscription = google_pubsub_subscription.proto_to_bq_ingress_events_subscription.id
   }
 

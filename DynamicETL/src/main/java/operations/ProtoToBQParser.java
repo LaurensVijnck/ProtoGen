@@ -3,6 +3,7 @@ package operations;
 import com.google.api.services.bigquery.model.*;
 import lvi.BQParserImp;
 import org.apache.beam.sdk.io.gcp.bigquery.*;
+import org.apache.beam.sdk.options.ValueProvider;
 import org.apache.beam.sdk.transforms.*;
 import org.apache.beam.sdk.values.*;
 import org.slf4j.Logger;
@@ -19,16 +20,20 @@ public class ProtoToBQParser<InputT> extends PTransform<PCollection<InputT>, PDo
     private static final Logger LOG = LoggerFactory.getLogger(ProtoToBQParser.class);
 
     private final String project;
+
+    private final ValueProvider<String> environment;
     private final SerializableFunction<InputT, String> protoTypeExtractor;
     private final SerializableFunction<InputT, byte[]> protoPayloadExtractor;
     private final SerializableFunction<InputT, String> datasetExtractor;
 
     public ProtoToBQParser(String project,
+                           ValueProvider<String> environment,
                            SerializableFunction<InputT, String> protoTypeExtractor,
                            SerializableFunction<InputT, String> datasetExtractor,
                            SerializableFunction<InputT, byte[]> protoPayloadExtractor) {
 
         this.project = project;
+        this.environment = environment;
         this.protoTypeExtractor = protoTypeExtractor;
         this.datasetExtractor = datasetExtractor;
         this.protoPayloadExtractor = protoPayloadExtractor;
@@ -82,11 +87,11 @@ public class ProtoToBQParser<InputT> extends PTransform<PCollection<InputT>, PDo
                 for(TableRow row: parser.convertToTableRow(protoPayloadExtractor.apply(input))) {
 
                     LOG.info(row.toPrettyString());
-                    LOG.info(constructTableRef(project, datasetExtractor.apply(input), parser.getBigQueryTableName()));
+                    LOG.info(constructTableRef(project, environment.get(), datasetExtractor.apply(input), parser.getBigQueryTableName()));
 
                     // Generate output object
                     c.output(KV.of(
-                            KV.of(new TableDestination(constructTableRef(project, datasetExtractor.apply(input), parser.getBigQueryTableName()),
+                            KV.of(new TableDestination(constructTableRef(project, environment.get(), datasetExtractor.apply(input), parser.getBigQueryTableName()),
                                             parser.getBigQueryTableDescription(),
                                             parser.getPartitioning(),
                                             parser.getClustering()),
@@ -101,8 +106,8 @@ public class ProtoToBQParser<InputT> extends PTransform<PCollection<InputT>, PDo
             }
         }
 
-        private String constructTableRef(String project, String datasetName, String tableName) {
-            return project + ":" + datasetName + "." + tableName;
+        private String constructTableRef(String project, String environment, String datasetName, String tableName) {
+            return project + ":" + environment + "_" + datasetName + "." + tableName;
         }
     }
 

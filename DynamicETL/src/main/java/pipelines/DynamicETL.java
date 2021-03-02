@@ -53,7 +53,9 @@ public class DynamicETL {
                 //  3. Union streams above
                 //  4. Pass function that extracts the value from the KVs constructed above as the ProtoTypeExtractor of ProtoBQParser
                 //
-                .apply(new ProtoToBQParser<>(options.getProject(),
+                .apply(new ProtoToBQParser<>(
+                        options.getProject(),
+                        options.getEnvironment(),
                         new PubSubAttributeExtractor("proto_type"),
                         new PubSubAttributeExtractor("tenant_id"),
                         new PubSubBytesExtractor()));

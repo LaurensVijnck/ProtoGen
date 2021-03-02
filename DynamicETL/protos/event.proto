@@ -20,10 +20,10 @@ message BatchEvent {
 
 message Event {
     // Bigquery meta data
-    option (root_options).table_name = "event_table";
-    option (root_options).table_description = "ProtoToBQ generated table for events";
-    option (root_options).time_partitioning = true;
-    option (root_options).time_partitioning_expiration_ms = 31556952000;
+    option (bq_root_options).table_name = "event_table";
+    option (bq_root_options).table_description = "ProtoToBQ generated table for events";
+    option (bq_root_options).time_partitioning = true;
+    option (bq_root_options).time_partitioning_expiration_ms = 15552000000;
 
     // Fields
     Client client = 1  [(required) = false, (description) = "Owner of the event"];

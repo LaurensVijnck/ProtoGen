@@ -27,8 +27,7 @@ message Event {
 
     // Fields
     Client client = 1  [(required) = false, (description) = "Owner of the event"];
-    repeated BatchEvent events = 2 [(required) = true, (batch_attribute) = false];
+    repeated BatchEvent events = 2 [(required) = true, (batch_attribute) = true];
     optional int64 epoch_timestamp_millis = 3 [(required) = true, (time_partitioning_attribute) = true, (timestamp_attribute) = true, (alias) = "event_time"];
     optional string tenant_id = 4 [(required) = true, (clustering_attribute) = true];
-    string example = 5 [(required) = true, (description) = "example"];
 }

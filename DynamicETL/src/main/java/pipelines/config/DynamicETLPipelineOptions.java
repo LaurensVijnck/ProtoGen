@@ -16,9 +16,13 @@ public interface DynamicETLPipelineOptions extends DataflowPipelineOptions {
 
     @Description("Input subscription")
     @Validation.Required
-    // @Default.String("projects/geometric-ocean-284614/subscriptions/dynamic_etl_subscription")
     ValueProvider<String> getPubSubInputSubscription();
     void setPubSubInputSubscription(ValueProvider<String> value);
+
+    @Description("Environment (dev, acc, prod)")
+    @Validation.Required
+    ValueProvider<String> getEnvironment();
+    void setEnvironment(ValueProvider<String> value);
 
     @Description("BigQuery output dead-letter table")
     @Validation.Required

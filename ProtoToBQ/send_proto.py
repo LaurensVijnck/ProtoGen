@@ -5,7 +5,7 @@ from protos import event_pb2, client_pb2, actor_pb2
 from google.protobuf.json_format import MessageToJson
 
 project_id = "geometric-ocean-284614"
-topic_id = "dynamic_etl"
+topic_id = "dev.proto-to-bq.ingess.v1"
 
 publisher = pubsub_v1.PublisherClient()
 topic_path = publisher.topic_path(project_id, topic_id)

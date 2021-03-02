@@ -362,12 +362,14 @@ def generate_code(request: plugin.CodeGeneratorRequest, response: plugin.CodeGen
         _contruct_bigquery_schema_rec(root_element, schema_fields)
 
         # Generate the BigQuery schema
+        # FUTURE: Handle this in the code-gen schema node
         f = io.StringIO("")
         client.schema_to_json(schema_fields, f)
         full_schema = {}
         full_schema["schema_fields"] = json.loads(f.getvalue())
         full_schema["clustering_fields"] = root_element.cluster_fields
         full_schema["partitioning_field"] = root_element.partition_field
+        full_schema["partitioning_expiration"] = root_element.partitioning_expiration
         full_schema["table_description"] = root_element.table_description
         full_schema["table_name"] = root_element.table_name
 

@@ -32,6 +32,7 @@ public class DynamicETL {
         options.setProject("geometric-ocean-284614");
         options.setJobName("DynamicETL-v2");
         options.setUpdate(false);
+        options.setTemplateLocation("gs://dev-lvi-templates/proto-to-bq/v1");
 
         // Create pipeline object
         Pipeline p = Pipeline.create(options);

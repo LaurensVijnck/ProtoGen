@@ -31,3 +31,9 @@ variable "tenants" {
   default = {}
 }
 
+variable "enable_active_components" {
+  type        = bool
+  description = "Boolean that indicates whether active components should be deployed, e.g., Dataflow jobs"
+  default     = true
+}
+

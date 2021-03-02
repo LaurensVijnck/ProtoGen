@@ -5,6 +5,7 @@ import org.apache.beam.sdk.extensions.gcp.options.GcpOptions;
 import org.apache.beam.sdk.options.Default;
 import org.apache.beam.sdk.options.Description;
 import org.apache.beam.sdk.options.Validation;
+import org.apache.beam.sdk.options.ValueProvider;
 
 public interface DynamicETLPipelineOptions extends DataflowPipelineOptions {
 
@@ -15,9 +16,9 @@ public interface DynamicETLPipelineOptions extends DataflowPipelineOptions {
 
     @Description("Input subscription")
     @Validation.Required
-    @Default.String("projects/geometric-ocean-284614/subscriptions/dynamic_etl_subscription")
-    String getPubSubInputSubscription();
-    void setPubSubInputSubscription(String value);
+    // @Default.String("projects/geometric-ocean-284614/subscriptions/dynamic_etl_subscription")
+    ValueProvider<String> getPubSubInputSubscription();
+    void setPubSubInputSubscription(ValueProvider<String> value);
 
     @Description("BigQuery output dead-letter table")
     @Validation.Required

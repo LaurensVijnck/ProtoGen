@@ -35,3 +35,19 @@ variable "bigquery_schema_repository_path" {
   type        = string
   description = "Location of the BigQuery schemas directory"
 }
+
+variable "enable_ingestion_pipeline" {
+  type        = bool
+  description = "Boolean that indicates whether the ingestion pipeline should be created"
+  default     = true
+}
+
+variable "max_workers" {
+  type    = number
+  default = 1
+}
+
+variable "machine_type" {
+  type    = string
+  default = "n1-standard-1"
+}

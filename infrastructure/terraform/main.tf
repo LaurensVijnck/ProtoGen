@@ -10,6 +10,8 @@ module "proto-to-bq" {
   data_location_bigquery = var.data_location_bigquery
   data_location_storage  = var.data_location_storage
 
+
   # FUTURE: Point to GCS location
   bigquery_schema_repository_path = "/Users/lvijnck/Desktop/ProtoBQGeneration/ProtoToBQ/output/bigquery"
+  enable_ingestion_pipeline       = var.enable_active_components
 }

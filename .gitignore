@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -579,10 +578,5 @@ Temporary Items
 # google accounts files
 infrastructure/terraform/account.json
 
-
 # Dependabot
 env.list
-
-# google credentials
-infrastructure/terraform/account.json
->>>>>>> 5ea40ab4999a1292361b548003dc035bc1473504

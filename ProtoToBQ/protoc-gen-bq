@@ -347,9 +347,10 @@ def generate_code(request: plugin.CodeGeneratorRequest, response: plugin.CodeGen
 
     # FUTURE: Enforce that required and fields with defaults are marked optional.
     # FUTURE: Add validation to old and new repository to detect conflicting changes.
-    new_repo = {k: v.to_json() for k, v in repo.items()}
-    old_repo = read_repository(request.parameter)
-    validate_changes(new_repo, old_repo)
+    if request.parameter:
+        new_repo = {k: v.to_json() for k, v in repo.items()}
+        old_repo = read_repository(request.parameter)
+        validate_changes(new_repo, old_repo)
 
     package_name = "lvi"
     interface_name = "BQParserImp"
@@ -371,7 +372,7 @@ def generate_code(request: plugin.CodeGeneratorRequest, response: plugin.CodeGen
         full_schema["table_name"] = root_element.table_name
 
         file = response.file.add()
-        file.name = root_element.name + ".json"
+        file.name = "schema_" + root_element.name.lower() + ".json"
         file.content = json.dumps(full_schema, indent=2)
 
         # Generate the ProtoToBQParser

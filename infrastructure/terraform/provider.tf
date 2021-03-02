@@ -24,11 +24,3 @@ provider "google" {
 
   credentials = file("account.json")
 }
-
-# BigQuery dataset
-resource "google_bigquery_dataset" "proto_to_bq_dataset" {
-  dataset_id                 = "proto_to_bq_dataset"
-  location                   = var.data_location_bigquery
-  project                    = var.project
-  delete_contents_on_destroy = true
-}

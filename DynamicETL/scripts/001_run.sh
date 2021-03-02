@@ -21,7 +21,7 @@ protoc -I=. \
     --experimental_allow_proto3_optional \
     $1
 
-# Invoke Custom BigQuery pluging
+# Invoke Custom BigQuery plugin
 protoc $1 \
   --experimental_allow_proto3_optional \
   --bq_out=$DST_DIR/bigquery

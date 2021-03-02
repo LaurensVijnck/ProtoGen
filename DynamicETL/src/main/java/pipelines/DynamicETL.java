@@ -1,6 +1,7 @@
 package pipelines;
 
 import operations.ProtoToBQParser;
+import org.apache.beam.runners.dataflow.DataflowRunner;
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.io.gcp.pubsub.PubsubIO;
 import org.apache.beam.sdk.io.gcp.pubsub.PubsubMessage;
@@ -23,9 +24,14 @@ public class DynamicETL {
                 .as(DynamicETLPipelineOptions.class);
 
         System.out.println(options.getPubSubInputSubscription());
+        System.out.println(options.getProject());
 
+        // FUTURE: Supply via options
         options.setTempLocation("gs://dataflow-staging-us-central1-230586129391/temp");
+        options.setRunner(DataflowRunner.class);
         options.setProject("geometric-ocean-284614");
+        options.setJobName("DynamicETL-v2");
+        options.setUpdate(false);
 
         // Create pipeline object
         Pipeline p = Pipeline.create(options);
@@ -66,6 +72,9 @@ public class DynamicETL {
         p.run();
     }
 
+    /**
+     *
+     */
     public static class PubSubAttributeExtractor implements SerializableFunction<PubsubMessage, String> {
 
         private final String attribute;

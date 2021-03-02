@@ -577,12 +577,12 @@ Temporary Items
 .apdisk
 
 # google accounts files
-**/account.json
+infrastructure/terraform/account.json
 
 
 # Dependabot
 env.list
 
 # google credentials
-**/account.json
+infrastructure/terraform/account.json
 >>>>>>> 5ea40ab4999a1292361b548003dc035bc1473504

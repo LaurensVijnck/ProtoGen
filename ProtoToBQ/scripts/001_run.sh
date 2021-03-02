@@ -25,6 +25,6 @@ protoc -I=. \
 protoc -I=. \
   --experimental_allow_proto3_optional \
   --plugin=protoc-gen-bq=protoc-gen-bq \
- --bq_out=$DST_DIR/bigquery \
+  --bq_out=$DST_DIR/bigquery \
   --bq_opt=input/repository.json \
   protos/*

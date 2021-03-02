@@ -12,6 +12,17 @@ variable "zone" {
 }
 
 variable "data_location_bigquery" {
-  description = "Default location for storage (e.g. EU)"
+  description = "Default location for BigQuery"
   default     = "EU"
 }
+
+variable "data_location_storage" {
+  type        = string
+  description = "Default location for blob storage"
+  default     = "EU"
+}
+
+variable "tenants" {
+  default = {}
+}
+

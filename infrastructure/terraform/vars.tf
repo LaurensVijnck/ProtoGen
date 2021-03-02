@@ -3,6 +3,11 @@ variable "project" {
   description = "GCP project ID"
 }
 
+variable "env" {
+  description = "Environment"
+  default = "dev"
+}
+
 variable "region" {
   description = "Default region for services and compute resources"
 }

@@ -32,9 +32,7 @@ resource "google_bigquery_dataset" "proto_to_bq_dataset" {
 
 # [External] table schema
 data "external" "table_schema" {
-
   for_each = local.bigquery_tables
-
   program     = ["sh", "scripts/read_schema_as_base64.sh", "${var.bigquery_schema_repository_path}/${each.value}"]
 }
 
@@ -44,8 +42,10 @@ resource "google_bigquery_table" "tenant_parsed" {
   for_each = local.tenants_tables_flat
 
   dataset_id  = split("-", each.value)[0]
-  table_id    = split(".", split("-", each.value)[1])[0]
-//  description = data.external.bigquery_schema_parsed.result["description"]
+  table_id    = data.external.table_schema[split("-", each.value)[1]].result["table_name"]
+  description = data.external.table_schema[split("-", each.value)[1]].result["table_description"]
+
+  clustering  = jsondecode(base64decode(data.external.table_schema[split("-", each.value)[1]].result["clustering_fields"]))
 
 //  time_partitioning {
 //    type  = "DAY"

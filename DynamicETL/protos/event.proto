@@ -14,7 +14,6 @@ message Tag {
 
 message BatchEvent {
     Actor actor = 1  [(required) = false, (description) = "Actor concerned with the event"];
-    string example = 3 [(required) = true, (description) = "example"];
     repeated Tag tags = 2 [(description) = "Tags associated with the event"];
 }
 

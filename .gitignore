@@ -575,8 +575,5 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-# google accounts files
-infrastructure/terraform/account.json
-
 # Dependabot
 env.list

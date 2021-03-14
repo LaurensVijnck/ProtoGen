@@ -14,7 +14,7 @@ The repository includes a generic pipeline template that uses the Proto-to-BQ to
 
 ## Infrastructure-as-Code
 
-The repository includes the source code to create the BigQuery tables by Terraform.
+The repository includes the source code to create the BigQuery tables through Terraform. Terraform is currently in charge of updating the BigQuery table schemas according to the output of the proto-to-bq plugin. 
 
 ## Supported features
 
@@ -23,6 +23,7 @@ The repository includes the source code to create the BigQuery tables by Terrafo
 - [x] Table name
 - [x] Table description
 - [x] Table partitioning
+- [ ] Range partitioning
 - [x] Clustering
 
 ### Attribute-level features

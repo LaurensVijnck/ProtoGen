@@ -120,7 +120,7 @@ def _resolve_repository_fields(request: plugin.CodeGeneratorRequest, repository)
                             field_index=f.number,
                             field_name=f.name,
                             field_alias=f.options.Extensions[bigquery_options_pb2.alias] if f.options.HasExtension(bigquery_options_pb2.alias) else None,
-                            field_description=f.options.Extensions[bigquery_options_pb2.description],
+                            field_description="empty" if f.options.Extensions[bigquery_options_pb2.description] == "" else f.options.Extensions[bigquery_options_pb2.description],
                             field_type=ProtoTypeEnum._member_map_[ProtoTypeEnum(f.type).name],
                             field_type_value=repository.get(f.type_name, None),
                             field_required=f.options.Extensions[bigquery_options_pb2.required],

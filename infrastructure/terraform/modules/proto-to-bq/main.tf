@@ -135,6 +135,10 @@ resource "google_bigquery_table" "proto_to_bq_tables" {
   schema      = base64decode(data.external.table_schema[split("-", each.value)[1]].result["schema_fields"])
 }
 
+######################################
+# IAM
+######################################
+
 # [AIM] Service account
 # Service account for the Dataflow job
 resource "google_service_account" "sa" {
@@ -142,10 +146,6 @@ resource "google_service_account" "sa" {
   account_id   = "sa-${local.module_name}-${var.env}"
   display_name = "SA for the ${local.module_name} ingestion pipeline"
 }
-
-######################################
-# IAM
-######################################
 
 # [IAM] dataflow worker
 # Grant SA the dataflow worker role
@@ -235,3 +235,32 @@ resource "google_dataflow_job" "proto_to_bq_dataflow_job" {
 
   on_delete = "drain"
 }
+
+
+# Test
+# [BigQuery] Tables
+# Create BigQuery table for each combination of tenant and schema
+resource "google_bigquery_table" "test_table" {
+
+  # Table specific attributes
+  # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/bigquery_table
+  dataset_id  = "dev_eu_lvi"
+  table_id    = "lvi_test"
+  description = "test"
+
+  schema = <<EOF
+  [
+    {
+      "mode": "REQUIRED",
+      "name": "timestamp",
+      "type": "TIMESTAMP"
+    },
+    {
+    "mode": "NULLABLE",
+    "name": "payloadString",
+    "type": "STRING"
+    }
+  ]
+  EOF
+}
+

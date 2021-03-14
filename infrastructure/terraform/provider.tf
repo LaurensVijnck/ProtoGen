@@ -2,6 +2,8 @@ terraform {
   required_providers {
     google = {
       source = "hashicorp/google"
+
+      # NOTE: Newer version does not support in-place BigQuery table schema changes.
       version = "~> 3.52.0"
     }
 

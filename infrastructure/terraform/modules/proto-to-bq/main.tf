@@ -235,37 +235,3 @@ resource "google_dataflow_job" "proto_to_bq_dataflow_job" {
 
   on_delete = "drain"
 }
-
-
-# Test
-# [BigQuery] Tables
-# Create BigQuery table for each combination of tenant and schema
-resource "google_bigquery_table" "test_table" {
-
-  # Table specific attributes
-  # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/bigquery_table
-  dataset_id  = "dev_eu_lvi"
-  table_id    = "lvi_test"
-  description = "test"
-
-  schema = <<EOF
-  [
-    {
-      "mode": "REQUIRED",
-      "name": "timestamp",
-      "type": "TIMESTAMP"
-    },
-    {
-    "mode": "NULLABLE",
-    "name": "payloadString",
-    "type": "STRING"
-    },
-    {
-    "mode": "NULLABLE",
-    "name": "example",
-    "type": "STRING"
-    }
-  ]
-  EOF
-}
-

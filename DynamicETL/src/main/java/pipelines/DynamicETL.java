@@ -30,9 +30,9 @@ public class DynamicETL {
         options.setTempLocation("gs://dataflow-staging-us-central1-230586129391/temp");
         options.setRunner(DataflowRunner.class);
         options.setProject("geometric-ocean-284614");
-        options.setJobName("DynamicETL-v2");
+        options.setJobName("DynamicETL-v1");
         options.setUpdate(false);
-        // options.setTemplateLocation("gs://dev-lvi-templates/proto-to-bq/v1");
+        options.setTemplateLocation("gs://dev-lvi-templates/proto-to-bq/v1/template");
 
         // Create pipeline object
         Pipeline p = Pipeline.create(options);

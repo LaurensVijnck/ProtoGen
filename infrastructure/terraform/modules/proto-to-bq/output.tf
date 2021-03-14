@@ -1,5 +1,5 @@
 output "tenant_tables" {
-  value = local.tenants_tables_flat
+  value = local.tenant_tables
 }
 
 output "clustering" {

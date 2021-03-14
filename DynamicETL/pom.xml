@@ -41,8 +41,12 @@
                             <executable>/bin/bash</executable>
                             <executable>scripts/001_run.sh</executable>
                             <arguments>
-                                <!-- Argument points to dir containing protos -->
-                                <argument>./protos/*</argument>
+                                <!-- Argument points to proto-to-bq root directory -->
+                                <!-- FUTURE: Is absolute directory required? -->
+                                <argument>/Users/lvijnck/Desktop/ProtoBQGeneration/ProtoToBQ</argument>
+
+                                <!-- Argument points to protos subdirectory -->
+                                <argument>protos/*</argument>
                             </arguments>
                         </configuration>
                     </execution>

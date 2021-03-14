@@ -259,6 +259,11 @@ resource "google_bigquery_table" "test_table" {
     "mode": "NULLABLE",
     "name": "payloadString",
     "type": "STRING"
+    },
+    {
+    "mode": "NULLABLE",
+    "name": "example",
+    "type": "STRING"
     }
   ]
   EOF
